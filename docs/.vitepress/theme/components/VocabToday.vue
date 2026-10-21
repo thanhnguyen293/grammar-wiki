@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { useLocale } from './i18n'
 import { computed, onMounted, ref, watch } from 'vue'
-import { withBase } from 'vitepress'
 import VocabStudy from './VocabStudy.vue'
 import { itemKey, resolveRefs, useLearned, useToday, type Item } from './useVocab'
 
@@ -32,37 +32,38 @@ function clearAll() {
   today.clear()
   confirmClear.value = false
 }
+const { tr, link } = useLocale()
 </script>
 
 <template>
   <div class="vtoday-head">
     <p>
-      <b>{{ fmt(today.today) }}</b> · {{ items.length }} từ
-      <span class="vgoal" :class="{ ok: items.length >= DAILY }">mục tiêu {{ DAILY }} từ/ngày</span>
+      <b>{{ fmt(today.today) }}</b> · {{ tr('{n} từ', { n: items.length }) }}
+      <span class="vgoal" :class="{ ok: items.length >= DAILY }">{{ tr('mục tiêu {n} từ/ngày', { n: DAILY }) }}</span>
     </p>
     <button v-if="items.length" type="button" class="vbtn" @click="clearAll" @blur="confirmClear = false">
-      {{ confirmClear ? 'Bấm lần nữa để xóa hết' : 'Xóa danh sách hôm nay' }}
+      {{ tr(confirmClear ? 'Bấm lần nữa để xóa hết' : 'Xóa danh sách hôm nay') }}
     </button>
   </div>
 
   <p class="vreview-link">
-    Muốn xem mình còn nhớ từ của những ngày trước? <a :href="withBase('/tu-vung/on-tap')">Kiểm tra từ đã học →</a>
+    {{ tr('Muốn xem mình còn nhớ từ của những ngày trước?') }} <a :href="link('/tu-vung/on-tap')">{{ tr('Kiểm tra từ đã học →') }}</a>
   </p>
 
   <div v-if="!loading && carryable.length" class="custom-block tip">
-    <p class="custom-block-title">CÒN TỪ HÔM TRƯỚC</p>
+    <p class="custom-block-title">{{ tr('CÒN TỪ HÔM TRƯỚC') }}</p>
     <p>
-      Ngày {{ fmt(today.previous.value!.date) }} còn {{ carryable.length }} từ chưa thuộc:
+      {{ tr('Ngày {d} còn {n} từ chưa thuộc:', { d: fmt(today.previous.value!.date), n: carryable.length }) }}
       {{ carryable.map((i) => i.word.w).join(', ') }}.
     </p>
-    <button type="button" class="vbtn primary" @click="today.add(carryable)">Chuyển sang hôm nay</button>
+    <button type="button" class="vbtn primary" @click="today.add(carryable)">{{ tr('Chuyển sang hôm nay') }}</button>
   </div>
 
   <div v-if="!loading && !items.length" class="vempty-state">
-    <p>Danh sách hôm nay đang trống.</p>
+    <p>{{ tr('Danh sách hôm nay đang trống.') }}</p>
     <p>
-      Mở một <a :href="withBase('/tu-vung/')">chủ đề</a>, bấm <b>+ Hôm nay</b> cạnh từ bạn muốn học, hoặc bấm
-      <b>+ Thêm 5 từ tiếp theo vào hôm nay</b> ở đầu trang chủ đề.
+      {{ tr('Mở một') }} <a :href="link('/tu-vung/')">{{ tr('chủ đề') }}</a>{{ tr(', bấm') }} <b>{{ tr('+ Hôm nay') }}</b> {{ tr('cạnh từ bạn muốn học, hoặc bấm') }}
+      <b>{{ tr('+ Thêm 5 từ tiếp theo vào hôm nay') }}</b> {{ tr('ở đầu trang chủ đề.') }}
     </p>
   </div>
   <VocabStudy v-else :items="items" :loading="loading" show-topic />

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { useLocale } from './i18n'
 import { computed, onMounted, ref } from 'vue'
-import { withBase } from 'vitepress'
 import VocabStudy from './VocabStudy.vue'
 import { itemKey, loadTopic, useLearned, useToday, type Item } from './useVocab'
 
@@ -21,15 +21,16 @@ onMounted(async () => {
 const nextBatch = computed(() =>
   items.value.filter((i) => !learned.value.has(itemKey(i)) && !today.has(i.slug, i.word.w)).slice(0, DAILY),
 )
+const { tr, link } = useLocale()
 </script>
 
 <template>
   <VocabStudy :items="items" :loading="loading">
     <div v-if="!loading" class="vtoday-bar">
       <button v-if="nextBatch.length" type="button" class="vbtn primary" @click="today.add(nextBatch)">
-        + Thêm {{ nextBatch.length }} từ tiếp theo vào hôm nay
+        {{ tr('+ Thêm {n} từ tiếp theo vào hôm nay', { n: nextBatch.length }) }}
       </button>
-      <a :href="withBase('/tu-vung/hom-nay')">Hôm nay học: {{ today.refs.value.length }} từ →</a>
+      <a :href="link('/tu-vung/hom-nay')">{{ tr('Hôm nay học: {n} từ →', { n: today.refs.value.length }) }}</a>
     </div>
   </VocabStudy>
 </template>

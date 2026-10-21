@@ -81,3 +81,16 @@ Mỗi từ có đúng 7 trường:
 | `lv` | Trình độ ước lượng: `A1`, `A2`, `B1` hoặc `B2`. |
 
 Kiểm tra: `npm run check` (hoặc `node scripts/check-vocab.mjs <slug>` cho một chủ đề).
+
+# Bản tiếng Anh (English version)
+
+The English site lives under `docs/en/` with the same folder and file names as the Vietnamese one (`docs/en/2-thi/hien-tai-don.md` mirrors `docs/2-thi/hien-tai-don.md`). Slugs stay Vietnamese so the two versions line up.
+
+When writing or updating an English lesson:
+
+- Translate all Vietnamese prose (intro, explanations, table headers and cells, notes, "Vì sao" column) into plain, simple English that an intermediate learner can read. Same structure, same examples, same headings order.
+- H1 = the English title from `docs/.vitepress/chapters.ts` (`en` field of the section).
+- Keep every English example sentence unchanged, and **keep its Vietnamese translation line** (`<br>*...*`): readers are still Vietnamese learners.
+- Container titles: `::: info FORMULA`, `::: warning IMPORTANT`, `::: warning SUMMARY`, `::: danger COMMON MISTAKES`, `::: tip TIP`, `::: details Vietnamese translation` (the dialogue translation stays Vietnamese).
+- Section headings: Công thức → Formula, Cách dùng → How to use, Dấu hiệu nhận biết → Signal words, Lỗi hay gặp → Common mistakes, Ví dụ trong ngữ cảnh → In context, Ghi nhớ → Remember, "Xem thêm:" → "See also:".
+- Links: same-chapter `./slug` stays as is; links to another chapter must start with `/en/` (e.g. `/en/5-cau-dieu-kien/cac-loai`).

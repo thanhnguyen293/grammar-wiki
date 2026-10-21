@@ -4,6 +4,8 @@ Wiki lý thuyết ngữ pháp tiếng Anh cho người Việt học lại từ �
 
 Phần **Từ vựng** (`/tu-vung/`) có 3000 từ thông dụng chia theo 28 chủ đề, cộng 250 từ chuyên ngành công nghệ thông tin cho mobile developer. Mỗi từ có phiên âm, loại từ, nghĩa, câu ví dụ có dịch, nút nghe phát âm (giọng đọc của trình duyệt), chế độ thẻ ghi nhớ, ẩn nghĩa để tự kiểm tra và đánh dấu đã thuộc (lưu trên trình duyệt). Ngoài ra có 500 cụm từ thông dụng (phrasal verb, collocation, thành ngữ), danh sách **Hôm nay học**, trang **Kiểm tra từ đã học** (nhìn nghĩa, gõ từ) và trang **Học từ bài viết**: dán một bài tiếng Anh, wiki đưa từ về dạng gốc, gom cụm từ, cho đánh dấu đã biết / chưa biết và thêm từ vào danh sách học.
 
+Web có hai ngôn ngữ: tiếng Việt (gốc `/`) và tiếng Anh (`/en/`), đổi bằng menu ngôn ngữ trên thanh điều hướng. Bản tiếng Anh dịch giao diện và 48 bài ngữ pháp; câu ví dụ vẫn giữ dòng dịch tiếng Việt và từ vựng vẫn giữ nghĩa tiếng Việt.
+
 Xây bằng [VitePress](https://vitepress.dev): mỗi bài là một file Markdown, có sẵn tìm kiếm, sidebar, chế độ sáng/tối.
 
 ## Chạy
@@ -27,6 +29,7 @@ Mỗi lần push lên nhánh `main`, GitHub Actions ([.github/workflows/deploy.y
 ```
 docs/
   index.md                 trang chủ
+  en/                      bản tiếng Anh, cùng tên file với bản tiếng Việt
   lo-trinh.md              lộ trình Vòng 1 / Vòng 2 / Tra cứu
   1-tu-loai/ … 9-tu-vung-hoc/
     index.md               trang chương (tự liệt kê các bài)
@@ -37,6 +40,7 @@ docs/
     vocabTopics.ts         danh sách chủ đề từ vựng
     theme/                 CSS và các component (thanh nhãn bài, danh sách bài, từ vựng)
       components/textAnalyze.ts  tách từ, đưa về dạng gốc, nhận diện cụm từ trong bài viết
+      components/i18n.ts         chuỗi giao diện tiếng Anh (khóa là chuỗi tiếng Việt)
   tu-vung/
     data/<slug>.json       từ của từng chủ đề, xếp từ thông dụng nhất xuống
 scripts/

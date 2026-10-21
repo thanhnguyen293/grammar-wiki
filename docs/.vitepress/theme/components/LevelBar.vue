@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { withBase } from 'vitepress'
-import { LEVEL_LABEL, sectionNo } from '../../chapters'
+import { LEVEL_LABEL, LEVEL_LABEL_EN, sectionNo } from '../../chapters'
+import { useLocale } from './i18n'
 import { useSection } from './useSection'
 
 const current = useSection()
+const { tr, link, isEn } = useLocale()
 </script>
 
 <template>
   <div v-if="current.chapter && current.section" class="level-bar">
-    <a :href="withBase(`/${current.chapter.dir}/`)">Chương {{ current.chapter.no }} · {{ current.chapter.title }}</a>
+    <a :href="link(`/${current.chapter.dir}/`)">
+      {{ tr('Chương {n} · {t}', { n: current.chapter.no, t: isEn ? current.chapter.en : current.chapter.title }) }}
+    </a>
     <span class="sep">/</span>
-    <span>Mục {{ sectionNo(current.chapter, current.section) }}</span>
-    <span :class="['lv', current.section.level]">{{ LEVEL_LABEL[current.section.level] }}</span>
+    <span>{{ tr('Mục {n}', { n: sectionNo(current.chapter, current.section) }) }}</span>
+    <span :class="['lv', current.section.level]">
+      {{ (isEn ? LEVEL_LABEL_EN : LEVEL_LABEL)[current.section.level] }}
+    </span>
   </div>
 </template>

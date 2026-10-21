@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useLocale } from './i18n'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { MINE, vocabTopics } from '../../vocabTopics'
 import SpeakButton from './SpeakButton.vue'
@@ -7,7 +8,6 @@ import { analyze, buildDict, type Analysis, type Dict, type Entry } from './text
 import {
   itemKey,
   loadTopic,
-  POS_LABEL,
   useLearned,
   useMine,
   useToday,
@@ -27,6 +27,7 @@ const { learned, set: setLearned } = useLearned()
 const unknown = useUnknown()
 const today = useToday()
 const mine = useMine()
+const { tr, pos, topicTitle } = useLocale()
 
 const text = ref('')
 const dict = ref<Dict | null>(null)
@@ -115,8 +116,6 @@ const unknownItems = computed(() =>
 )
 const unknownNotToday = computed(() => unknownItems.value.filter((i) => !today.has(i.slug, i.word.w)))
 
-const topicTitle = (slug: string) =>
-  slug === MINE.slug ? MINE.title : (vocabTopics.find((t) => t.slug === slug)?.title ?? slug)
 
 /* ---------- Highlighted text ---------- */
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
@@ -228,7 +227,7 @@ async function saveMine(e: Entry) {
 }
 const lookupLinks = (w: string) => [
   { label: 'Cambridge', href: `https://dictionary.cambridge.org/dictionary/english-vietnamese/${encodeURIComponent(w)}` },
-  { label: 'Google Dịch', href: `https://translate.google.com/?sl=en&tl=vi&op=translate&text=${encodeURIComponent(w)}` },
+  { label: tr('Google Dịch'), href: `https://translate.google.com/?sl=en&tl=vi&op=translate&text=${encodeURIComponent(w)}` },
 ]
 
 const FILTERS: { value: Filter; label: string }[] = [
@@ -242,70 +241,70 @@ const FILTERS: { value: Filter; label: string }[] = [
 
 <template>
   <div class="vocab analyzer">
-    <label for="article-text" class="an-label">Dán đoạn văn hoặc bài viết tiếng Anh</label>
+    <label for="article-text" class="an-label">{{ tr('Dán đoạn văn hoặc bài viết tiếng Anh') }}</label>
     <textarea
       id="article-text"
       v-model="text"
       class="an-text"
       rows="8"
-      placeholder="Dán bài báo, email, tài liệu, comment trong PR… vào đây"
+      :placeholder="tr('Dán bài báo, email, tài liệu, comment trong PR… vào đây')"
     />
     <div class="an-actions">
       <button type="button" class="vbtn primary" :disabled="!dict || !text.trim()" @click="run">
-        {{ dict ? 'Phân tích' : 'Đang tải từ điển…' }}
+        {{ tr(dict ? 'Phân tích' : 'Đang tải từ điển…') }}
       </button>
-      <button v-if="!text.trim()" type="button" class="vbtn" @click="(text = SAMPLE), run()">Thử với đoạn mẫu</button>
-      <button v-else type="button" class="vbtn" @click="(text = ''), (result = null)">Xóa văn bản</button>
-      <span v-if="text.length > MAX_CHARS" class="vnote">Chỉ phân tích {{ MAX_CHARS.toLocaleString('vi') }} ký tự đầu.</span>
+      <button v-if="!text.trim()" type="button" class="vbtn" @click="(text = SAMPLE), run()">{{ tr('Thử với đoạn mẫu') }}</button>
+      <button v-else type="button" class="vbtn" @click="(text = ''), (result = null)">{{ tr('Xóa văn bản') }}</button>
+      <span v-if="text.length > MAX_CHARS" class="vnote">{{ tr('Chỉ phân tích {n} ký tự đầu.', { n: MAX_CHARS.toLocaleString() }) }}</span>
     </div>
 
     <template v-if="result">
       <div class="an-summary">
-        <span><b>{{ kindCounts.word }}</b> từ đơn</span>
-        <span><b>{{ kindCounts.phrase }}</b> cụm từ</span>
-        <span class="s-known"><b>{{ counts.known }}</b> đã biết</span>
-        <span class="s-unknown"><b>{{ counts.unknown }}</b> chưa biết</span>
-        <span><b>{{ counts.none }}</b> chưa đánh dấu</span>
-        <span class="s-outside"><b>{{ counts.outside }}</b> ngoài từ điển</span>
+        <span><b>{{ kindCounts.word }}</b> {{ tr('từ đơn') }}</span>
+        <span><b>{{ kindCounts.phrase }}</b> {{ tr('cụm từ') }}</span>
+        <span class="s-known"><b>{{ counts.known }}</b> {{ tr('đã biết') }}</span>
+        <span class="s-unknown"><b>{{ counts.unknown }}</b> {{ tr('chưa biết') }}</span>
+        <span><b>{{ counts.none }}</b> {{ tr('chưa đánh dấu') }}</span>
+        <span class="s-outside"><b>{{ counts.outside }}</b> {{ tr('ngoài từ điển') }}</span>
       </div>
 
       <div class="vbar">
-        <label class="vcheck"><input id="hide-basic" v-model="hideBasic" type="checkbox" /> Ẩn từ cơ bản (the, of, is…)</label>
-        <label class="vcheck"><input id="hide-names" v-model="hideNames" type="checkbox" /> Ẩn tên riêng</label>
-        <label class="vcheck"><input id="show-reader" v-model="showReader" type="checkbox" /> Hiện bài viết đã tô màu</label>
+        <label class="vcheck"><input id="hide-basic" v-model="hideBasic" type="checkbox" /> {{ tr('Ẩn từ cơ bản (the, of, is…)') }}</label>
+        <label class="vcheck"><input id="hide-names" v-model="hideNames" type="checkbox" /> {{ tr('Ẩn tên riêng') }}</label>
+        <label class="vcheck"><input id="show-reader" v-model="showReader" type="checkbox" /> {{ tr('Hiện bài viết đã tô màu') }}</label>
       </div>
 
       <div v-if="showReader" class="an-reader" @click="jumpTo" v-html="readerHtml" />
       <p v-if="showReader" class="an-legend">
-        <span class="tk none">chưa đánh dấu</span>
-        <span class="tk unknown">chưa biết</span>
-        <span class="tk known">đã biết</span>
-        <span class="tk none ph">cụm từ</span>
-        <span class="tk outside">ngoài từ điển</span>
-        · Bấm vào một từ để tới dòng của nó.
+        <span class="tk none">{{ tr('chưa đánh dấu') }}</span>
+        <span class="tk unknown">{{ tr('chưa biết') }}</span>
+        <span class="tk known">{{ tr('đã biết') }}</span>
+        <span class="tk none ph">{{ tr('cụm từ') }}</span>
+        <span class="tk outside">{{ tr('ngoài từ điển') }}</span>
+        {{ tr('· Bấm vào một từ để tới dòng của nó.') }}
       </p>
 
       <div class="vsticky">
         <div class="vbar">
-          <div class="vseg" role="group" aria-label="Lọc theo loại">
-            <button type="button" :aria-pressed="kind === 'all'" @click="kind = 'all'">Tất cả ({{ kindCounts.all }})</button>
-            <button type="button" :aria-pressed="kind === 'phrase'" @click="kind = 'phrase'">Cụm từ ({{ kindCounts.phrase }})</button>
-            <button type="button" :aria-pressed="kind === 'word'" @click="kind = 'word'">Từ đơn ({{ kindCounts.word }})</button>
+          <div class="vseg" role="group" :aria-label="tr('Lọc theo loại')">
+            <button type="button" :aria-pressed="kind === 'all'" @click="kind = 'all'">{{ tr('Tất cả ({n})', { n: kindCounts.all }) }}</button>
+            <button type="button" :aria-pressed="kind === 'phrase'" @click="kind = 'phrase'">{{ tr('Cụm từ ({n})', { n: kindCounts.phrase }) }}</button>
+            <button type="button" :aria-pressed="kind === 'word'" @click="kind = 'word'">{{ tr('Từ đơn ({n})', { n: kindCounts.word }) }}</button>
           </div>
-          <div class="vseg" role="group" aria-label="Lọc theo trạng thái">
+          <div class="vseg" role="group" :aria-label="tr('Lọc theo trạng thái')">
             <button v-for="f in FILTERS" :key="f.value" type="button" :aria-pressed="filter === f.value" @click="filter = f.value">
-              {{ f.label }} ({{ counts[f.value] }})
+              {{ tr(f.label) }} ({{ counts[f.value] }})
             </button>
           </div>
         </div>
         <div class="an-bulk">
           <button v-if="counts.none" type="button" class="vbtn" @click="markRestKnown">
-            Đánh dấu {{ counts.none }} từ chưa đánh dấu là "Đã biết"
+            {{ tr('Đánh dấu {n} từ chưa đánh dấu là "Đã biết"', { n: counts.none }) }}
           </button>
           <button v-if="unknownNotToday.length" type="button" class="vbtn primary" @click="today.add(unknownNotToday)">
-            + Thêm {{ unknownNotToday.length }} từ "Chưa biết" vào hôm nay
+            {{ tr('+ Thêm {n} từ "Chưa biết" vào hôm nay', { n: unknownNotToday.length }) }}
           </button>
-          <span v-else-if="unknownItems.length" class="vnote">✓ Các từ "Chưa biết" đã có trong danh sách hôm nay.</span>
+          <span v-else-if="unknownItems.length" class="vnote">{{ tr('✓ Các từ "Chưa biết" đã có trong danh sách hôm nay.') }}</span>
         </div>
       </div>
 
@@ -322,11 +321,11 @@ const FILTERS: { value: Filter; label: string }[] = [
             <div class="vhead">
               <span class="vword">{{ primary(e)?.word.w ?? e.head }}</span>
               <SpeakButton :text="primary(e)?.word.w ?? e.head" />
-              <span v-if="e.kind === 'phrase'" class="an-chip">cụm từ</span>
+              <span v-if="e.kind === 'phrase'" class="an-chip">{{ tr('cụm từ') }}</span>
               <span v-if="primary(e)?.word.ipa" class="vipa">{{ primary(e)!.word.ipa }}</span>
-              <span v-if="primary(e)" class="vpos">{{ POS_LABEL[primary(e)!.word.pos] }}</span>
+              <span v-if="primary(e)" class="vpos">{{ pos[primary(e)!.word.pos] }}</span>
               <span v-if="primary(e)?.word.lv" class="vlv">{{ primary(e)!.word.lv }}</span>
-              <span v-if="e.kind === 'name'" class="an-chip">tên riêng?</span>
+              <span v-if="e.kind === 'name'" class="an-chip">{{ tr('tên riêng?') }}</span>
             </div>
             <span v-if="primary(e)" class="vres-vi">{{ primary(e)!.word.vi }}</span>
             <span v-for="it in e.items.slice(1)" :key="it.slug" class="an-other">
@@ -336,63 +335,63 @@ const FILTERS: { value: Filter; label: string }[] = [
               v-if="e.forms.some((f) => f.toLowerCase() !== (primary(e)?.word.w ?? e.head).toLowerCase())"
               class="an-forms"
             >
-              Trong bài: {{ e.forms.join(', ') }}
+              {{ tr('Trong bài: {f}', { f: e.forms.join(', ') }) }}
             </span>
             <p class="an-context" v-html="contextHtml(e)" />
 
             <div v-if="status(e) === 'outside'" class="an-outside">
               <template v-if="editing !== e.key">
-                <span class="vnote">Chưa có trong từ điển của wiki.</span>
+                <span class="vnote">{{ tr('Chưa có trong từ điển của wiki.') }}</span>
                 <a v-for="l in lookupLinks(e.head)" :key="l.label" :href="l.href" target="_blank" rel="noopener">{{ l.label }} ↗</a>
-                <button type="button" class="vtoday" @click="openForm(e)">+ Thêm vào Từ của tôi</button>
+                <button type="button" class="vtoday" @click="openForm(e)">{{ tr('+ Thêm vào Từ của tôi') }}</button>
               </template>
               <form v-else class="an-form" @submit.prevent="saveMine(e)">
                 <p class="an-lookup" :class="lookup.state">
-                  <template v-if="lookup.state === 'loading'">Đang tra tự động…</template>
+                  <template v-if="lookup.state === 'loading'">{{ tr('Đang tra tự động…') }}</template>
                   <template v-else-if="lookup.state === 'done'">
-                    Đã điền sẵn gợi ý từ từ điển công khai và MyMemory. Hãy kiểm tra lại trước khi lưu.
+                    {{ tr('Đã điền sẵn gợi ý từ từ điển công khai và MyMemory. Hãy kiểm tra lại trước khi lưu.') }}
                   </template>
                   <template v-else-if="lookup.state === 'failed'">
-                    Không tra được tự động. Bạn tự điền, hoặc mở Cambridge / Google Dịch ở trên.
+                    {{ tr('Không tra được tự động. Bạn tự điền, hoặc mở Cambridge / Google Dịch ở trên.') }}
                   </template>
                 </p>
-                <p v-if="lookup.definition" class="an-def"><b>Định nghĩa (tiếng Anh):</b> {{ lookup.definition }}</p>
+                <p v-if="lookup.definition" class="an-def"><b>{{ tr('Định nghĩa (tiếng Anh):') }}</b> {{ lookup.definition }}</p>
                 <label>
-                  Từ
+                  {{ tr('Từ') }}
                   <span class="an-inline">
                     <input v-model="form.w" :id="`mine-w-${rowId(e.key)}`" required />
-                    <button type="button" class="vbtn" :disabled="lookup.state === 'loading'" @click="autoFill">Tra lại</button>
+                    <button type="button" class="vbtn" :disabled="lookup.state === 'loading'" @click="autoFill">{{ tr('Tra lại') }}</button>
                   </span>
                 </label>
-                <label>Nghĩa tiếng Việt <input v-model="form.vi" :id="`mine-vi-${rowId(e.key)}`" required placeholder="vd: có thể mở rộng" /></label>
+                <label>{{ tr('Nghĩa tiếng Việt') }} <input v-model="form.vi" :id="`mine-vi-${rowId(e.key)}`" required :placeholder="tr('vd: có thể mở rộng')" /></label>
                 <label>
-                  Loại từ
+                  {{ tr('Loại từ') }}
                   <select v-model="form.pos" :id="`mine-pos-${rowId(e.key)}`">
-                    <option v-for="(label, p) in POS_LABEL" :key="p" :value="p">{{ label }}</option>
+                    <option v-for="(label, p) in pos" :key="p" :value="p">{{ label }}</option>
                   </select>
                 </label>
-                <label>Phiên âm <input v-model="form.ipa" :id="`mine-ipa-${rowId(e.key)}`" placeholder="không bắt buộc" /></label>
+                <label>{{ tr('Phiên âm') }} <input v-model="form.ipa" :id="`mine-ipa-${rowId(e.key)}`" :placeholder="tr('không bắt buộc')" /></label>
                 <label class="an-wide">
-                  Dịch câu ví dụ (không bắt buộc)
+                  {{ tr('Dịch câu ví dụ (không bắt buộc)') }}
                   <textarea v-model="form.exVi" :id="`mine-exvi-${rowId(e.key)}`" rows="2" />
                 </label>
                 <div class="quiz-actions">
-                  <button type="submit" class="vbtn primary" :disabled="!form.w.trim() || !form.vi.trim()">Lưu và thêm vào hôm nay</button>
+                  <button type="submit" class="vbtn primary" :disabled="!form.w.trim() || !form.vi.trim()">{{ tr('Lưu và thêm vào hôm nay') }}</button>
                   <button type="button" class="vbtn" :disabled="lookup.translating" @click="translateSentence(e)">
-                    {{ lookup.translating ? 'Đang dịch…' : 'Gợi ý dịch câu' }}
+                    {{ tr(lookup.translating ? 'Đang dịch…' : 'Gợi ý dịch câu') }}
                   </button>
-                  <button type="button" class="vbtn" @click="editing = null">Hủy</button>
-                  <span v-if="lookup.sentenceFailed" class="vnote">Không dịch được câu lúc này.</span>
+                  <button type="button" class="vbtn" @click="editing = null">{{ tr('Hủy') }}</button>
+                  <span v-if="lookup.sentenceFailed" class="vnote">{{ tr('Không dịch được câu lúc này.') }}</span>
                 </div>
               </form>
             </div>
           </div>
           <div v-if="status(e) !== 'outside'" class="vactions">
             <button type="button" class="vmark an-known" :aria-pressed="status(e) === 'known'" @click="mark(e, 'known')">
-              Đã biết
+              {{ tr('Đã biết') }}
             </button>
             <button type="button" class="vmark an-unknown" :aria-pressed="status(e) === 'unknown'" @click="mark(e, 'unknown')">
-              Chưa biết
+              {{ tr('Chưa biết') }}
             </button>
             <button
               type="button"
@@ -400,12 +399,12 @@ const FILTERS: { value: Filter; label: string }[] = [
               :aria-pressed="today.has(primary(e)!.slug, primary(e)!.word.w)"
               @click="today.toggle(primary(e)!.slug, primary(e)!.word.w)"
             >
-              {{ today.has(primary(e)!.slug, primary(e)!.word.w) ? '✓ Hôm nay' : '+ Hôm nay' }}
+              {{ tr(today.has(primary(e)!.slug, primary(e)!.word.w) ? '✓ Hôm nay' : '+ Hôm nay') }}
             </button>
           </div>
         </li>
       </ol>
-      <p v-else class="vempty">Không có từ nào trong bộ lọc này.</p>
+      <p v-else class="vempty">{{ tr('Không có từ nào trong bộ lọc này.') }}</p>
     </template>
   </div>
 </template>

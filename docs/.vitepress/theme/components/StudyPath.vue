@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { withBase } from 'vitepress'
 import { chapters, type Level, sectionLink, sectionNo } from '../../chapters'
+import { useLocale } from './i18n'
 
 const props = defineProps<{ level: Level }>()
+const { link, isEn } = useLocale()
 
 // Round 1 starts with word classes and the core tenses before sentences, so the order
 // here follows the study plan rather than the book's chapter numbers.
@@ -18,7 +19,7 @@ const items = computed(() =>
     const c = chapters.find((x) => x.no === no)!
     return c.sections
       .filter((s) => s.level === props.level)
-      .map((s) => ({ c, s, href: withBase(sectionLink(c, s)), no: sectionNo(c, s) }))
+      .map((s) => ({ c, s, href: link(sectionLink(c, s)), no: sectionNo(c, s) }))
   }),
 )
 </script>
@@ -28,8 +29,8 @@ const items = computed(() =>
     <li v-for="it in items" :key="it.href">
       <a class="row" :href="it.href">
         <span class="row-no">{{ it.no }}</span>
-        <span class="row-title">{{ it.s.title }}</span>
-        <span class="row-ch">{{ it.c.title }}</span>
+        <span class="row-title">{{ isEn ? it.s.titleEn : it.s.title }}</span>
+        <span class="row-ch">{{ isEn ? it.c.en : it.c.title }}</span>
       </a>
     </li>
   </ol>

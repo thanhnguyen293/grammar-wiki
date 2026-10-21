@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { useLocale } from './i18n'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import SpeakButton from './SpeakButton.vue'
-import { itemKey, POS_LABEL, useToday, type Item } from './useVocab'
+import { itemKey, useToday, type Item } from './useVocab'
 
 const props = defineProps<{ items: Item[]; learned: Set<string> }>()
 const emit = defineEmits<{ toggle: [key: string] }>()
@@ -52,12 +53,13 @@ function onKey(e: KeyboardEvent) {
 }
 onMounted(() => window.addEventListener('keydown', onKey))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
+const { tr, pos } = useLocale()
 </script>
 
 <template>
   <div v-if="card && word" class="cards">
     <div class="cards-top">
-      <span class="cards-count">Thẻ {{ index + 1 }} / {{ deck.length }}</span>
+      <span class="cards-count">{{ tr('Thẻ {a} / {b}', { a: index + 1, b: deck.length }) }}</span>
       <span class="cards-tools">
         <button
           type="button"
@@ -65,9 +67,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
           :aria-pressed="today.has(card.slug, word.w)"
           @click="today.toggle(card.slug, word.w)"
         >
-          {{ today.has(card.slug, word.w) ? '✓ Hôm nay' : '+ Hôm nay' }}
+          {{ tr(today.has(card.slug, word.w) ? '✓ Hôm nay' : '+ Hôm nay') }}
         </button>
-        <button type="button" class="vbtn" @click="shuffle">Trộn thẻ</button>
+        <button type="button" class="vbtn" @click="shuffle">{{ tr('Trộn thẻ') }}</button>
       </span>
     </div>
 
@@ -76,7 +78,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       :class="{ flipped, learned: learned.has(itemKey(card)) }"
       role="button"
       tabindex="0"
-      :aria-label="flipped ? 'Úp thẻ' : 'Lật thẻ xem nghĩa'"
+      :aria-label="tr(flipped ? 'Úp thẻ' : 'Lật thẻ xem nghĩa')"
       @click="flipped = !flipped"
       @keydown.enter.prevent="flipped = !flipped"
     >
@@ -84,26 +86,26 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         {{ word.w }}
         <SpeakButton :text="word.w" />
       </div>
-      <div class="card-meta">{{ [word.ipa, POS_LABEL[word.pos], word.lv].filter(Boolean).join(' · ') }}</div>
+      <div class="card-meta">{{ [word.ipa, pos[word.pos], word.lv].filter(Boolean).join(' · ') }}</div>
       <template v-if="flipped">
         <div class="card-vi">{{ word.vi }}</div>
         <div class="card-ex">
           <span>{{ word.ex }}</span>
-          <SpeakButton :text="word.ex" label="Nghe câu ví dụ" />
+          <SpeakButton :text="word.ex" :label="tr('Nghe câu ví dụ')" />
         </div>
         <div v-if="word.exVi" class="card-exvi">{{ word.exVi }}</div>
       </template>
-      <div v-else class="card-hint">Nhớ nghĩa trong đầu, rồi chạm để lật thẻ</div>
+      <div v-else class="card-hint">{{ tr('Nhớ nghĩa trong đầu, rồi chạm để lật thẻ') }}</div>
     </div>
 
     <div class="cards-actions">
-      <button type="button" class="vbtn" @click="go(-1)">← Trước</button>
-      <button type="button" class="vbtn" @click="flipped = !flipped">{{ flipped ? 'Úp thẻ' : 'Lật thẻ' }}</button>
-      <button v-if="!learned.has(itemKey(card))" type="button" class="vbtn primary" @click="markAndNext">Đã thuộc, tiếp</button>
-      <button v-else type="button" class="vbtn done" @click="emit('toggle', itemKey(card))">✓ Đã thuộc</button>
-      <button type="button" class="vbtn" @click="go(1)">Tiếp →</button>
+      <button type="button" class="vbtn" @click="go(-1)">{{ tr('← Trước') }}</button>
+      <button type="button" class="vbtn" @click="flipped = !flipped">{{ tr(flipped ? 'Úp thẻ' : 'Lật thẻ') }}</button>
+      <button v-if="!learned.has(itemKey(card))" type="button" class="vbtn primary" @click="markAndNext">{{ tr('Đã thuộc, tiếp') }}</button>
+      <button v-else type="button" class="vbtn done" @click="emit('toggle', itemKey(card))">{{ tr('✓ Đã thuộc') }}</button>
+      <button type="button" class="vbtn" @click="go(1)">{{ tr('Tiếp →') }}</button>
     </div>
-    <p class="cards-keys">Phím tắt: Space lật thẻ · ← → chuyển thẻ</p>
+    <p class="cards-keys">{{ tr('Phím tắt: Space lật thẻ · ← → chuyển thẻ') }}</p>
   </div>
-  <p v-else class="vempty">Không còn thẻ nào trong bộ lọc này.</p>
+  <p v-else class="vempty">{{ tr('Không còn thẻ nào trong bộ lọc này.') }}</p>
 </template>

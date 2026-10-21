@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { useLocale } from './i18n'
 import { computed, nextTick, onMounted, ref } from 'vue'
-import { withBase } from 'vitepress'
 import SpeakButton from './SpeakButton.vue'
-import { itemKey, POS_LABEL, resolveRefs, speak, useToday, type Item } from './useVocab'
+import { itemKey, resolveRefs, speak, useToday, type Item } from './useVocab'
 
 type Range = 1 | 7 | 30 | null
 interface Result {
@@ -130,13 +130,14 @@ const mask = (text: string) => {
 const score = computed(() => results.value.filter((r) => r.ok).length)
 const wrong = computed(() => results.value.filter((r) => !r.ok))
 const wrongInToday = computed(() => wrong.value.every((r) => today.has(r.item.slug, r.item.word.w)))
+const { tr, link, pos } = useLocale()
 </script>
 
 <template>
   <div class="vocab review">
     <!-- Setup -->
     <template v-if="phase === 'setup'">
-      <div class="vseg" role="group" aria-label="Chọn khoảng thời gian">
+      <div class="vseg" role="group" :aria-label="tr('Chọn khoảng thời gian')">
         <button
           v-for="r in RANGES"
           :key="String(r.value)"
@@ -144,23 +145,22 @@ const wrongInToday = computed(() => wrong.value.every((r) => today.has(r.item.sl
           :aria-pressed="range === r.value"
           @click="range = r.value"
         >
-          {{ r.label }} ({{ counts[String(r.value)] ?? 0 }})
+          {{ tr(r.label) }} ({{ counts[String(r.value)] ?? 0 }})
         </button>
       </div>
       <p v-if="available" class="vnote">
-        {{ available }} từ trong danh sách "Hôm nay học" của các ngày trước. Mỗi câu hiện nghĩa tiếng Việt, bạn gõ từ
-        tiếng Anh.
+        {{ tr('{n} từ trong danh sách "Hôm nay học" của các ngày trước. Mỗi câu hiện nghĩa tiếng Việt, bạn gõ từ tiếng Anh.', { n: available }) }}
       </p>
       <div v-else class="vempty-state">
-        <p>Chưa có từ nào để ôn trong khoảng này.</p>
+        <p>{{ tr('Chưa có từ nào để ôn trong khoảng này.') }}</p>
         <p>
-          Bài ôn tập lấy từ danh sách <a :href="withBase('/tu-vung/hom-nay')">Hôm nay học</a> của những ngày trước. Hãy
-          chọn từ để học hôm nay, ngày mai quay lại đây để kiểm tra.
+          {{ tr('Bài ôn tập lấy từ danh sách') }} <a :href="link('/tu-vung/hom-nay')">{{ tr('Hôm nay học') }}</a>
+          {{ tr('của những ngày trước. Hãy chọn từ để học hôm nay, ngày mai quay lại đây để kiểm tra.') }}
         </p>
       </div>
       <div>
         <button type="button" class="vbtn primary" :disabled="!available" @click="start()">
-          Bắt đầu kiểm tra
+          {{ tr('Bắt đầu kiểm tra') }}
         </button>
       </div>
     </template>
@@ -168,15 +168,15 @@ const wrongInToday = computed(() => wrong.value.every((r) => today.has(r.item.sl
     <!-- Quiz -->
     <template v-else-if="phase === 'quiz' && current">
       <div class="cards-top">
-        <span class="cards-count">Câu {{ index + 1 }} / {{ queue.length }} · Đúng {{ score }}</span>
-        <button type="button" class="vbtn" @click="phase = 'done'">Kết thúc</button>
+        <span class="cards-count">{{ tr('Câu {a} / {b} · Đúng {c}', { a: index + 1, b: queue.length, c: score }) }}</span>
+        <button type="button" class="vbtn" @click="phase = 'done'">{{ tr('Kết thúc') }}</button>
       </div>
       <div class="vprog-bar"><i :style="{ width: (index / queue.length) * 100 + '%' }" /></div>
 
       <div class="quiz">
-        <p class="quiz-label">Từ tiếng Anh nào có nghĩa là</p>
+        <p class="quiz-label">{{ tr('Từ tiếng Anh nào có nghĩa là') }}</p>
         <p class="quiz-vi">{{ mask(current.word.vi) }}</p>
-        <p class="quiz-meta">{{ POS_LABEL[current.word.pos] }}</p>
+        <p class="quiz-meta">{{ pos[current.word.pos] }}</p>
         <p class="quiz-ex">"{{ mask(current.word.exVi) }}"</p>
         <p class="quiz-pattern" aria-hidden="true">{{ pattern }}</p>
 
@@ -191,35 +191,35 @@ const wrongInToday = computed(() => wrong.value.every((r) => today.has(r.item.sl
             autocomplete="off"
             autocapitalize="off"
             spellcheck="false"
-            placeholder="Gõ từ tiếng Anh rồi nhấn Enter"
-            aria-label="Câu trả lời"
+            :placeholder="tr('Gõ từ tiếng Anh rồi nhấn Enter')"
+            :aria-label="tr('Câu trả lời')"
             :readonly="!!checked"
           />
           <div v-if="!checked" class="quiz-actions">
-            <button type="submit" class="vbtn primary" :disabled="!input.trim()">Kiểm tra</button>
-            <button type="button" class="vbtn" :disabled="hint" @click="hint = true">Gợi ý chữ đầu</button>
-            <button type="button" class="vbtn" @click="giveUp">Mình chưa nhớ</button>
+            <button type="submit" class="vbtn primary" :disabled="!input.trim()">{{ tr('Kiểm tra') }}</button>
+            <button type="button" class="vbtn" :disabled="hint" @click="hint = true">{{ tr('Gợi ý chữ đầu') }}</button>
+            <button type="button" class="vbtn" @click="giveUp">{{ tr('Mình chưa nhớ') }}</button>
           </div>
         </form>
 
         <div v-if="checked" class="quiz-result" :class="checked.ok ? 'ok' : 'bad'">
-          <p class="quiz-verdict">{{ checked.ok ? 'Chính xác!' : checked.answer ? 'Chưa đúng' : 'Đáp án' }}</p>
+          <p class="quiz-verdict">{{ tr(checked.ok ? 'Chính xác!' : checked.answer ? 'Chưa đúng' : 'Đáp án') }}</p>
           <p class="quiz-answer">
             <span class="vword">{{ current.word.w }}</span>
             <SpeakButton :text="current.word.w" />
             <span class="vipa">{{ current.word.ipa }}</span>
           </p>
-          <p v-if="!checked.ok && checked.answer" class="quiz-yours">Bạn gõ: <s>{{ checked.answer }}</s></p>
+          <p v-if="!checked.ok && checked.answer" class="quiz-yours">{{ tr('Bạn gõ:') }} <s>{{ checked.answer }}</s></p>
           <p class="vex">
             <span>{{ current.word.ex }}</span>
-            <SpeakButton :text="current.word.ex" label="Nghe câu ví dụ" />
+            <SpeakButton :text="current.word.ex" :label="tr('Nghe câu ví dụ')" />
           </p>
           <div class="quiz-actions">
             <button type="button" class="vbtn primary" @click="next">
-              {{ index + 1 >= queue.length ? 'Xem kết quả' : 'Câu tiếp (Enter)' }}
+              {{ tr(index + 1 >= queue.length ? 'Xem kết quả' : 'Câu tiếp (Enter)') }}
             </button>
             <button v-if="!checked.ok && checked.answer" type="button" class="vbtn" @click="acceptMine">
-              Từ của mình cũng đúng
+              {{ tr('Từ của mình cũng đúng') }}
             </button>
           </div>
         </div>
@@ -229,9 +229,9 @@ const wrongInToday = computed(() => wrong.value.every((r) => today.has(r.item.sl
     <!-- Results -->
     <template v-else>
       <div class="quiz-score">
-        <p class="quiz-vi">{{ score }} / {{ results.length }} từ đúng</p>
+        <p class="quiz-vi">{{ tr('{a} / {b} từ đúng', { a: score, b: results.length }) }}</p>
         <p class="vnote">
-          {{ wrong.length ? `Còn ${wrong.length} từ cần ôn lại.` : results.length ? 'Bạn nhớ hết rồi.' : 'Bạn chưa trả lời câu nào.' }}
+          {{ wrong.length ? tr('Còn {n} từ cần ôn lại.', { n: wrong.length }) : tr(results.length ? 'Bạn nhớ hết rồi.' : 'Bạn chưa trả lời câu nào.') }}
         </p>
       </div>
       <ol v-if="wrong.length" class="vlist">
@@ -243,13 +243,13 @@ const wrongInToday = computed(() => wrong.value.every((r) => today.has(r.item.sl
               <span class="vipa">{{ r.item.word.ipa }}</span>
             </div>
             <span class="vres-vi">{{ r.item.word.vi }}</span>
-            <span v-if="r.answer" class="quiz-yours">Bạn gõ: <s>{{ r.answer }}</s></span>
+            <span v-if="r.answer" class="quiz-yours">{{ tr('Bạn gõ:') }} <s>{{ r.answer }}</s></span>
           </div>
         </li>
       </ol>
       <div class="quiz-actions">
         <button v-if="wrong.length" type="button" class="vbtn primary" @click="start(wrong.map((r) => r.item))">
-          Kiểm tra lại {{ wrong.length }} từ sai
+          {{ tr('Kiểm tra lại {n} từ sai', { n: wrong.length }) }}
         </button>
         <button
           v-if="wrong.length"
@@ -258,9 +258,9 @@ const wrongInToday = computed(() => wrong.value.every((r) => today.has(r.item.sl
           :disabled="wrongInToday"
           @click="today.add(wrong.map((r) => r.item))"
         >
-          {{ wrongInToday ? '✓ Đã thêm vào hôm nay' : 'Thêm từ sai vào hôm nay' }}
+          {{ tr(wrongInToday ? '✓ Đã thêm vào hôm nay' : 'Thêm từ sai vào hôm nay') }}
         </button>
-        <button type="button" class="vbtn" @click="phase = 'setup'">Làm bài mới</button>
+        <button type="button" class="vbtn" @click="phase = 'setup'">{{ tr('Làm bài mới') }}</button>
       </div>
     </template>
   </div>
