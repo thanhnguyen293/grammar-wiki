@@ -1,0 +1,83 @@
+# Hướng dẫn viết bài
+
+Mỗi bài là một file Markdown trong `docs/<thư-mục-chương>/<slug>.md`. Danh sách chương, slug, tên bài và nhãn vòng học nằm ở [docs/.vitepress/chapters.ts](docs/.vitepress/chapters.ts). Sidebar, trang chương và trang lộ trình đều sinh ra từ file đó, nên khi thêm bài mới chỉ cần thêm một dòng ở đó và tạo file `.md` tương ứng.
+
+Bài mẫu: [docs/2-thi/hien-tai-don.md](docs/2-thi/hien-tai-don.md). Bài mới theo đúng cấu trúc và mật độ ví dụ của bài này.
+
+## Người đọc
+
+Người Việt mất gốc tiếng Anh, vốn từ ít. Họ cần **thấy được** quy tắc qua ví dụ, không cần thuật ngữ. Viết tiếng Việt ngắn, rõ, câu chủ động. Ví dụ tiếng Anh dùng từ vựng đơn giản, tình huống đời thường (gia đình, đi học, đi làm, mua sắm, du lịch).
+
+## Cấu trúc một bài
+
+1. `# Tên bài` — đúng tên trong `chapters.ts`. Không cần frontmatter; nhãn vòng học và số mục tự hiện.
+2. Một đoạn mở đầu 1–2 câu: dùng để làm gì, khi nào gặp.
+3. `## Công thức` (khi bài có cấu trúc câu) trong khung `::: info CÔNG THỨC`, dạng bảng **Dạng | Cấu trúc | Ví dụ**.
+4. `## Cách dùng` — mỗi cách dùng là một `### 1. …`, mỗi mục có **3–4 ví dụ** có dịch nghĩa.
+5. Các phần riêng của chủ điểm (dấu hiệu nhận biết, bảng so sánh, bảng phân biệt, ngoại lệ…). Bảng nào cũng có cột **Ví dụ**.
+6. `## Lỗi hay gặp` — khung `::: danger LỖI HAY GẶP`, bảng **✗ Sai | ✓ Đúng | Vì sao**, 3–5 dòng.
+7. `## Ví dụ trong ngữ cảnh` — một đoạn hội thoại hoặc đoạn văn 5–8 dòng dùng chủ điểm tự nhiên, phần ngữ pháp in đậm, rồi khung `::: details Xem bản dịch`.
+8. `## Ghi nhớ` — khung `::: warning TÓM TẮT`, 3–4 gạch đầu dòng.
+9. Dòng `Xem thêm:` với 1–3 liên kết tới bài liên quan.
+
+Bài nhãn **Tra cứu** có thể bỏ phần 7, nhưng vẫn cần ví dụ trong bảng.
+
+## Quy ước định dạng
+
+**Ví dụ** luôn viết thành danh sách, câu tiếng Anh trước, `<br>` rồi nghĩa tiếng Việt in nghiêng. Phần ngữ pháp đang học in đậm:
+
+```md
+- My dad **goes** to work by bus.<br>*Bố tôi đi làm bằng xe buýt.*
+```
+
+**Khung màu** (đúng tiêu đề viết hoa như dưới):
+
+| Khung | Dùng cho |
+|---|---|
+| `::: info CÔNG THỨC` | Công thức, cấu trúc câu |
+| `::: warning QUAN TRỌNG` | Quy tắc phải nhớ (tối đa 2 khung mỗi bài) |
+| `::: warning TÓM TẮT` | Phần Ghi nhớ cuối bài |
+| `::: danger LỖI HAY GẶP` | Lỗi sai thường gặp |
+| `::: tip MẸO` | Mẹo nhớ, ghi chú thêm |
+| `::: details Xem bản dịch` | Bản dịch đoạn hội thoại |
+
+**Hội thoại** đặt trong `>`; mỗi dòng (trừ dòng cuối) kết thúc bằng ` \` để xuống dòng:
+
+```md
+> **Lan:** What **do** you **do**, Minh? \
+> **Minh:** I'**m** a nurse.
+```
+
+Trong bản dịch, mỗi dòng kết thúc bằng `<br>` (trừ dòng cuối).
+
+**Liên kết**: cùng chương dùng `./slug`, khác chương dùng `/thu-muc-chuong/slug` (ví dụ `/5-cau-dieu-kien/cac-loai`).
+
+**Không** dùng emoji, không dùng ký tự `|` trong ô bảng (sẽ vỡ bảng), không chép nguyên văn từ sách.
+
+## Kiểm tra trước khi xong
+
+- Mọi câu ví dụ đúng ngữ pháp và có dịch nghĩa.
+- Mỗi cách dùng có ít nhất 3 ví dụ.
+- `npm run dev` rồi mở bài: không vỡ bảng, khung hiện đúng màu.
+
+# Từ vựng theo chủ đề
+
+Danh sách chủ đề nằm ở [docs/.vitepress/vocabTopics.ts](docs/.vitepress/vocabTopics.ts). Từ của mỗi chủ đề nằm trong `docs/tu-vung/data/<slug>.json`, là một mảng đã **xếp từ thông dụng nhất xuống**. Trang chủ đề `docs/tu-vung/<slug>.md` chỉ chứa `<VocabTopic slug="..." />`.
+
+Mỗi từ có đúng 7 trường:
+
+```json
+{ "w": "family", "ipa": "/ˈfæməli/", "pos": "n", "vi": "gia đình", "ex": "My family lives in Hanoi.", "exVi": "Gia đình tôi sống ở Hà Nội.", "lv": "A1" }
+```
+
+| Trường | Quy ước |
+|---|---|
+| `w` | Từ gốc, chữ thường. Mỗi từ chỉ xuất hiện ở **một** chủ đề trong toàn bộ site. |
+| `ipa` | Phiên âm Anh-Mỹ, đặt trong `/…/`, có dấu trọng âm `ˈ` với từ nhiều âm tiết. |
+| `pos` | `n`, `v`, `adj`, `adv`, `pron`, `prep`, `conj`, `det`, `num`, `modal`, `int`, `phr` — loại từ của nghĩa chính. |
+| `vi` | Nghĩa tiếng Việt ngắn gọn, nghĩa phổ biến nhất trước; nhiều nghĩa ngăn bằng dấu phẩy, tối đa 3 nghĩa. |
+| `ex` | Một câu ví dụ ngắn (dưới ~12 từ), đời thường, đúng ngữ pháp, chứa từ đó, kết thúc bằng `.` `?` hoặc `!`. |
+| `exVi` | Bản dịch tự nhiên của câu ví dụ. |
+| `lv` | Trình độ ước lượng: `A1`, `A2`, `B1` hoặc `B2`. |
+
+Kiểm tra: `npm run check` (hoặc `node scripts/check-vocab.mjs <slug>` cho một chủ đề).

@@ -1,0 +1,48 @@
+# Sổ Tay Ngữ Pháp
+
+Wiki lý thuyết ngữ pháp tiếng Anh cho người Việt học lại từ đầu. Nội dung sắp theo 9 chương của cuốn *Giải thích ngữ pháp tiếng Anh* (Mai Lan Hương – Hà Thanh Uyên), tự biên soạn lại, mỗi quy tắc đều có ví dụ kèm dịch nghĩa. Mỗi bài được gắn nhãn **Vòng 1**, **Vòng 2** hoặc **Tra cứu** theo lộ trình học.
+
+Phần **Từ vựng** (`/tu-vung/`) có 3000 từ thông dụng chia theo 28 chủ đề, cộng 250 từ chuyên ngành công nghệ thông tin cho mobile developer. Mỗi từ có phiên âm, loại từ, nghĩa, câu ví dụ có dịch, nút nghe phát âm (giọng đọc của trình duyệt), chế độ thẻ ghi nhớ, ẩn nghĩa để tự kiểm tra và đánh dấu đã thuộc (lưu trên trình duyệt).
+
+Xây bằng [VitePress](https://vitepress.dev): mỗi bài là một file Markdown, có sẵn tìm kiếm, sidebar, chế độ sáng/tối.
+
+## Chạy
+
+```bash
+npm install
+npm run dev       # http://localhost:5173
+npm run build     # xuất web tĩnh ra docs/.vitepress/dist
+npm run preview   # xem bản build
+npm run check     # kiểm tra dữ liệu từ vựng
+```
+
+Cần Node 18 trở lên.
+
+## Deploy
+
+Mỗi lần push lên nhánh `main`, GitHub Actions ([.github/workflows/deploy.yml](.github/workflows/deploy.yml)) kiểm tra dữ liệu từ vựng, build và đưa web lên GitHub Pages tại https://thanhnguyen293.github.io/grammar-wiki/. Workflow đặt `VITEPRESS_BASE=/<tên-repo>/` vì Pages phục vụ web dưới đường dẫn con; chạy ở máy thì base là `/`.
+
+## Cấu trúc
+
+```
+docs/
+  index.md                 trang chủ
+  lo-trinh.md              lộ trình Vòng 1 / Vòng 2 / Tra cứu
+  1-tu-loai/ … 9-tu-vung-hoc/
+    index.md               trang chương (tự liệt kê các bài)
+    <slug>.md              từng bài
+  .vitepress/
+    chapters.ts            danh sách chương, bài, nhãn vòng học
+    config.mts             cấu hình site, sidebar sinh từ chapters.ts
+    vocabTopics.ts         danh sách chủ đề từ vựng
+    theme/                 CSS và các component (thanh nhãn bài, danh sách bài, từ vựng)
+  tu-vung/
+    data/<slug>.json       từ của từng chủ đề, xếp từ thông dụng nhất xuống
+scripts/
+  vocab-plan.json          danh sách 3000 từ đã chốt cho từng chủ đề
+  check-vocab.mjs          kiểm tra định dạng, số lượng, trùng lặp
+```
+
+## Thêm hoặc sửa bài
+
+Xem [CONTENT_GUIDE.md](CONTENT_GUIDE.md). Tóm tắt: thêm một dòng vào `chapters.ts`, tạo file `.md` cùng slug, viết theo bài mẫu [docs/2-thi/hien-tai-don.md](docs/2-thi/hien-tai-don.md).
