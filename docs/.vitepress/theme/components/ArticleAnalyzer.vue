@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { MINE, vocabTopics } from '../../vocabTopics'
 import SpeakButton from './SpeakButton.vue'
+import { lookupEnglish, translateToVi } from './autoLookup'
 import { analyze, buildDict, type Analysis, type Dict, type Entry } from './textAnalyze'
 import {
   itemKey,
@@ -172,10 +173,37 @@ const rowId = (key: string) => 'e-' + key.replace(/[^a-zA-Z0-9]+/g, '-')
 
 /* ---------- Adding words that are not in the dictionary ---------- */
 const editing = ref<string | null>(null)
-const form = ref({ w: '', vi: '', pos: 'n' as Pos, ipa: '' })
+const form = ref({ w: '', vi: '', pos: 'n' as Pos, ipa: '', exVi: '' })
+const lookup = ref<{ state: 'idle' | 'loading' | 'done' | 'failed'; definition?: string; translating?: boolean; sentenceFailed?: boolean }>({
+  state: 'idle',
+})
+let lookupRun = 0
+
 function openForm(e: Entry) {
   editing.value = e.key
-  form.value = { w: e.head.toLowerCase(), vi: '', pos: 'n', ipa: '' }
+  form.value = { w: e.head.toLowerCase(), vi: '', pos: 'n', ipa: '', exVi: '' }
+  autoFill()
+}
+/** Pre-fills IPA, part of speech and a Vietnamese meaning; the learner checks them before saving. */
+async function autoFill() {
+  const run = ++lookupRun
+  const word = form.value.w.trim()
+  if (!word) return
+  lookup.value = { state: 'loading' }
+  // A new lookup replaces the previous suggestions, which may belong to a different word.
+  form.value = { ...form.value, ipa: '', vi: '' }
+  const [en, vi] = await Promise.all([lookupEnglish(word), translateToVi(word, 3)])
+  if (run !== lookupRun) return
+  if (en?.ipa) form.value.ipa = en.ipa
+  if (en?.pos) form.value.pos = en.pos
+  if (vi && !form.value.vi.trim()) form.value.vi = vi
+  lookup.value = { state: en || vi ? 'done' : 'failed', definition: en?.definition }
+}
+async function translateSentence(e: Entry) {
+  lookup.value = { ...lookup.value, translating: true, sentenceFailed: false }
+  const t = await translateToVi(sentenceText(e))
+  if (t) form.value.exVi = t
+  lookup.value = { ...lookup.value, translating: false, sentenceFailed: !t }
 }
 async function saveMine(e: Entry) {
   const w = form.value.w.trim()
@@ -188,7 +216,7 @@ async function saveMine(e: Entry) {
     pos: form.value.pos,
     ipa: ipa && !ipa.startsWith('/') ? `/${ipa}/` : ipa,
     ex: sentenceText(e).slice(0, 220),
-    exVi: '',
+    exVi: form.value.exVi.trim(),
     lv: '' as const,
   }
   mine.save(word)
@@ -317,18 +345,42 @@ const FILTERS: { value: Filter; label: string }[] = [
                 <button type="button" class="vtoday" @click="openForm(e)">+ Thêm vào Từ của tôi</button>
               </template>
               <form v-else class="an-form" @submit.prevent="saveMine(e)">
-                <label>Từ <input v-model="form.w" :id="`mine-w-${rowId(e.key)}`" required /></label>
-                <label>Nghĩa tiếng Việt <input v-model="form.vi" :id="`mine-vi-${rowId(e.key)}`" required placeholder="vd: triển khai" /></label>
+                <p class="an-lookup" :class="lookup.state">
+                  <template v-if="lookup.state === 'loading'">Đang tra tự động…</template>
+                  <template v-else-if="lookup.state === 'done'">
+                    Đã điền sẵn gợi ý từ từ điển công khai và MyMemory. Hãy kiểm tra lại trước khi lưu.
+                  </template>
+                  <template v-else-if="lookup.state === 'failed'">
+                    Không tra được tự động. Bạn tự điền, hoặc mở Cambridge / Google Dịch ở trên.
+                  </template>
+                </p>
+                <p v-if="lookup.definition" class="an-def"><b>Định nghĩa (tiếng Anh):</b> {{ lookup.definition }}</p>
+                <label>
+                  Từ
+                  <span class="an-inline">
+                    <input v-model="form.w" :id="`mine-w-${rowId(e.key)}`" required />
+                    <button type="button" class="vbtn" :disabled="lookup.state === 'loading'" @click="autoFill">Tra lại</button>
+                  </span>
+                </label>
+                <label>Nghĩa tiếng Việt <input v-model="form.vi" :id="`mine-vi-${rowId(e.key)}`" required placeholder="vd: có thể mở rộng" /></label>
                 <label>
                   Loại từ
                   <select v-model="form.pos" :id="`mine-pos-${rowId(e.key)}`">
                     <option v-for="(label, p) in POS_LABEL" :key="p" :value="p">{{ label }}</option>
                   </select>
                 </label>
-                <label>Phiên âm (không bắt buộc) <input v-model="form.ipa" :id="`mine-ipa-${rowId(e.key)}`" /></label>
+                <label>Phiên âm <input v-model="form.ipa" :id="`mine-ipa-${rowId(e.key)}`" placeholder="không bắt buộc" /></label>
+                <label class="an-wide">
+                  Dịch câu ví dụ (không bắt buộc)
+                  <textarea v-model="form.exVi" :id="`mine-exvi-${rowId(e.key)}`" rows="2" />
+                </label>
                 <div class="quiz-actions">
                   <button type="submit" class="vbtn primary" :disabled="!form.w.trim() || !form.vi.trim()">Lưu và thêm vào hôm nay</button>
+                  <button type="button" class="vbtn" :disabled="lookup.translating" @click="translateSentence(e)">
+                    {{ lookup.translating ? 'Đang dịch…' : 'Gợi ý dịch câu' }}
+                  </button>
                   <button type="button" class="vbtn" @click="editing = null">Hủy</button>
+                  <span v-if="lookup.sentenceFailed" class="vnote">Không dịch được câu lúc này.</span>
                 </div>
               </form>
             </div>

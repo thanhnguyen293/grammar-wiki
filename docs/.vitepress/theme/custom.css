@@ -993,3 +993,43 @@
   font-weight: 600;
   background: var(--vp-c-bg);
 }
+
+/* Auto lookup in the add-word form */
+.vp-doc p.an-lookup,
+.vp-doc p.an-def {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+.an-lookup.done {
+  color: var(--vp-c-tip-1);
+}
+.an-lookup.failed {
+  color: var(--vp-c-warning-1);
+}
+.an-inline {
+  display: flex;
+  gap: 6px;
+}
+.an-inline input {
+  flex: 1;
+  min-width: 0;
+}
+.an-inline .vbtn {
+  padding: 4px 10px;
+  font-size: 13px;
+}
+.an-form .an-wide {
+  grid-column: 1 / -1;
+}
+.an-form textarea {
+  padding: 6px 8px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background: var(--vp-c-bg);
+  font-size: 14px;
+  color: var(--vp-c-text-1);
+  resize: vertical;
+}
