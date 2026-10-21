@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { withBase } from 'vitepress'
-import { coreTopics, itTopics, learnedKey, vocabTopics } from '../../vocabTopics'
+import { coreTopics, extraTopics, learnedKey, vocabTopics } from '../../vocabTopics'
 import SpeakButton from './SpeakButton.vue'
 import { fold, loadTopic, POS_LABEL, useLearned, useToday, type Word } from './useVocab'
 
@@ -51,6 +51,10 @@ const results = computed(() => {
       <span><b>Kiểm tra từ đã học</b> · nhìn nghĩa tiếng Việt, gõ từ tiếng Anh</span>
       <span>Bắt đầu →</span>
     </a>
+    <a class="vtoday-link" :href="withBase('/tu-vung/phan-tich')">
+      <span><b>Học từ bài viết</b> · dán một bài tiếng Anh, lọc ra từ và cụm từ để học</span>
+      <span>Mở →</span>
+    </a>
 
     <input id="vocab-search" v-model="query" class="vsearch" type="search" placeholder="Tra từ tiếng Anh hoặc nghĩa tiếng Việt (vd: family, gia dinh)" aria-label="Tra từ" />
 
@@ -75,10 +79,10 @@ const results = computed(() => {
       </a>
     </div>
 
-    <h2>Chuyên ngành</h2>
+    <h2>Mở rộng</h2>
     <div class="row-list">
-      <a v-for="t in itTopics" :key="t.slug" class="row vtopic" :href="withBase(`/tu-vung/${t.slug}`)">
-        <span class="row-no">IT</span>
+      <a v-for="t in extraTopics" :key="t.slug" class="row vtopic" :href="withBase(`/tu-vung/${t.slug}`)">
+        <span class="row-no">{{ t.track === 'it' ? 'IT' : 'Cụm' }}</span>
         <span class="row-title">{{ t.title }}<small>{{ t.en }}</small></span>
         <span class="row-ch">{{ done(t.slug) }}/{{ count(t.slug) || t.target }}</span>
       </a>

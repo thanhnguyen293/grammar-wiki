@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { withBase } from 'vitepress'
-import { vocabTopics } from '../../vocabTopics'
+import { MINE, vocabTopics } from '../../vocabTopics'
 import SpeakButton from './SpeakButton.vue'
 import VocabCards from './VocabCards.vue'
 import { canSpeak, itemKey, POS_LABEL, useLearned, useToday, type Item } from './useVocab'
 
 /** List + flashcards for any set of words: a topic, or today's list. */
-const props = defineProps<{ items: Item[]; loading?: boolean; showTopic?: boolean }>()
+const props = defineProps<{ items: Item[]; loading?: boolean; showTopic?: boolean; removable?: boolean }>()
+const emit = defineEmits<{ remove: [item: Item] }>()
 
 const mode = ref<'list' | 'cards'>('list')
 const filter = ref<'all' | 'todo' | 'done'>('all')
@@ -18,7 +19,8 @@ const { learned, toggle } = useLearned()
 const today = useToday()
 onMounted(() => (speechOk.value = canSpeak()))
 
-const topicTitle = (slug: string) => vocabTopics.find((t) => t.slug === slug)?.title ?? slug
+const topicTitle = (slug: string) =>
+  slug === MINE.slug ? MINE.title : (vocabTopics.find((t) => t.slug === slug)?.title ?? slug)
 const learnedCount = computed(() => props.items.filter((i) => learned.value.has(itemKey(i))).length)
 const shown = computed(() =>
   props.items.filter((i) => {
@@ -86,9 +88,9 @@ const isHidden = (i: Item) => hideMeaning.value && !revealed.value.has(itemKey(i
             <div class="vhead">
               <span class="vword">{{ it.word.w }}</span>
               <SpeakButton :text="it.word.w" />
-              <span class="vipa">{{ it.word.ipa }}</span>
+              <span v-if="it.word.ipa" class="vipa">{{ it.word.ipa }}</span>
               <span class="vpos">{{ POS_LABEL[it.word.pos] }}</span>
-              <span class="vlv">{{ it.word.lv }}</span>
+              <span v-if="it.word.lv" class="vlv">{{ it.word.lv }}</span>
               <a v-if="showTopic" class="vtopic-link" :href="withBase(`/tu-vung/${it.slug}`)">{{ topicTitle(it.slug) }}</a>
             </div>
             <button
@@ -105,7 +107,7 @@ const isHidden = (i: Item) => hideMeaning.value && !revealed.value.has(itemKey(i
               <span>{{ it.word.ex }}</span>
               <SpeakButton :text="it.word.ex" label="Nghe câu ví dụ" />
             </div>
-            <div class="vexvi" :class="{ hidden: isHidden(it) }">{{ it.word.exVi }}</div>
+            <div v-if="it.word.exVi" class="vexvi" :class="{ hidden: isHidden(it) }">{{ it.word.exVi }}</div>
           </div>
           <div class="vactions">
             <button
@@ -126,6 +128,7 @@ const isHidden = (i: Item) => hideMeaning.value && !revealed.value.has(itemKey(i
             >
               {{ learned.has(itemKey(it)) ? '✓ Đã thuộc' : 'Đã thuộc?' }}
             </button>
+            <button v-if="removable" type="button" class="vmark" @click="emit('remove', it)">Xóa</button>
           </div>
         </li>
       </ol>

@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { chapters, LEVEL_LABEL, sectionLink, sectionNo } from './chapters'
-import { coreTopics, itTopics } from './vocabTopics'
+import { coreTopics, extraTopics } from './vocabTopics'
 
 const grammarSidebar = [
   {
@@ -29,12 +29,14 @@ const vocabSidebar = [
       { text: 'Tổng quan & tra từ', link: '/tu-vung/' },
       { text: 'Hôm nay học', link: '/tu-vung/hom-nay' },
       { text: 'Kiểm tra từ đã học', link: '/tu-vung/on-tap' },
+      { text: 'Học từ bài viết', link: '/tu-vung/phan-tich' },
+      { text: 'Từ của tôi', link: '/tu-vung/cua-toi' },
       ...coreTopics.map((t, i) => ({ text: `${i + 1}. ${t.title}`, link: `/tu-vung/${t.slug}` })),
     ],
   },
   {
-    text: 'Chuyên ngành',
-    items: itTopics.map((t) => ({ text: t.title, link: `/tu-vung/${t.slug}` })),
+    text: 'Mở rộng',
+    items: extraTopics.map((t) => ({ text: t.title, link: `/tu-vung/${t.slug}` })),
   },
 ]
 

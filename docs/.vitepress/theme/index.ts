@@ -8,6 +8,8 @@ import VocabHome from './components/VocabHome.vue'
 import VocabTopic from './components/VocabTopic.vue'
 import VocabToday from './components/VocabToday.vue'
 import VocabReview from './components/VocabReview.vue'
+import ArticleAnalyzer from './components/ArticleAnalyzer.vue'
+import VocabMine from './components/VocabMine.vue'
 import './custom.css'
 
 export default {
@@ -20,5 +22,7 @@ export default {
     app.component('VocabTopic', VocabTopic)
     app.component('VocabToday', VocabToday)
     app.component('VocabReview', VocabReview)
+    app.component('ArticleAnalyzer', ArticleAnalyzer)
+    app.component('VocabMine', VocabMine)
   },
 } satisfies Theme

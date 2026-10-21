@@ -9,7 +9,7 @@ export interface VocabTopic {
   target: number
   /** Specialist topics sit outside the 3000 core words: they may reuse a core word with its
       specialist meaning (bug, branch, release), so their progress is tracked separately. */
-  track?: 'it'
+  track?: 'it' | 'phrase'
 }
 
 export const vocabTopics: VocabTopic[] = [
@@ -42,11 +42,17 @@ export const vocabTopics: VocabTopic[] = [
   { slug: 'xa-hoi-phap-luat', title: 'Xã hội, pháp luật & chính trị', en: 'Society, law & politics', target: 100 },
   { slug: 'khoa-hoc-moi-truong', title: 'Khoa học & môi trường', en: 'Science & environment', target: 90 },
   { slug: 'cntt-mobile', title: 'Công nghệ thông tin cho mobile developer', en: 'IT for mobile developers', target: 250, track: 'it' },
+  { slug: 'cum-tu', title: 'Cụm từ thông dụng', en: 'Phrasal verbs, collocations & fixed expressions', target: 500, track: 'phrase' },
 ]
 
 export const coreTopics = vocabTopics.filter((t) => !t.track)
-export const itTopics = vocabTopics.filter((t) => t.track === 'it')
+/** Words the learner added themselves (from articles); kept in the browser, not in data files. */
+export const MINE = { slug: 'cua-toi', title: 'Từ của tôi' }
 
-/** Key under which "đã thuộc" is stored for a word. */
+/** Topics outside the 3000 core words: IT vocabulary and common phrases. */
+export const extraTopics = vocabTopics.filter((t) => t.track)
+
+/** Key under which "đã thuộc" is stored for a word. Core words use the bare word; everything
+    else (specialist topics, phrases, the learner's own words) is prefixed with its slug. */
 export const learnedKey = (slug: string, word: string) =>
-  vocabTopics.find((t) => t.slug === slug)?.track ? `${slug}:${word}` : word
+  coreTopics.some((t) => t.slug === slug) ? word : `${slug}:${word}`

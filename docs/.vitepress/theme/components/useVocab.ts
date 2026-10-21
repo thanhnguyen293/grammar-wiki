@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { learnedKey } from '../../vocabTopics'
+import { learnedKey, MINE } from '../../vocabTopics'
 
 export type Pos = 'n' | 'v' | 'adj' | 'adv' | 'pron' | 'prep' | 'conj' | 'det' | 'num' | 'modal' | 'int' | 'phr'
 export type Cefr = 'A1' | 'A2' | 'B1' | 'B2'
@@ -11,7 +11,8 @@ export interface Word {
   vi: string
   ex: string
   exVi: string
-  lv: Cefr
+  /** Empty for words the learner added themselves. */
+  lv: Cefr | ''
 }
 
 export const POS_LABEL: Record<Pos, string> = {
@@ -33,39 +34,76 @@ export const POS_LABEL: Record<Pos, string> = {
 const loaders = import.meta.glob<Word[]>('../../../tu-vung/data/*.json', { import: 'default' })
 
 export async function loadTopic(slug: string): Promise<Word[]> {
+  if (slug === MINE.slug) return useMine().words.value
   const load = loaders[`../../../tu-vung/data/${slug}.json`]
   return load ? load() : []
 }
 
-/* Learned words: one list for the whole site, kept in this browser only. Words are
-   unique across topics (scripts/check-vocab.mjs enforces it), so the word is the key. */
-const STORAGE_KEY = 'stnp.vocab.learned'
-const learnedList = ref<string[]>([])
-let loaded = false
+function readStore<T>(key: string, fallback: T): T {
+  try {
+    const raw = window.localStorage.getItem(key)
+    return raw ? JSON.parse(raw) : fallback
+  } catch {
+    // Storage can be blocked (private mode); data then lasts for this visit only.
+    return fallback
+  }
+}
+function writeStore(key: string, value: unknown) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value))
+  } catch {
+    // See readStore.
+  }
+}
 
+/** A set of word keys kept in this browser, shared by every component that uses it. */
+function keySet(storageKey: string) {
+  const list = ref<string[]>([])
+  let loaded = false
+  return () => {
+    if (!loaded && typeof window !== 'undefined') {
+      loaded = true
+      list.value = readStore(storageKey, [])
+    }
+    const keys = computed(() => new Set(list.value))
+    function set(key: string, on: boolean) {
+      if (keys.value.has(key) === on) return
+      list.value = on ? [...list.value, key] : list.value.filter((k) => k !== key)
+      writeStore(storageKey, list.value)
+    }
+    const toggle = (key: string) => set(key, !keys.value.has(key))
+    return { keys, set, toggle }
+  }
+}
+
+const learnedSet = keySet('stnp.vocab.learned')
+/** "Đã thuộc / đã biết". Keys come from learnedKey(). */
 export function useLearned() {
-  if (!loaded && typeof window !== 'undefined') {
-    loaded = true
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY)
-      if (raw) learnedList.value = JSON.parse(raw)
-    } catch {
-      // Storage can be blocked (private mode); progress then lasts for this visit only.
-    }
+  const { keys, set, toggle } = learnedSet()
+  return { learned: keys, set, toggle }
+}
+
+/** Words the learner said they don't know yet (from the article analyser). */
+export const useUnknown = keySet('stnp.vocab.unknown')
+
+const MINE_KEY = 'stnp.vocab.mine'
+const mineList = ref<Word[]>([])
+let mineLoaded = false
+/** "Từ của tôi": words outside the dictionary that the learner added with their own meaning. */
+export function useMine() {
+  if (!mineLoaded && typeof window !== 'undefined') {
+    mineLoaded = true
+    mineList.value = readStore(MINE_KEY, [])
   }
-  const learned = computed(() => new Set(learnedList.value))
-  function toggle(word: string) {
-    const next = new Set(learnedList.value)
-    if (next.has(word)) next.delete(word)
-    else next.add(word)
-    learnedList.value = [...next]
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(learnedList.value))
-    } catch {
-      // See above.
-    }
+  function save(word: Word) {
+    mineList.value = [...mineList.value.filter((x) => x.w !== word.w), word]
+    writeStore(MINE_KEY, mineList.value)
   }
-  return { learned, toggle }
+  function remove(w: string) {
+    mineList.value = mineList.value.filter((x) => x.w !== w)
+    writeStore(MINE_KEY, mineList.value)
+  }
+  return { words: mineList, save, remove }
 }
 
 let voice: SpeechSynthesisVoice | undefined

@@ -2,7 +2,7 @@
 
 Wiki lý thuyết ngữ pháp tiếng Anh cho người Việt học lại từ đầu. Nội dung sắp theo 9 chương của cuốn *Giải thích ngữ pháp tiếng Anh* (Mai Lan Hương – Hà Thanh Uyên), tự biên soạn lại, mỗi quy tắc đều có ví dụ kèm dịch nghĩa. Mỗi bài được gắn nhãn **Vòng 1**, **Vòng 2** hoặc **Tra cứu** theo lộ trình học.
 
-Phần **Từ vựng** (`/tu-vung/`) có 3000 từ thông dụng chia theo 28 chủ đề, cộng 250 từ chuyên ngành công nghệ thông tin cho mobile developer. Mỗi từ có phiên âm, loại từ, nghĩa, câu ví dụ có dịch, nút nghe phát âm (giọng đọc của trình duyệt), chế độ thẻ ghi nhớ, ẩn nghĩa để tự kiểm tra và đánh dấu đã thuộc (lưu trên trình duyệt).
+Phần **Từ vựng** (`/tu-vung/`) có 3000 từ thông dụng chia theo 28 chủ đề, cộng 250 từ chuyên ngành công nghệ thông tin cho mobile developer. Mỗi từ có phiên âm, loại từ, nghĩa, câu ví dụ có dịch, nút nghe phát âm (giọng đọc của trình duyệt), chế độ thẻ ghi nhớ, ẩn nghĩa để tự kiểm tra và đánh dấu đã thuộc (lưu trên trình duyệt). Ngoài ra có 500 cụm từ thông dụng (phrasal verb, collocation, thành ngữ), danh sách **Hôm nay học**, trang **Kiểm tra từ đã học** (nhìn nghĩa, gõ từ) và trang **Học từ bài viết**: dán một bài tiếng Anh, wiki đưa từ về dạng gốc, gom cụm từ, cho đánh dấu đã biết / chưa biết và thêm từ vào danh sách học.
 
 Xây bằng [VitePress](https://vitepress.dev): mỗi bài là một file Markdown, có sẵn tìm kiếm, sidebar, chế độ sáng/tối.
 
@@ -36,6 +36,7 @@ docs/
     config.mts             cấu hình site, sidebar sinh từ chapters.ts
     vocabTopics.ts         danh sách chủ đề từ vựng
     theme/                 CSS và các component (thanh nhãn bài, danh sách bài, từ vựng)
+      components/textAnalyze.ts  tách từ, đưa về dạng gốc, nhận diện cụm từ trong bài viết
   tu-vung/
     data/<slug>.json       từ của từng chủ đề, xếp từ thông dụng nhất xuống
 scripts/

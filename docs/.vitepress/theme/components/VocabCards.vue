@@ -84,14 +84,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         {{ word.w }}
         <SpeakButton :text="word.w" />
       </div>
-      <div class="card-meta">{{ word.ipa }} · {{ POS_LABEL[word.pos] }} · {{ word.lv }}</div>
+      <div class="card-meta">{{ [word.ipa, POS_LABEL[word.pos], word.lv].filter(Boolean).join(' · ') }}</div>
       <template v-if="flipped">
         <div class="card-vi">{{ word.vi }}</div>
         <div class="card-ex">
           <span>{{ word.ex }}</span>
           <SpeakButton :text="word.ex" label="Nghe câu ví dụ" />
         </div>
-        <div class="card-exvi">{{ word.exVi }}</div>
+        <div v-if="word.exVi" class="card-exvi">{{ word.exVi }}</div>
       </template>
       <div v-else class="card-hint">Nhớ nghĩa trong đầu, rồi chạm để lật thẻ</div>
     </div>
