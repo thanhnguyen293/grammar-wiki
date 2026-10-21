@@ -285,26 +285,28 @@ const FILTERS: { value: Filter; label: string }[] = [
         · Bấm vào một từ để tới dòng của nó.
       </p>
 
-      <div class="vbar">
-        <div class="vseg" role="group" aria-label="Lọc theo loại">
-          <button type="button" :aria-pressed="kind === 'all'" @click="kind = 'all'">Tất cả ({{ kindCounts.all }})</button>
-          <button type="button" :aria-pressed="kind === 'phrase'" @click="kind = 'phrase'">Cụm từ ({{ kindCounts.phrase }})</button>
-          <button type="button" :aria-pressed="kind === 'word'" @click="kind = 'word'">Từ đơn ({{ kindCounts.word }})</button>
+      <div class="vsticky">
+        <div class="vbar">
+          <div class="vseg" role="group" aria-label="Lọc theo loại">
+            <button type="button" :aria-pressed="kind === 'all'" @click="kind = 'all'">Tất cả ({{ kindCounts.all }})</button>
+            <button type="button" :aria-pressed="kind === 'phrase'" @click="kind = 'phrase'">Cụm từ ({{ kindCounts.phrase }})</button>
+            <button type="button" :aria-pressed="kind === 'word'" @click="kind = 'word'">Từ đơn ({{ kindCounts.word }})</button>
+          </div>
+          <div class="vseg" role="group" aria-label="Lọc theo trạng thái">
+            <button v-for="f in FILTERS" :key="f.value" type="button" :aria-pressed="filter === f.value" @click="filter = f.value">
+              {{ f.label }} ({{ counts[f.value] }})
+            </button>
+          </div>
         </div>
-        <div class="vseg" role="group" aria-label="Lọc theo trạng thái">
-          <button v-for="f in FILTERS" :key="f.value" type="button" :aria-pressed="filter === f.value" @click="filter = f.value">
-            {{ f.label }} ({{ counts[f.value] }})
+        <div class="an-bulk">
+          <button v-if="counts.none" type="button" class="vbtn" @click="markRestKnown">
+            Đánh dấu {{ counts.none }} từ chưa đánh dấu là "Đã biết"
           </button>
+          <button v-if="unknownNotToday.length" type="button" class="vbtn primary" @click="today.add(unknownNotToday)">
+            + Thêm {{ unknownNotToday.length }} từ "Chưa biết" vào hôm nay
+          </button>
+          <span v-else-if="unknownItems.length" class="vnote">✓ Các từ "Chưa biết" đã có trong danh sách hôm nay.</span>
         </div>
-      </div>
-      <div class="an-bulk">
-        <button v-if="counts.none" type="button" class="vbtn" @click="markRestKnown">
-          Đánh dấu {{ counts.none }} từ chưa đánh dấu là "Đã biết"
-        </button>
-        <button v-if="unknownNotToday.length" type="button" class="vbtn primary" @click="today.add(unknownNotToday)">
-          + Thêm {{ unknownNotToday.length }} từ "Chưa biết" vào hôm nay
-        </button>
-        <span v-else-if="unknownItems.length" class="vnote">✓ Các từ "Chưa biết" đã có trong danh sách hôm nay.</span>
       </div>
 
       <ol v-if="shown.length" class="vlist">

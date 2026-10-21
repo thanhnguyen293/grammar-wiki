@@ -49,26 +49,30 @@ const isHidden = (i: Item) => hideMeaning.value && !revealed.value.has(itemKey(i
 
 <template>
   <div class="vocab">
-    <div class="vbar">
-      <div class="vseg" role="group" aria-label="Chế độ học">
-        <button type="button" :aria-pressed="mode === 'list'" @click="mode = 'list'">Danh sách</button>
-        <button type="button" :aria-pressed="mode === 'cards'" @click="openCards">Thẻ ghi nhớ</button>
+    <!-- Stays under the site header while the list scrolls. -->
+    <div class="vsticky">
+      <div class="vbar">
+        <div class="vseg" role="group" aria-label="Chế độ học">
+          <button type="button" :aria-pressed="mode === 'list'" @click="mode = 'list'">Danh sách</button>
+          <button type="button" :aria-pressed="mode === 'cards'" @click="openCards">Thẻ ghi nhớ</button>
+        </div>
+        <div class="vseg" role="group" aria-label="Lọc từ">
+          <button type="button" :aria-pressed="filter === 'all'" @click="setFilter('all')">Tất cả</button>
+          <button type="button" :aria-pressed="filter === 'todo'" @click="setFilter('todo')">Chưa thuộc</button>
+          <button type="button" :aria-pressed="filter === 'done'" @click="setFilter('done')">Đã thuộc</button>
+        </div>
+        <label v-if="mode === 'list'" class="vcheck">
+          <input id="hide-meaning" v-model="hideMeaning" type="checkbox" @change="revealed = new Set()" />
+          Ẩn nghĩa
+        </label>
       </div>
-      <div class="vseg" role="group" aria-label="Lọc từ">
-        <button type="button" :aria-pressed="filter === 'all'" @click="setFilter('all')">Tất cả</button>
-        <button type="button" :aria-pressed="filter === 'todo'" @click="setFilter('todo')">Chưa thuộc</button>
-        <button type="button" :aria-pressed="filter === 'done'" @click="setFilter('done')">Đã thuộc</button>
+
+      <div class="vprog">
+        <span>Đã thuộc {{ learnedCount }} / {{ items.length || (loading ? '…' : 0) }} từ</span>
+        <div class="vprog-bar"><i :style="{ width: items.length ? (learnedCount / items.length) * 100 + '%' : '0' }" /></div>
       </div>
-      <label v-if="mode === 'list'" class="vcheck">
-        <input id="hide-meaning" v-model="hideMeaning" type="checkbox" @change="revealed = new Set()" />
-        Ẩn nghĩa
-      </label>
     </div>
 
-    <div class="vprog">
-      <span>Đã thuộc {{ learnedCount }} / {{ items.length || (loading ? '…' : 0) }} từ</span>
-      <div class="vprog-bar"><i :style="{ width: items.length ? (learnedCount / items.length) * 100 + '%' : '0' }" /></div>
-    </div>
     <p v-if="!speechOk" class="vnote">Trình duyệt này không hỗ trợ đọc phát âm. Hãy thử Chrome, Edge hoặc Safari.</p>
 
     <slot />

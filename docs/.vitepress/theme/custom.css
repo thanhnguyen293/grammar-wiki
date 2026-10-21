@@ -1033,3 +1033,52 @@
   color: var(--vp-c-text-1);
   resize: vertical;
 }
+
+/* Toolbars that stay visible while a long list scrolls. On phones only the "Mục lục" bar
+   (about 48px) is pinned above the content; from 960px the site header (--vp-nav-height) is. */
+.vsticky {
+  position: sticky;
+  top: calc(var(--vp-layout-top-height, 0px) + 48px);
+  z-index: 10;
+  display: grid;
+  gap: 10px;
+  margin: 0 -12px;
+  padding: 10px 12px;
+  background: var(--vp-c-bg);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+@media (min-width: 960px) {
+  .vsticky {
+    top: calc(var(--vp-layout-top-height, 0px) + var(--vp-nav-height));
+  }
+}
+.vsticky .vprog,
+.vsticky .an-bulk:empty {
+  margin: 0;
+}
+.vsticky .an-bulk:empty {
+  display: none;
+}
+@media (max-width: 560px) {
+  /* Keep the pinned bar short on phones so the list still has room. */
+  .vsticky {
+    gap: 6px;
+    padding-block: 8px;
+  }
+  .vsticky .vbar {
+    gap: 6px;
+  }
+  .vsticky .vseg button {
+    padding: 4px 9px;
+    font-size: 13px;
+  }
+  .vsticky .vcheck,
+  .vsticky .vprog {
+    font-size: 12.5px;
+  }
+  .vsticky .vprog {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+}
