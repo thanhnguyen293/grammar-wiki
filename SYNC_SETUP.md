@@ -4,6 +4,14 @@ Nút **Đồng bộ** trên thanh menu cho phép đăng nhập bằng Google và
 
 Firebase gói miễn phí (Spark) đủ cho dùng cá nhân.
 
+Project đang dùng: **`grammar-wiki-tn293`** ([console](https://console.firebase.google.com/project/grammar-wiki-tn293/overview)). Khi sửa [firestore.rules](firestore.rules), đưa lên bằng:
+
+```bash
+firebase deploy --only firestore:rules --project grammar-wiki-tn293
+```
+
+Các bước dưới đây là cách dựng lại từ đầu nếu cần một project khác.
+
 ## 1. Tạo project
 
 1. Mở https://console.firebase.google.com, bấm **Create a project** (hoặc **Add project**), đặt tên, ví dụ `grammar-wiki`. Có thể tắt Google Analytics.
