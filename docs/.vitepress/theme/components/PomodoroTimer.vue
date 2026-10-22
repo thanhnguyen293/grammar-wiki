@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useLocale } from './i18n'
 import { format, usePomodoro, type PomodoroMode } from './usePomodoro'
 
-const { state, left, total, today, start, pause, reset, setMode, skip, updateSettings } = usePomodoro()
+const { state, left, total, today, goal, setGoal, start, pause, reset, setMode, skip, updateSettings } = usePomodoro()
 const { tr } = useLocale()
 const open = ref(false)
 const showSettings = ref(false)
@@ -60,6 +60,7 @@ const setNumber = (key: 'focus' | 'short' | 'long' | 'longEvery', e: Event, max:
         <path d="M12 9v4l2.5 2M9.5 2.5h5M12 2.5V5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
       </svg>
       <span v-if="active" class="pomo-time">{{ format(left) }}</span>
+      <span v-else class="pomo-count" :class="{ met: today >= goal }">{{ today }}/{{ goal }}</span>
     </button>
 
     <div v-if="open" class="pomo-panel" role="dialog" :aria-label="tr('Đồng hồ Pomodoro')">
@@ -93,8 +94,20 @@ const setNumber = (key: 'focus' | 'short' | 'long' | 'longEvery', e: Event, max:
         <button type="button" class="vbtn" @click="skip">{{ tr('Bỏ qua') }}</button>
       </div>
 
+      <div class="pomo-goal">
+        <span>{{ tr('Hôm nay học') }}</span>
+        <span class="pomo-stepper">
+          <button type="button" :aria-label="tr('Bớt một phiên')" :disabled="goal <= 1" @click="setGoal(goal - 1)">−</button>
+          <b>{{ goal }}</b>
+          <button type="button" :aria-label="tr('Thêm một phiên')" :disabled="goal >= 20" @click="setGoal(goal + 1)">+</button>
+        </span>
+        <span>{{ tr('phiên') }}</span>
+      </div>
+      <div class="pomo-dots" :aria-label="tr('Đã xong {a}/{b} phiên hôm nay', { a: today, b: goal })">
+        <i v-for="n in Math.max(goal, today)" :key="n" :class="{ done: n <= today, extra: n > goal }" />
+      </div>
       <p class="pomo-stats">
-        {{ tr('Hôm nay: {n} phiên tập trung', { n: today }) }} ·
+        {{ today >= goal ? tr('Đã đạt mục tiêu hôm nay!') : tr('Đã xong {a}/{b} phiên hôm nay', { a: today, b: goal }) }} ·
         {{ tr('Vòng {a}/{b}', { a: cycleStep, b: state.settings.longEvery }) }}
       </p>
 

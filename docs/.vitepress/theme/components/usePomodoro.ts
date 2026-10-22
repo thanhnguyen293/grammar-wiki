@@ -13,6 +13,8 @@ export interface PomodoroSettings {
   longEvery: number
   /** Start the next session by itself when one ends. */
   autoStart: boolean
+  /** Focus sessions to aim for on a day that has no goal of its own yet. */
+  dailyGoal: number
 }
 
 interface PomodoroState {
@@ -27,11 +29,13 @@ interface PomodoroState {
   settings: PomodoroSettings
   /** Focus sessions finished per local date. */
   done: Record<string, number>
+  /** The learner's goal per local date ("how many sessions today"). */
+  goals: Record<string, number>
 }
 
 const KEY = 'stnp.pomodoro'
 const MIN = 60_000
-const DEFAULTS: PomodoroSettings = { focus: 25, short: 5, long: 15, longEvery: 4, autoStart: false }
+const DEFAULTS: PomodoroSettings = { focus: 25, short: 5, long: 15, longEvery: 4, autoStart: false, dailyGoal: 4 }
 
 const minutes = (s: PomodoroSettings, m: PomodoroMode) => (m === 'focus' ? s.focus : m === 'short' ? s.short : s.long)
 
@@ -43,6 +47,7 @@ const state = reactive<PomodoroState>({
   round: 0,
   settings: { ...DEFAULTS },
   done: {},
+  goals: {},
 })
 const now = ref(Date.now())
 let started = false
@@ -59,7 +64,7 @@ function load() {
     const raw = localStorage.getItem(KEY)
     if (raw) {
       const s = JSON.parse(raw) as Partial<PomodoroState>
-      Object.assign(state, s, { settings: { ...DEFAULTS, ...s.settings } })
+      Object.assign(state, s, { settings: { ...DEFAULTS, ...s.settings }, goals: s.goals ?? {} })
     }
   } catch {
     // Keep defaults.
@@ -89,17 +94,23 @@ function chime() {
   }
 }
 
-let notifyText: (mode: PomodoroMode) => { title: string; body: string } = () => ({ title: '', body: '' })
+let notifyText: (mode: PomodoroMode, goalReached: boolean) => { title: string; body: string } = () => ({
+  title: '',
+  body: '',
+})
 
 function finish() {
   // Another tab may have finished this session already.
   load()
   if (!state.running || !state.endsAt || state.endsAt > Date.now()) return
   const ended = state.mode
+  let goalReached = false
   if (ended === 'focus') {
     const d = localDate()
-    state.done = { ...state.done, [d]: (state.done[d] ?? 0) + 1 }
+    const n = (state.done[d] ?? 0) + 1
+    state.done = { ...state.done, [d]: n }
     state.round += 1
+    goalReached = n === (state.goals[d] ?? state.settings.dailyGoal)
   }
   const next: PomodoroMode =
     ended === 'focus' ? (state.round % state.settings.longEvery === 0 ? 'long' : 'short') : 'focus'
@@ -113,7 +124,7 @@ function finish() {
   chime()
   try {
     if ('Notification' in window && Notification.permission === 'granted') {
-      const { title, body } = notifyText(ended)
+      const { title, body } = notifyText(ended, goalReached)
       new Notification(title, { body, tag: 'pomodoro' })
     }
   } catch {
@@ -162,6 +173,14 @@ export function usePomodoro() {
   const left = computed(() => msLeft())
   const total = computed(() => minutes(state.settings, state.mode) * MIN)
   const today = computed(() => state.done[localDate()] ?? 0)
+  const goal = computed(() => state.goals[localDate()] ?? state.settings.dailyGoal)
+  /** Sets today's goal; it also becomes the default for the next days. */
+  function setGoal(n: number) {
+    const g = Math.max(1, Math.min(20, Math.round(n)))
+    state.goals = { ...state.goals, [localDate()]: g }
+    state.settings = { ...state.settings, dailyGoal: g }
+    save()
+  }
 
   function start() {
     if (state.running) return
@@ -206,5 +225,5 @@ export function usePomodoro() {
     tick()
   }
 
-  return { state, left, total, today, start, pause, reset, setMode, skip, updateSettings }
+  return { state, left, total, today, goal, setGoal, start, pause, reset, setMode, skip, updateSettings }
 }

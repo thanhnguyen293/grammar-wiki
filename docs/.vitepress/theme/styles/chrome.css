@@ -1,0 +1,61 @@
+/* Top bar and page chrome on phones: the sidebar opens from an icon in the top bar, and
+   "back to top" is a floating button, so the extra "Mục lục / Lên đầu trang" bar is gone. */
+.sb-menu-btn {
+  display: none;
+}
+@media (max-width: 959px) {
+  .VPLocalNav {
+    display: none !important;
+  }
+  .sb-menu-btn {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    margin-left: -8px;
+    margin-right: 4px;
+    border-radius: 8px;
+    color: var(--vp-c-text-1);
+  }
+  .sb-menu-btn:hover {
+    background: var(--vp-c-default-soft);
+  }
+  /* Pinned toolbars now sit right under the top bar. */
+  .vsticky {
+    top: calc(var(--vp-layout-top-height, 0px) + var(--vp-nav-height)) !important;
+  }
+}
+
+.back-to-top {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right, 0px));
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-elv);
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: var(--vp-shadow-3);
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+.back-to-top:hover {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+.btt-enter-active,
+.btt-leave-active {
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+.btt-enter-from,
+.btt-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
