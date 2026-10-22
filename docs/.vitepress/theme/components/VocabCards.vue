@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import { useLocale } from './i18n'
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import SpeakButton from './SpeakButton.vue'
 import { itemKey, useToday, type Item } from './useVocab'
 
 const props = defineProps<{ items: Item[]; learned: Set<string> }>()
 const emit = defineEmits<{ toggle: [key: string] }>()
 const today = useToday()
+const { tr, pos } = useLocale()
 
 // The deck is a snapshot: marking a card as learned must not pull it out from under the learner.
 const deck = ref<Item[]>([])
 const index = ref(0)
 const flipped = ref(false)
-// Which way the deck moved, so the card slides out on the side it came from.
-const dir = ref<'next' | 'prev'>('next')
+// How the deck moved, so the next card comes in from the right side. A swiped card has already
+// flown off, so it leaves without a second animation.
+const dir = ref<'next' | 'prev' | 'swipe'>('next')
 
 function reset(list: Item[]) {
   deck.value = [...list]
@@ -24,10 +26,11 @@ watch(() => props.items, reset, { immediate: true })
 
 const card = computed(() => deck.value[index.value])
 const word = computed(() => card.value?.word)
+const isLearned = computed(() => !!card.value && props.learned.has(itemKey(card.value)))
 
-function go(step: number) {
+function go(step: number, how: typeof dir.value = step > 0 ? 'next' : 'prev') {
   if (!deck.value.length) return
-  dir.value = step > 0 ? 'next' : 'prev'
+  dir.value = how
   index.value = (index.value + step + deck.value.length) % deck.value.length
   flipped.value = false
 }
@@ -39,29 +42,104 @@ function shuffle() {
   }
   reset(a)
 }
-function markAndNext() {
+/** "Đã thuộc": mark as learned and move on. */
+function know(how: typeof dir.value = 'next') {
   if (!card.value) return
-  const k = itemKey(card.value)
-  if (!props.learned.has(k)) emit('toggle', k)
-  go(1)
+  if (!isLearned.value) emit('toggle', itemKey(card.value))
+  go(1, how)
+}
+/** "Chưa nhớ": keep (or put back) the word among the ones to learn, and move on. */
+function notYet(how: typeof dir.value = 'next') {
+  if (!card.value) return
+  if (isLearned.value) emit('toggle', itemKey(card.value))
+  go(1, how)
 }
 
+/* ---------- Swipe: right = know, left = not yet, tap = flip ---------- */
+
+const drag = reactive({ id: -1, x0: 0, y0: 0, t0: 0, dx: 0, decided: false, horizontal: false, fly: 0 })
+const SWIPE_DIST = 0.28 // of the card width
+const SWIPE_SPEED = 0.6 // px per ms
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches
+
+function onDown(e: PointerEvent) {
+  if (e.button !== 0 || drag.fly || (e.target as HTMLElement).closest('button')) return
+  Object.assign(drag, { id: e.pointerId, x0: e.clientX, y0: e.clientY, t0: performance.now(), dx: 0, decided: false, horizontal: false })
+}
+function onMove(e: PointerEvent) {
+  if (e.pointerId !== drag.id) return
+  const dx = e.clientX - drag.x0
+  const dy = e.clientY - drag.y0
+  if (!drag.decided && Math.hypot(dx, dy) > 8) {
+    drag.decided = true
+    // Mostly sideways: it's a swipe. Mostly up or down: let the page scroll.
+    drag.horizontal = Math.abs(dx) > Math.abs(dy) * 1.2
+    if (drag.horizontal) (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+  }
+  if (drag.horizontal) drag.dx = dx
+}
+function onUp(e: PointerEvent) {
+  if (e.pointerId !== drag.id) return
+  drag.id = -1
+  if (!drag.decided) {
+    flipped.value = !flipped.value
+    return
+  }
+  if (!drag.horizontal) return
+  const width = (e.currentTarget as HTMLElement).offsetWidth
+  const speed = Math.abs(drag.dx) / Math.max(1, performance.now() - drag.t0)
+  if (Math.abs(drag.dx) > width * SWIPE_DIST || (speed > SWIPE_SPEED && Math.abs(drag.dx) > 40)) commit(drag.dx > 0 ? 1 : -1)
+  else drag.dx = 0
+}
+function onCancel() {
+  drag.id = -1
+  drag.dx = 0
+}
+/** Throws the card off-screen, then records the answer. Buttons and keys use the same path. */
+function commit(side: 1 | -1) {
+  if (drag.fly) return
+  const done = () => {
+    drag.fly = 0
+    drag.dx = 0
+    if (side > 0) know('swipe')
+    else notYet('swipe')
+  }
+  if (reduceMotion()) return done()
+  drag.fly = side
+  setTimeout(done, 200)
+}
+
+const cardStyle = computed(() => {
+  if (drag.fly) return { transform: `translateX(${drag.fly * 120}%) rotate(${drag.fly * 16}deg)`, transition: 'transform 0.2s ease-in' }
+  if (drag.dx) return { transform: `translateX(${drag.dx}px) rotate(${drag.dx / 24}deg)`, transition: drag.id === -1 ? undefined : 'none' }
+  return undefined
+})
+// The stamp fades in as the card moves towards that side.
+const lean = computed(() => (drag.fly ? drag.fly * 200 : drag.dx))
+const yesOpacity = computed(() => Math.min(1, Math.max(0, lean.value / 110)))
+const noOpacity = computed(() => Math.min(1, Math.max(0, -lean.value / 110)))
+
 function onKey(e: KeyboardEvent) {
-  if ((e.target as HTMLElement)?.closest('input, textarea, select')) return
+  if ((e.target as HTMLElement)?.closest('input, textarea, select, [contenteditable]')) return
   if (e.key === ' ') {
     e.preventDefault()
     flipped.value = !flipped.value
-  } else if (e.key === 'ArrowRight') go(1)
-  else if (e.key === 'ArrowLeft') go(-1)
+  } else if (e.key === 'ArrowRight') commit(1)
+  else if (e.key === 'ArrowLeft') commit(-1)
+  else if (e.key === 'Backspace') go(-1)
 }
 onMounted(() => window.addEventListener('keydown', onKey))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
-const { tr, pos } = useLocale()
 </script>
 
 <template>
   <div v-if="card && word" class="cards">
     <div class="cards-top">
+      <button type="button" class="icon-btn" :aria-label="tr('Thẻ trước')" :title="tr('Thẻ trước')" @click="go(-1)">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
       <span class="cards-count">{{ tr('Thẻ {a} / {b}', { a: index + 1, b: deck.length }) }}</span>
       <span class="cards-tools">
         <button
@@ -72,7 +150,18 @@ const { tr, pos } = useLocale()
         >
           {{ tr(today.has(card.slug, word.w) ? '✓ Hôm nay' : '+ Hôm nay') }}
         </button>
-        <button type="button" class="vbtn" @click="shuffle">{{ tr('Trộn thẻ') }}</button>
+        <button type="button" class="icon-btn" :aria-label="tr('Trộn thẻ')" :title="tr('Trộn thẻ')" @click="shuffle">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path
+              d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
       </span>
     </div>
 
@@ -80,24 +169,28 @@ const { tr, pos } = useLocale()
       <div
         :key="index"
         class="card"
-        :class="{ flipped, learned: learned.has(itemKey(card)) }"
+        :class="{ flipped, learned: isLearned, dragging: drag.id !== -1 && drag.horizontal }"
+        :style="cardStyle"
         role="button"
         tabindex="0"
         :aria-label="tr(flipped ? 'Úp thẻ' : 'Lật thẻ xem nghĩa')"
-        @click="flipped = !flipped"
+        @pointerdown="onDown"
+        @pointermove="onMove"
+        @pointerup="onUp"
+        @pointercancel="onCancel"
         @keydown.enter.prevent="flipped = !flipped"
       >
+        <span class="swipe-stamp yes" :style="{ opacity: yesOpacity }" aria-hidden="true">{{ tr('Đã thuộc') }}</span>
+        <span class="swipe-stamp no" :style="{ opacity: noOpacity }" aria-hidden="true">{{ tr('Chưa nhớ') }}</span>
         <div class="card-word">
           {{ word.w }}
           <SpeakButton :text="word.w" />
         </div>
-        <div class="card-meta">{{ [word.ipa, pos[word.pos], word.lv].filter(Boolean).join(' · ') }}</div>
+        <div class="card-meta">{{ [word.ipa, pos[word.pos]].filter(Boolean).join(' · ') }}</div>
         <!-- Both sides are always rendered in the same grid cell, so the card is as tall as its
              taller side and does not change size when it is flipped. -->
         <div class="card-body">
-          <div class="card-face" :class="{ shown: !flipped }" :aria-hidden="flipped">
-            <div class="card-hint">{{ tr('Nhớ nghĩa trong đầu, rồi chạm để lật thẻ') }}</div>
-          </div>
+          <div class="card-face" :class="{ shown: !flipped }" :aria-hidden="flipped" />
           <div class="card-face" :class="{ shown: flipped }" :aria-hidden="!flipped">
             <div class="card-vi">{{ word.vi }}</div>
             <div class="card-ex">
@@ -110,14 +203,29 @@ const { tr, pos } = useLocale()
       </div>
     </Transition>
 
+    <!-- The three answers, in thumb reach. On phones the row sticks to the bottom of the screen. -->
     <div class="cards-actions">
-      <button type="button" class="vbtn" @click="go(-1)">{{ tr('← Trước') }}</button>
-      <button type="button" class="vbtn" @click="flipped = !flipped">{{ tr(flipped ? 'Úp thẻ' : 'Lật thẻ') }}</button>
-      <button v-if="!learned.has(itemKey(card))" type="button" class="vbtn primary" @click="markAndNext">{{ tr('Đã thuộc, tiếp') }}</button>
-      <button v-else type="button" class="vbtn done" @click="emit('toggle', itemKey(card))">{{ tr('✓ Đã thuộc') }}</button>
-      <button type="button" class="vbtn" @click="go(1)">{{ tr('Tiếp →') }}</button>
+      <button type="button" class="act no" @click="commit(-1)">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        </svg>
+        <span>{{ tr('Chưa nhớ') }}</span>
+      </button>
+      <button type="button" class="act flip" :aria-pressed="flipped" @click="flipped = !flipped">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>{{ tr(flipped ? 'Úp thẻ' : 'Lật thẻ') }}</span>
+      </button>
+      <button type="button" class="act yes" :class="{ on: isLearned }" @click="commit(1)">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M5 12.5 10 17 19 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>{{ tr('Đã thuộc') }}</span>
+      </button>
     </div>
-    <p class="cards-keys">{{ tr('Phím tắt: Space lật thẻ · ← → chuyển thẻ') }}</p>
+    <p class="cards-keys">{{ tr('Phím tắt: Space lật thẻ · → đã thuộc · ← chưa nhớ · Backspace thẻ trước') }}</p>
+    <p class="cards-swipe-hint">{{ tr('Chạm để lật · Vuốt phải: đã thuộc · Vuốt trái: chưa nhớ') }}</p>
   </div>
   <p v-else class="vempty">{{ tr('Không còn thẻ nào trong bộ lọc này.') }}</p>
 </template>

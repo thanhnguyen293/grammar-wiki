@@ -1,24 +1,40 @@
 /* Top bar and page chrome on phones: the sidebar opens from an icon in the top bar, and
    "back to top" is a floating button, so the extra "Mục lục / Lên đầu trang" bar is gone. */
+/* Sidebar button, placed before the logo inside the bar's title block (all sizes). */
+.VPNavBarTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 .sb-menu-btn {
-  display: none;
+  order: -1;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-left: -6px;
+  border-radius: var(--r-md, 8px);
+  color: var(--vp-c-text-2);
+  pointer-events: auto;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+.sb-menu-btn:hover {
+  background: var(--vp-c-default-soft);
+  color: var(--vp-c-text-1);
+}
+.sb-menu-btn svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 @media (max-width: 959px) {
   .VPLocalNav {
     display: none !important;
-  }
-  .sb-menu-btn {
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    margin-left: -8px;
-    margin-right: 4px;
-    border-radius: 8px;
-    color: var(--vp-c-text-1);
-  }
-  .sb-menu-btn:hover {
-    background: var(--vp-c-default-soft);
   }
   /* Pinned toolbars now sit right under the top bar. */
   .vsticky {

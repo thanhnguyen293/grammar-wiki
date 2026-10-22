@@ -225,16 +225,6 @@
   color: var(--vp-c-text-2);
   font-style: italic;
 }
-.vlv {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  padding: 1px 8px;
-  border-radius: 99px;
-  background: var(--vp-c-bg-alt);
-  border: 1px solid var(--vp-c-divider);
-  color: var(--vp-c-text-2);
-}
 .vvi {
   text-align: left;
   font-size: 16px;
@@ -566,17 +556,182 @@
     opacity: 0;
   }
 }
-.cards-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
+/* Flashcard controls, built for thumbs: three large answer buttons (not yet / flip / know)
+   and small icon buttons above the card for the rarer actions. Swiping the card does the same
+   as the outer buttons, which stay as the always-visible alternative. */
+.cards-top .icon-btn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg);
+  flex: none;
 }
-.cards-keys {
+.cards-top .icon-btn:hover {
+  color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+.cards-top {
+  gap: 10px;
+}
+.cards-top .cards-count {
+  margin-right: auto;
+}
+.cards-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.act {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1.5px solid var(--vp-c-divider);
+  border-radius: 14px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 15px;
+  font-weight: 600;
+  transition:
+    transform 0.12s ease,
+    background-color 0.2s,
+    border-color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.act:active {
+  transform: scale(0.96);
+}
+.act.no {
+  border-color: var(--block-border-warning);
+  color: var(--vp-c-warning-1);
+}
+.act.no:hover {
+  background: var(--vp-c-warning-soft);
+}
+.act.flip:hover {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+.act.yes {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-1);
+  color: var(--vp-c-bg);
+}
+.act.yes:hover {
+  filter: brightness(1.08);
+}
+.act.yes.on {
+  background: var(--vp-c-tip-soft);
+  border-color: var(--block-border-tip);
+  color: var(--vp-c-tip-1);
+}
+.cards-keys,
+.cards-swipe-hint {
   margin: 0 !important;
   text-align: center;
   font-size: 12.5px;
   color: var(--vp-c-text-3);
+}
+/* Show the hint that matches the device: keys with a mouse, gestures on touch screens. */
+.cards-swipe-hint {
+  display: none;
+}
+@media (hover: none) {
+  .cards-keys {
+    display: none;
+  }
+  .cards-swipe-hint {
+    display: block;
+  }
+}
+
+/* Swiping */
+.card {
+  touch-action: pan-y;
+}
+.card.dragging {
+  cursor: grabbing;
+}
+.swipe-stamp {
+  position: absolute;
+  top: 18px;
+  z-index: 1;
+  padding: 3px 12px;
+  border: 2.5px solid;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.swipe-stamp.yes {
+  left: 56px;
+  color: var(--vp-c-tip-1);
+  border-color: var(--vp-c-tip-2);
+  transform: rotate(-8deg);
+}
+.swipe-stamp.no {
+  right: 24px;
+  color: var(--vp-c-warning-1);
+  border-color: var(--vp-c-warning-1);
+  transform: rotate(8deg);
+}
+/* A swiped card has already flown off; the next one just rises into place. */
+.card-swipe-enter-active {
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.card-swipe-enter-from {
+  opacity: 0;
+  transform: translateY(14px) scale(0.97);
+}
+.card-swipe-leave-active {
+  transition: none;
+}
+
+@media (max-width: 640px) {
+  /* The answer row sticks to the bottom edge while the card is on screen. */
+  .cards-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    max-width: none;
+    margin: 0 -16px;
+    width: auto;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: var(--vp-c-bg);
+    border-top: 1px solid var(--vp-c-divider);
+  }
+  .act {
+    flex-direction: column;
+    gap: 2px;
+    font-size: 13px;
+    min-height: 60px;
+  }
+  .cards-top .cards-count {
+    font-size: 14px;
+  }
+  /* Keep the floating "back to top" button clear of the answer row. */
+  body:has(.cards-actions) .back-to-top {
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .act:active {
+    transform: none;
+  }
 }
 
 /* ---------- Overview page ---------- */

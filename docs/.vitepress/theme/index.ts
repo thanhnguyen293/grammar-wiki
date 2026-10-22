@@ -12,7 +12,6 @@ import ArticleAnalyzer from './components/ArticleAnalyzer.vue'
 import VocabMine from './components/VocabMine.vue'
 import HomeHero from './components/HomeHero.vue'
 import HomeChapters from './components/HomeChapters.vue'
-import SidebarToggle from './components/SidebarToggle.vue'
 import ProgressDashboard from './components/ProgressDashboard.vue'
 import { useScrollbarReveal } from './components/useScrollbarReveal'
 import SyncButton from './components/SyncButton.vue'
@@ -37,8 +36,9 @@ export default {
   Layout: () =>
     h(DefaultTheme.Layout, null, {
       'doc-before': () => h(LevelBar),
-      'nav-bar-content-before': () => h(SidebarToggle),
-      'nav-bar-title-before': () => h(SidebarMenuButton),
+      // Teleports itself next to the logo. Not 'nav-bar-title-before': that slot sits inside the
+      // logo link, so a click there also followed the link to the home page.
+      'nav-bar-content-before': () => h(SidebarMenuButton),
       'nav-bar-content-after': () => [h(PomodoroTimer), h(SyncButton)],
       'layout-bottom': () => h(BackToTop),
     }),

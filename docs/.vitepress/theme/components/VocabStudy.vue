@@ -147,7 +147,6 @@ watch(
               <SpeakButton :text="it.word.w" />
               <span v-if="it.word.ipa" class="vipa">{{ it.word.ipa }}</span>
               <span class="vpos">{{ pos[it.word.pos] }}</span>
-              <span v-if="it.word.lv" class="vlv">{{ it.word.lv }}</span>
               <span v-if="kind" class="vrel-tag" :class="kind">{{ tr(KIND_LABEL[kind]) }}</span>
               <a v-if="showTopic" class="vtopic-link" :href="link(`/tu-vung/${it.slug}`)">{{ topicTitle(it.slug) }}</a>
             </div>

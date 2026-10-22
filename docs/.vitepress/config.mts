@@ -54,6 +54,8 @@ function vocabSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
 }
 
 const viTheme: DefaultTheme.Config = {
+  // Logo only in the top bar: the title takes room the timer and sync buttons need.
+  siteTitle: false,
   nav: [
     { text: 'Ngữ pháp', link: '/lo-trinh', activeMatch: '^/(?!tu-vung|tien-do|en/)' },
     { text: 'Từ vựng', link: '/tu-vung/', activeMatch: '^/tu-vung/' },
@@ -72,6 +74,8 @@ const viTheme: DefaultTheme.Config = {
 }
 
 const enTheme: DefaultTheme.Config = {
+  // Logo only in the top bar: the title takes room the timer and sync buttons need.
+  siteTitle: false,
   nav: [
     { text: 'Grammar', link: '/en/lo-trinh', activeMatch: '^/en/(?!tu-vung|tien-do)' },
     { text: 'Vocabulary', link: '/en/tu-vung/', activeMatch: '^/en/tu-vung/' },

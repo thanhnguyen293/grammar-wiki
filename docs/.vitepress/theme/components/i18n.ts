@@ -86,6 +86,11 @@ const EN: Record<string, string> = {
   'Không có từ nào trong bộ lọc này.': 'No words match this filter.',
   'Thẻ {a} / {b}': 'Card {a} / {b}',
   'Trộn thẻ': 'Shuffle',
+  'Thẻ trước': 'Previous card',
+  'Chưa nhớ': 'Not yet',
+  'Phím tắt: Space lật thẻ · → đã thuộc · ← chưa nhớ · Backspace thẻ trước':
+    'Shortcuts: Space flips · → learned · ← not yet · Backspace previous card',
+  'Chạm để lật · Vuốt phải: đã thuộc · Vuốt trái: chưa nhớ': 'Tap to flip · Swipe right: learned · Swipe left: not yet',
   'Úp thẻ': 'Hide answer',
   'Lật thẻ': 'Flip',
   'Lật thẻ xem nghĩa': 'Flip to see the meaning',

@@ -128,42 +128,8 @@ body {
   scrollbar-color: var(--vp-c-border) transparent;
 }
 
-/* Sidebar toggle (desktop only; below 960px VitePress already opens the sidebar as a drawer). */
-.sidebar-toggle {
-  display: none;
-}
+/* Collapsing the sidebar on large screens (button: SidebarMenuButton.vue). */
 @media (min-width: 960px) {
-  .sidebar-toggle {
-    display: inline-grid;
-    place-items: center;
-    flex: none;
-    width: 36px;
-    height: 36px;
-    /* Same left inset as the search box, so the two read as one toolbar. */
-    margin-left: 32px;
-    border: 1px solid var(--vp-c-divider);
-    border-radius: var(--r-md);
-    background: var(--surface-card);
-    color: var(--vp-c-text-2);
-    transition:
-      background-color var(--dur-fast) var(--ease),
-      color var(--dur-fast) var(--ease);
-  }
-  .sidebar-toggle + .VPNavBarSearch {
-    padding-left: 10px;
-  }
-  .sidebar-toggle:hover {
-    background: var(--vp-c-default-soft);
-    color: var(--vp-c-text-1);
-  }
-  .sidebar-toggle svg {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
   .VPSidebar,
   .VPContent.has-sidebar,
   .VPLocalNav.has-sidebar,

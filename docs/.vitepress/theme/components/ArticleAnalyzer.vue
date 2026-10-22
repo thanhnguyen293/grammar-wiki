@@ -324,7 +324,6 @@ const FILTERS: { value: Filter; label: string }[] = [
               <span v-if="e.kind === 'phrase'" class="an-chip">{{ tr('cụm từ') }}</span>
               <span v-if="primary(e)?.word.ipa" class="vipa">{{ primary(e)!.word.ipa }}</span>
               <span v-if="primary(e)" class="vpos">{{ pos[primary(e)!.word.pos] }}</span>
-              <span v-if="primary(e)?.word.lv" class="vlv">{{ primary(e)!.word.lv }}</span>
               <span v-if="e.kind === 'name'" class="an-chip">{{ tr('tên riêng?') }}</span>
             </div>
             <span v-if="primary(e)" class="vres-vi">{{ primary(e)!.word.vi }}</span>

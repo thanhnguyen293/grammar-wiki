@@ -13,6 +13,6 @@ Mỗi ngày học 5 từ mới:
 - Hôm sau mở chế độ **Thẻ ghi nhớ** với bộ lọc **Chưa thuộc** để ôn lại, nhớ được thì bấm **Đã thuộc**.
 :::
 
-Nhãn A1, A2, B1, B2 cho biết trình độ của từ: A1 là cơ bản nhất. Tiến độ "đã thuộc" được lưu trên trình duyệt bạn đang dùng.
+Tiến độ "đã thuộc" được lưu trên trình duyệt bạn đang dùng, hoặc vào tài khoản nếu bạn đăng nhập để đồng bộ.
 
 <VocabHome />

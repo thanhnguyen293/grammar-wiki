@@ -13,6 +13,6 @@ Learn 5 new words a day:
 - The next day, open **Flashcards** with the **Not learned** filter to review, and click **Learned** for the ones you remember.
 :::
 
-The A1, A2, B1, B2 labels show each word's level; A1 is the most basic. Meanings are in Vietnamese. Your "learned" progress is saved in this browser.
+Meanings are in Vietnamese. Your "learned" progress is saved in this browser, or in your account if you sign in to sync.
 
 <VocabHome />
