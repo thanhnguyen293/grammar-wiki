@@ -1,3 +1,7 @@
+---
+pageClass: study-path-page
+---
+
 # Lộ trình học
 
 Không cần học hết từ chương 1 đến chương 9. Mỗi bài được gắn một nhãn:

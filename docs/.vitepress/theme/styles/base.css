@@ -1,0 +1,200 @@
+/* Site chrome: navbar, sidebar, pager, focus and motion. */
+body {
+  background: var(--vp-c-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--vp-c-text-1);
+}
+
+:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* Navbar: translucent paper so the page shows faintly underneath while scrolling. */
+.VPNavBar:not(.home.top) .content-body,
+.VPNavBar.has-sidebar .content-body {
+  backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
+}
+.VPLocalNav {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.VPNavBarTitle .title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  gap: 10px;
+}
+.VPNavBarTitle .logo {
+  height: 28px;
+  width: 28px;
+}
+.VPNavBarMenuLink {
+  font-weight: 600;
+}
+.VPNavBarMenuLink.active {
+  color: var(--vp-c-brand-1);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+/* Framed only where the button shows its label; on narrow screens it stays a bare icon. */
+@media (min-width: 768px) {
+  .VPNavBarSearch .DocSearch-Button {
+    border-radius: var(--r-md);
+    border: 1px solid var(--vp-c-divider);
+    background: var(--surface-card);
+  }
+}
+
+/* Sidebar */
+.VPSidebar {
+  border-right: 1px solid var(--vp-c-divider);
+}
+.VPSidebarItem.level-0 > .item .text {
+  font-weight: 600;
+}
+/* The highlight gets room on both sides; the negative margin keeps the text aligned with
+   the group headings above it. */
+.VPSidebarItem.level-1 > .item {
+  margin: 0 -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: var(--r-sm);
+  transition: background-color var(--dur-fast) var(--ease);
+}
+.VPSidebarItem.level-1 > .item:hover {
+  background: var(--vp-c-default-soft);
+}
+.VPSidebarItem.level-1.is-active > .item {
+  background: var(--vp-c-brand-soft);
+}
+.VPSidebarItem.level-1.is-active > .item .text {
+  font-weight: 600;
+}
+
+/* Prev / next pager */
+.VPDocFooter .pager-link {
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  border-color: var(--vp-c-divider);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.VPDocFooter .pager-link:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.VPDocFooter .pager-link .title {
+  font-family: var(--font-display);
+}
+
+/* Outline */
+.VPDocAsideOutline .outline-title {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Sidebar scrollbar: hidden at rest, shown while scrolling (see useScrollbarReveal). The
+   thin track keeps its width either way, so the text never shifts. */
+.VPSidebar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color var(--dur) var(--ease);
+}
+.VPSidebar.is-scrolling {
+  scrollbar-color: var(--vp-c-border) transparent;
+}
+
+/* Sidebar toggle (desktop only; below 960px VitePress already opens the sidebar as a drawer). */
+.sidebar-toggle {
+  display: none;
+}
+@media (min-width: 960px) {
+  .sidebar-toggle {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    /* Same left inset as the search box, so the two read as one toolbar. */
+    margin-left: 32px;
+    border: 1px solid var(--vp-c-divider);
+    border-radius: var(--r-md);
+    background: var(--surface-card);
+    color: var(--vp-c-text-2);
+    transition:
+      background-color var(--dur-fast) var(--ease),
+      color var(--dur-fast) var(--ease);
+  }
+  .sidebar-toggle + .VPNavBarSearch {
+    padding-left: 10px;
+  }
+  .sidebar-toggle:hover {
+    background: var(--vp-c-default-soft);
+    color: var(--vp-c-text-1);
+  }
+  .sidebar-toggle svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .VPSidebar,
+  .VPContent.has-sidebar,
+  .VPLocalNav.has-sidebar,
+  .VPNavBar.has-sidebar .content,
+  .VPNavBar.has-sidebar .divider {
+    transition:
+      transform var(--dur) var(--ease),
+      padding var(--dur) var(--ease),
+      visibility var(--dur);
+  }
+
+  /* Collapsed: slide the sidebar out and give its column back to the page. The navbar
+     title keeps its place so the logo does not jump. */
+  .sidebar-collapsed .VPSidebar {
+    transform: translateX(-100%);
+    visibility: hidden;
+  }
+  .sidebar-collapsed .VPContent.has-sidebar,
+  .sidebar-collapsed .VPLocalNav.has-sidebar {
+    padding-left: 0;
+  }
+  .sidebar-collapsed .VPNavBar.has-sidebar .title {
+    background: var(--vp-nav-bg-color);
+  }
+  .sidebar-collapsed .VPNavBar.has-sidebar .divider {
+    padding-left: 0;
+  }
+}
+@media (min-width: 1440px) {
+  .sidebar-collapsed .VPContent.has-sidebar,
+  .sidebar-collapsed .VPLocalNav.has-sidebar {
+    padding-left: calc((100vw - var(--vp-layout-max-width)) / 2);
+  }
+}

@@ -1,0 +1,247 @@
+/* Lesson content: headings, examples, callouts, tables, level badges. */
+
+/* Headings */
+.vp-doc h1,
+.vp-doc h2 {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+.vp-doc h1 {
+  font-size: 38px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+/* The English chapter name sits right under h1 as an italic paragraph. */
+.vp-doc h1 + p > em:only-child {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--vp-c-text-3);
+}
+.vp-doc h2 {
+  font-size: 26px;
+  border-top: 0;
+  padding-top: 8px;
+  margin-top: 44px;
+}
+/* A short amber rule above each section, like a ruled notebook heading. */
+.vp-doc h2::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 3px;
+  margin-bottom: 14px;
+  border-radius: 99px;
+  background: var(--accent);
+}
+.vp-doc h3 {
+  font-size: 19px;
+  margin-top: 32px;
+}
+.vp-doc p,
+.vp-doc li {
+  line-height: 1.75;
+}
+.vp-doc a {
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* Bold words in examples and tables are the grammar point being shown. */
+.vp-doc li strong,
+.vp-doc td strong,
+.vp-doc blockquote strong {
+  color: var(--vp-c-brand-1);
+}
+
+/* Example convention: English line, then `<br>` + *Vietnamese translation*. */
+.vp-doc li br + em,
+.vp-doc td br + em {
+  display: inline-block;
+  margin-top: 2px;
+  font-style: normal;
+  font-size: 0.93em;
+  color: var(--vp-c-text-2);
+}
+.vp-doc li br + em::before {
+  content: '→ ';
+  color: var(--accent);
+}
+
+/* Tables */
+.vp-doc table {
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.vp-doc th {
+  background: var(--vp-c-bg-alt);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--vp-c-text-2);
+}
+.vp-doc tr {
+  background: var(--surface-card);
+  border-top: 0;
+}
+.vp-doc tr:nth-child(2n) {
+  background: var(--vp-c-bg);
+}
+.vp-doc th,
+.vp-doc td {
+  border: 0;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.vp-doc th + th,
+.vp-doc td + td {
+  border-left: 1px solid var(--vp-c-divider);
+}
+.vp-doc tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Callouts: a coloured bar on the left like a margin note. */
+.custom-block {
+  border: 1px solid transparent;
+  border-left-width: 4px;
+  border-radius: var(--r-md);
+  padding: 14px 18px 12px;
+}
+.custom-block.tip {
+  border-color: var(--block-border-tip);
+  border-left-color: var(--vp-c-tip-2);
+}
+.custom-block.warning {
+  border-color: var(--block-border-warning);
+  border-left-color: var(--vp-c-warning-1);
+}
+.custom-block.danger {
+  border-color: var(--block-border-danger);
+  border-left-color: var(--vp-c-danger-1);
+}
+.custom-block .custom-block-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.custom-block.tip .custom-block-title {
+  color: var(--vp-c-tip-1);
+}
+.custom-block.warning .custom-block-title {
+  color: var(--vp-c-warning-1);
+}
+.custom-block.danger .custom-block-title {
+  color: var(--vp-c-danger-1);
+}
+
+/* "info" containers hold formulas. */
+.custom-block.info {
+  background: var(--formula-bg);
+  border-color: var(--formula-border);
+  border-left-color: var(--vp-c-brand-1);
+}
+.custom-block.info .custom-block-title {
+  color: var(--vp-c-brand-1);
+}
+.custom-block.info p,
+.custom-block.info li,
+.custom-block.info td {
+  font-family: var(--vp-font-family-mono);
+  font-size: 14px;
+}
+.custom-block.info table {
+  margin: 8px 0;
+}
+.custom-block.info th,
+.custom-block.info td br + em {
+  font-family: var(--vp-font-family-base);
+}
+
+/* Dialogue / context examples */
+.vp-doc blockquote {
+  padding: 14px 18px;
+  border-radius: var(--r-md);
+  background: var(--surface-card);
+  border: 1px solid var(--vp-c-divider);
+  border-left: 4px solid var(--accent-border);
+}
+.vp-doc blockquote > p {
+  color: var(--vp-c-text-1);
+  font-size: 15px;
+}
+
+/* Level badges */
+.lv {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.7;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.lv.v1 {
+  background: var(--vp-c-brand-1);
+  color: var(--on-brand);
+}
+.lv.v2 {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+.lv.tc {
+  background: var(--lv-tc-bg);
+  color: var(--vp-c-text-2);
+}
+
+.sb-lv {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: 1px;
+}
+.sb-lv.v1 {
+  background: var(--vp-c-brand-1);
+}
+.sb-lv.v2 {
+  border: 1.5px solid var(--vp-c-brand-1);
+}
+.sb-lv.tc {
+  background: var(--vp-c-border);
+}
+
+/* Breadcrumb above a lesson */
+.level-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 13.5px;
+  color: var(--vp-c-text-2);
+}
+.level-bar a {
+  color: var(--vp-c-text-2);
+  text-decoration: none;
+  font-weight: 500;
+}
+.level-bar a:hover {
+  color: var(--vp-c-brand-1);
+}
+.level-bar .sep {
+  color: var(--vp-c-text-3);
+}
+
+@media (max-width: 640px) {
+  .vp-doc h1 {
+    font-size: 30px;
+  }
+  .vp-doc h2 {
+    font-size: 23px;
+    margin-top: 36px;
+  }
+}

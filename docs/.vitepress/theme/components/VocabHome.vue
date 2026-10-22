@@ -17,6 +17,7 @@ onMounted(async () => {
 
 const count = (slug: string) => data.value[slug]?.length ?? 0
 const done = (slug: string) => (data.value[slug] ?? []).filter((w) => learned.value.has(learnedKey(slug, w.w))).length
+const pct = (slug: string) => (count(slug) ? (done(slug) / count(slug)) * 100 : 0)
 // The overall bar counts the 3000 core words only; specialist topics show their own count.
 const total = computed(() => coreTopics.reduce((n, t) => n + count(t.slug), 0))
 const totalDone = computed(() => coreTopics.reduce((n, t) => n + done(t.slug), 0))
@@ -38,26 +39,38 @@ const { tr, link, pos, topicTitle, isEn } = useLocale()
 </script>
 
 <template>
-  <div class="vocab">
-    <div class="vprog">
-      <span>{{ tr('Đã thuộc {a} / {b} từ thông dụng', { a: totalDone, b: total || '…' }) }}</span>
+  <div class="vocab vhome">
+    <div class="vhome-progress">
+      <span class="vhome-num"><b>{{ totalDone }}</b> / {{ total || '…' }}</span>
+      <span class="vhome-label">{{ tr('từ thông dụng đã thuộc') }}</span>
       <div class="vprog-bar"><i :style="{ width: total ? (totalDone / total) * 100 + '%' : '0' }" /></div>
     </div>
 
-    <a class="vtoday-link" :href="link('/tu-vung/hom-nay')">
-      <span><b>{{ tr('Hôm nay học') }}</b> · {{ tr('{n} từ đã chọn', { n: today.refs.value.length }) }}</span>
-      <span>{{ tr('Mở danh sách →') }}</span>
-    </a>
-    <a class="vtoday-link" :href="link('/tu-vung/on-tap')">
-      <span><b>{{ tr('Kiểm tra từ đã học') }}</b> · {{ tr('nhìn nghĩa tiếng Việt, gõ từ tiếng Anh') }}</span>
-      <span>{{ tr('Bắt đầu →') }}</span>
-    </a>
-    <a class="vtoday-link" :href="link('/tu-vung/phan-tich')">
-      <span><b>{{ tr('Học từ bài viết') }}</b> · {{ tr('dán một bài tiếng Anh, lọc ra từ và cụm từ để học') }}</span>
-      <span>{{ tr('Mở →') }}</span>
-    </a>
+    <div class="vquick">
+      <a class="vquick-card" :href="link('/tu-vung/hom-nay')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 10h17M8 3v4M16 3v4M8.5 14.5l2 2 4-4" /></svg>
+        <b>{{ tr('Hôm nay học') }}</b>
+        <span>{{ tr('{n} từ đã chọn', { n: today.refs.value.length }) }}</span>
+        <em>{{ tr('Mở danh sách →') }}</em>
+      </a>
+      <a class="vquick-card" :href="link('/tu-vung/on-tap')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4zM13.5 6.5l4 4" /></svg>
+        <b>{{ tr('Kiểm tra từ đã học') }}</b>
+        <span>{{ tr('nhìn nghĩa tiếng Việt, gõ từ tiếng Anh') }}</span>
+        <em>{{ tr('Bắt đầu →') }}</em>
+      </a>
+      <a class="vquick-card" :href="link('/tu-vung/phan-tich')">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8l4 4V20.5H6z" /><path d="M14 3.5v4h4M9 12h6M9 15.5h6" /></svg>
+        <b>{{ tr('Học từ bài viết') }}</b>
+        <span>{{ tr('dán một bài tiếng Anh, lọc ra từ và cụm từ để học') }}</span>
+        <em>{{ tr('Mở →') }}</em>
+      </a>
+    </div>
 
-    <input id="vocab-search" v-model="query" class="vsearch" type="search" :placeholder="tr('Tra từ tiếng Anh hoặc nghĩa tiếng Việt (vd: family, gia dinh)')" :aria-label="tr('Tra từ')" />
+    <div class="vsearch-wrap">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
+      <input id="vocab-search" v-model="query" class="vsearch" type="search" :placeholder="tr('Tra từ tiếng Anh hoặc nghĩa tiếng Việt (vd: family, gia dinh)')" :aria-label="tr('Tra từ')" />
+    </div>
 
     <ol v-if="results.length" class="vresults">
       <li v-for="r in results" :key="r.slug + r.w.w">
@@ -72,20 +85,28 @@ const { tr, link, pos, topicTitle, isEn } = useLocale()
     <p v-else-if="query.trim().length >= 2 && total" class="vempty">{{ tr('Không tìm thấy từ nào khớp "{q}".', { q: query }) }}</p>
 
     <h2>{{ tr('3000 từ thông dụng') }}</h2>
-    <div class="row-list">
-      <a v-for="(t, i) in coreTopics" :key="t.slug" class="row vtopic" :href="link(`/tu-vung/${t.slug}`)">
-        <span class="row-no">{{ i + 1 }}</span>
-        <span class="row-title">{{ isEn ? t.en : t.title }}<small>{{ isEn ? t.title : t.en }}</small></span>
-        <span class="row-ch">{{ done(t.slug) }}/{{ count(t.slug) || t.target }}</span>
+    <div class="vtopics">
+      <a v-for="(t, i) in coreTopics" :key="t.slug" class="vtopic-card" :href="link(`/tu-vung/${t.slug}`)">
+        <span class="vtopic-no">{{ i + 1 }}</span>
+        <span class="vtopic-title">{{ isEn ? t.en : t.title }}</span>
+        <small>{{ isEn ? t.title : t.en }}</small>
+        <span class="vtopic-prog">
+          <span class="vprog-bar"><i :style="{ width: pct(t.slug) + '%' }" /></span>
+          <span>{{ done(t.slug) }}/{{ count(t.slug) || t.target }}</span>
+        </span>
       </a>
     </div>
 
     <h2>{{ tr('Mở rộng') }}</h2>
-    <div class="row-list">
-      <a v-for="t in extraTopics" :key="t.slug" class="row vtopic" :href="link(`/tu-vung/${t.slug}`)">
-        <span class="row-no">{{ t.track === 'it' ? 'IT' : tr('Cụm') }}</span>
-        <span class="row-title">{{ isEn ? t.en : t.title }}<small>{{ isEn ? t.title : t.en }}</small></span>
-        <span class="row-ch">{{ done(t.slug) }}/{{ count(t.slug) || t.target }}</span>
+    <div class="vtopics">
+      <a v-for="t in extraTopics" :key="t.slug" class="vtopic-card" :href="link(`/tu-vung/${t.slug}`)">
+        <span class="vtopic-no">{{ t.track === 'it' ? 'IT' : tr('Cụm') }}</span>
+        <span class="vtopic-title">{{ isEn ? t.en : t.title }}</span>
+        <small>{{ isEn ? t.title : t.en }}</small>
+        <span class="vtopic-prog">
+          <span class="vprog-bar"><i :style="{ width: pct(t.slug) + '%' }" /></span>
+          <span>{{ done(t.slug) }}/{{ count(t.slug) || t.target }}</span>
+        </span>
       </a>
     </div>
   </div>

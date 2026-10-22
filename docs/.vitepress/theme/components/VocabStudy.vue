@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useLocale } from './i18n'
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import type { RelationKind } from './relations.data'
 import SpeakButton from './SpeakButton.vue'
 import VocabCards from './VocabCards.vue'
+import { useRelations } from './useRelations'
 import { canSpeak, itemKey, useLearned, useToday, type Item } from './useVocab'
 
 /** List + flashcards for any set of words: a topic, or today's list. */
@@ -43,6 +45,63 @@ function reveal(k: string) {
 }
 const isHidden = (i: Item) => hideMeaning.value && !revealed.value.has(itemKey(i))
 const { tr, pos, link, topicTitle } = useLocale()
+
+const relIndex = useRelations()
+const KIND_LABEL: Record<RelationKind, string> = { family: 'cùng họ', synonym: 'đồng nghĩa', antonym: 'trái nghĩa' }
+const KIND_ORDER = Object.keys(KIND_LABEL) as RelationKind[]
+// Relations describe the core sense of a word; a specialist topic may reuse it with another
+// meaning (release, bug), so only the word in its own core topic gets them.
+const relatedOf = (i: Item) => (relIndex.value.slug[i.word.w] === i.slug ? (relIndex.value.related[i.word.w] ?? []) : [])
+const anchor = (w: string) => `w-${w.replace(/\s+/g, '-')}`
+const onPage = computed(() => new Set(props.items.map((i) => `${i.slug}:${i.word.w}`)))
+const relatedHref = (w: string) => {
+  const slug = relIndex.value.slug[w]
+  return onPage.value.has(`${slug}:${w}`) ? `#${anchor(w)}` : `${link(`/tu-vung/${slug}`)}#${anchor(w)}`
+}
+/** The "Liên quan" line: related words grouped by kind. */
+const relatedLine = (i: Item) => {
+  const rel = relatedOf(i)
+  return KIND_ORDER.map((kind) => ({ kind, words: rel.filter((r) => r.kind === kind).map((r) => r.w) }))
+    .filter((g) => g.words.length)
+}
+
+// Grouping only changes the order on screen: each group keeps the place of its most common
+// word, and the related words of the same topic follow it. Numbers stay the frequency rank.
+const groupRelated = ref(false)
+const rows = computed(() => {
+  if (!groupRelated.value) return shown.value.map((it) => ({ it, kind: undefined as RelationKind | undefined }))
+  const placed = new Set<Item>()
+  const out: { it: Item; kind?: RelationKind }[] = []
+  for (const it of shown.value) {
+    if (placed.has(it)) continue
+    placed.add(it)
+    out.push({ it })
+    // Family first, then synonyms, then antonyms; each by frequency.
+    const kinds = new Map(relatedOf(it).map((r) => [r.w, r.kind]))
+    const rank = (o: Item) => KIND_ORDER.indexOf(kinds.get(o.word.w) ?? 'family')
+    const follow = shown.value.filter((o) => kinds.has(o.word.w) && o.slug === it.slug && !placed.has(o))
+    for (const o of follow.sort((a, b) => rank(a) - rank(b))) {
+      placed.add(o)
+      out.push({ it: o, kind: kinds.get(o.word.w) })
+    }
+  }
+  return out
+})
+const canGroup = computed(() =>
+  props.items.some((it) => relatedOf(it).some((r) => relIndex.value.slug[r.w] === it.slug && onPage.value.has(`${it.slug}:${r.w}`))),
+)
+
+// Links from another topic point at a word (#w-friendly); the list renders only after the
+// words load, so the browser's own jump to the anchor has already missed it.
+watch(
+  () => props.loading,
+  async (now, before) => {
+    if (before && !now && location.hash.startsWith('#w-')) {
+      await nextTick()
+      document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView()
+    }
+  },
+)
 </script>
 
 <template>
@@ -63,6 +122,10 @@ const { tr, pos, link, topicTitle } = useLocale()
           <input id="hide-meaning" v-model="hideMeaning" type="checkbox" @change="revealed = new Set()" />
           {{ tr('Ẩn nghĩa') }}
         </label>
+        <label v-if="mode === 'list' && canGroup" class="vcheck" :title="tr('Đặt họ từ, từ đồng nghĩa và trái nghĩa cạnh nhau')">
+          <input id="group-related" v-model="groupRelated" type="checkbox" />
+          {{ tr('Nhóm theo liên quan') }}
+        </label>
       </div>
 
       <div class="vprog">
@@ -80,10 +143,11 @@ const { tr, pos, link, topicTitle } = useLocale()
     <template v-else-if="mode === 'list'">
       <ol v-if="shown.length" class="vlist">
         <li
-          v-for="it in shown"
+          v-for="{ it, kind } in rows"
+          :id="relatedOf(it).length ? anchor(it.word.w) : undefined"
           :key="itemKey(it)"
           class="vitem"
-          :class="{ learned: learned.has(itemKey(it)) }"
+          :class="{ learned: learned.has(itemKey(it)), 'vrel-follow': kind }"
         >
           <span class="vno">{{ items.indexOf(it) + 1 }}</span>
           <div class="vmain">
@@ -93,6 +157,7 @@ const { tr, pos, link, topicTitle } = useLocale()
               <span v-if="it.word.ipa" class="vipa">{{ it.word.ipa }}</span>
               <span class="vpos">{{ pos[it.word.pos] }}</span>
               <span v-if="it.word.lv" class="vlv">{{ it.word.lv }}</span>
+              <span v-if="kind" class="vrel-tag" :class="kind">{{ tr(KIND_LABEL[kind]) }}</span>
               <a v-if="showTopic" class="vtopic-link" :href="link(`/tu-vung/${it.slug}`)">{{ topicTitle(it.slug) }}</a>
             </div>
             <button
@@ -110,6 +175,16 @@ const { tr, pos, link, topicTitle } = useLocale()
               <SpeakButton :text="it.word.ex" :label="tr('Nghe câu ví dụ')" />
             </div>
             <div v-if="it.word.exVi" class="vexvi" :class="{ hidden: isHidden(it) }">{{ it.word.exVi }}</div>
+            <p v-if="relatedOf(it).length" class="vrel">
+              <span class="vrel-label">{{ tr('Liên quan:') }}</span>
+              <span v-for="g in relatedLine(it)" :key="g.kind" class="vrel-group">
+                <span class="vrel-kind">{{ tr(KIND_LABEL[g.kind]) }}</span>
+                <template v-for="(w, n) in g.words" :key="w">
+                  <a :href="relatedHref(w)" :title="topicTitle(relIndex.slug[w])">{{ w }}</a>
+                  <template v-if="n < g.words.length - 1">, </template>
+                </template>
+              </span>
+            </p>
           </div>
           <div class="vactions">
             <button

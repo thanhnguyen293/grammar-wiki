@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useLocale } from './i18n'
 import { computed, nextTick, onMounted, ref } from 'vue'
+import { MINE, vocabTopics } from '../../vocabTopics'
 import SpeakButton from './SpeakButton.vue'
-import { itemKey, resolveRefs, speak, useToday, type Item } from './useVocab'
+import { itemKey, resolveLearned, resolveRefs, speak, useLearned, useQuizLog, useToday, type Item } from './useVocab'
 
 type Range = 1 | 7 | 30 | null
+type Source = 'today' | 'learned' | 'topic' | 'recent'
 interface Result {
   item: Item
   answer: string
@@ -17,16 +19,70 @@ const RANGES: { value: Range; label: string }[] = [
   { value: 30, label: '30 ngày qua' },
   { value: null, label: 'Tất cả' },
 ]
+// Counted in calendar days back from today: 1 = since midnight.
+const RECENT: { days: number; label: string }[] = [
+  { days: 1, label: 'Hôm nay' },
+  { days: 7, label: '7 ngày qua' },
+  { days: 30, label: '30 ngày qua' },
+]
+const SIZES: { value: number | null; label: string }[] = [
+  { value: 10, label: '10 câu' },
+  { value: 20, label: '20 câu' },
+  { value: 50, label: '50 câu' },
+  { value: null, label: 'Tất cả' },
+]
 
 const today = useToday()
+const { learned, learnedAt } = useLearned()
+const quizLog = useQuizLog()
 const mounted = ref(false)
-onMounted(() => (mounted.value = true))
+const learnedItems = ref<Item[] | null>(null)
+onMounted(async () => {
+  mounted.value = true
+  learnedItems.value = await resolveLearned([...learned.value])
+  // Open the topic picker on a topic that has something to test.
+  const first = learnedItems.value[0]
+  if (first) topic.value = first.slug
+})
 
+const source = ref<Source>('today')
 const range = ref<Range>(7)
+const topic = ref(vocabTopics[0].slug)
+const recent = ref(7)
+const size = ref<number | null>(20)
+
 const counts = computed(() =>
   mounted.value ? Object.fromEntries(RANGES.map((r) => [String(r.value), today.pastRefs(r.value).length])) : {},
 )
-const available = computed(() => counts.value[String(range.value)] ?? 0)
+const topics = computed(() =>
+  [...vocabTopics, { slug: MINE.slug, title: MINE.title, en: 'My words' }].map((t) => ({
+    ...t,
+    n: learnedItems.value?.filter((i) => i.slug === t.slug).length ?? 0,
+  })),
+)
+const learnedCount = computed(() => learnedItems.value?.length ?? 0)
+
+function since(days: number) {
+  const d = new Date()
+  d.setHours(0, 0, 0, 0)
+  d.setDate(d.getDate() - (days - 1))
+  return d.getTime()
+}
+const learnedSince = (days: number) =>
+  (learnedItems.value ?? []).filter((i) => (learnedAt.value[itemKey(i)] ?? 0) >= since(days))
+
+/** The words the chosen source covers, before the question count is applied. */
+const pool = computed<Item[] | null>(() => {
+  if (source.value === 'today') return null // resolved on start; counted from refs
+  const all = learnedItems.value ?? []
+  if (source.value === 'topic') return all.filter((i) => i.slug === topic.value)
+  if (source.value === 'recent') return learnedSince(recent.value)
+  return all
+})
+const available = computed(() =>
+  source.value === 'today' ? (counts.value[String(range.value)] ?? 0) : (pool.value?.length ?? 0),
+)
+const questions = computed(() => (size.value === null ? available.value : Math.min(size.value, available.value)))
 
 const phase = ref<'setup' | 'quiz' | 'done'>('setup')
 const queue = ref<Item[]>([])
@@ -49,8 +105,10 @@ function shuffle<T>(list: T[]) {
 }
 
 async function start(items?: Item[]) {
-  const list = items ?? (await resolveRefs(today.pastRefs(range.value)))
-  queue.value = shuffle(list)
+  const list = items ?? (source.value === 'today' ? await resolveRefs(today.pastRefs(range.value)) : (pool.value ?? []))
+  // A retry of wrong answers keeps every word; a new quiz is cut to the chosen length.
+  const mixed = shuffle(list)
+  queue.value = items || size.value === null ? mixed : mixed.slice(0, size.value)
   index.value = 0
   results.value = []
   phase.value = queue.value.length ? 'quiz' : 'setup'
@@ -82,17 +140,21 @@ function check() {
   const ok = same(input.value, current.value.word.w)
   checked.value = { item: current.value, answer: input.value.trim(), ok }
   results.value.push(checked.value)
+  quizLog.record(ok)
   speak(current.value.word.w)
 }
 function giveUp() {
   if (!current.value || checked.value) return
   checked.value = { item: current.value, answer: '', ok: false }
   results.value.push(checked.value)
+  quizLog.record(false)
   speak(current.value.word.w)
 }
 /** For synonyms the list doesn't know about (big vs large): the learner overrides the mark. */
 function acceptMine() {
-  if (checked.value) checked.value.ok = true
+  if (!checked.value || checked.value.ok) return
+  checked.value.ok = true
+  quizLog.upgrade()
 }
 function next() {
   if (index.value + 1 >= queue.value.length) {
@@ -130,38 +192,96 @@ const mask = (text: string) => {
 const score = computed(() => results.value.filter((r) => r.ok).length)
 const wrong = computed(() => results.value.filter((r) => !r.ok))
 const wrongInToday = computed(() => wrong.value.every((r) => today.has(r.item.slug, r.item.word.w)))
-const { tr, link, pos } = useLocale()
+const { tr, link, pos, isEn } = useLocale()
 </script>
 
 <template>
   <div class="vocab review">
     <!-- Setup -->
     <template v-if="phase === 'setup'">
-      <div class="vseg" role="group" :aria-label="tr('Chọn khoảng thời gian')">
-        <button
-          v-for="r in RANGES"
-          :key="String(r.value)"
-          type="button"
-          :aria-pressed="range === r.value"
-          @click="range = r.value"
-        >
-          {{ tr(r.label) }} ({{ counts[String(r.value)] ?? 0 }})
-        </button>
+      <fieldset class="rv-group">
+        <legend>{{ tr('Ôn những từ nào?') }}</legend>
+        <div class="rv-sources">
+          <label class="rv-source" :class="{ on: source === 'today' }">
+            <input v-model="source" type="radio" name="rv-source" value="today" />
+            <b>{{ tr('Từ đã chọn học') }}</b>
+            <span>{{ tr('Danh sách "Hôm nay học" của những ngày trước') }}</span>
+          </label>
+          <label class="rv-source" :class="{ on: source === 'learned' }">
+            <input v-model="source" type="radio" name="rv-source" value="learned" />
+            <b>{{ tr('Tất cả từ đã thuộc') }}</b>
+            <span>{{ learnedItems ? tr('{n} từ', { n: learnedCount }) : '…' }}</span>
+          </label>
+          <label class="rv-source" :class="{ on: source === 'topic' }">
+            <input v-model="source" type="radio" name="rv-source" value="topic" />
+            <b>{{ tr('Đã thuộc theo chủ đề') }}</b>
+            <span>{{ tr('Chọn một chủ đề') }}</span>
+          </label>
+          <label class="rv-source" :class="{ on: source === 'recent' }">
+            <input v-model="source" type="radio" name="rv-source" value="recent" />
+            <b>{{ tr('Thuộc gần đây') }}</b>
+            <span>{{ tr('Những từ bạn vừa đánh dấu đã thuộc') }}</span>
+          </label>
+        </div>
+
+        <div v-if="source === 'today'" class="vseg" role="group" :aria-label="tr('Chọn khoảng thời gian')">
+          <button
+            v-for="r in RANGES"
+            :key="String(r.value)"
+            type="button"
+            :aria-pressed="range === r.value"
+            @click="range = r.value"
+          >
+            {{ tr(r.label) }} ({{ counts[String(r.value)] ?? 0 }})
+          </button>
+        </div>
+        <select v-else-if="source === 'topic'" id="rv-topic" v-model="topic" class="rv-select" :aria-label="tr('Chủ đề')">
+          <option v-for="t in topics" :key="t.slug" :value="t.slug">
+            {{ isEn ? t.en : t.title }} ({{ t.n }})
+          </option>
+        </select>
+        <div v-else-if="source === 'recent'" class="vseg" role="group" :aria-label="tr('Thuộc trong khoảng')">
+          <button v-for="r in RECENT" :key="r.days" type="button" :aria-pressed="recent === r.days" @click="recent = r.days">
+            {{ tr(r.label) }} ({{ learnedItems ? learnedSince(r.days).length : '…' }})
+          </button>
+        </div>
+      </fieldset>
+
+      <fieldset class="rv-group">
+        <legend>{{ tr('Số câu') }}</legend>
+        <div class="vseg" role="group" :aria-label="tr('Số câu')">
+          <button
+            v-for="z in SIZES"
+            :key="String(z.value)"
+            type="button"
+            :aria-pressed="size === z.value"
+            @click="size = z.value"
+          >
+            {{ tr(z.label) }}
+          </button>
+        </div>
+      </fieldset>
+
+      <div v-if="available" class="rv-start">
+        <button type="button" class="vbtn primary" @click="start()">{{ tr('Bắt đầu kiểm tra') }}</button>
+        <span class="vnote">{{ tr('{a} câu, lấy ngẫu nhiên từ {b} từ.', { a: questions, b: available }) }}</span>
       </div>
-      <p v-if="available" class="vnote">
-        {{ tr('{n} từ trong danh sách "Hôm nay học" của các ngày trước. Mỗi câu hiện nghĩa tiếng Việt, bạn gõ từ tiếng Anh.', { n: available }) }}
-      </p>
       <div v-else class="vempty-state">
-        <p>{{ tr('Chưa có từ nào để ôn trong khoảng này.') }}</p>
-        <p>
-          {{ tr('Bài ôn tập lấy từ danh sách') }} <a :href="link('/tu-vung/hom-nay')">{{ tr('Hôm nay học') }}</a>
-          {{ tr('của những ngày trước. Hãy chọn từ để học hôm nay, ngày mai quay lại đây để kiểm tra.') }}
-        </p>
-      </div>
-      <div>
-        <button type="button" class="vbtn primary" :disabled="!available" @click="start()">
-          {{ tr('Bắt đầu kiểm tra') }}
-        </button>
+        <template v-if="source === 'today'">
+          <p>{{ tr('Chưa có từ nào để ôn trong khoảng này.') }}</p>
+          <p>
+            {{ tr('Bài ôn tập lấy từ danh sách') }} <a :href="link('/tu-vung/hom-nay')">{{ tr('Hôm nay học') }}</a>
+            {{ tr('của những ngày trước. Hãy chọn từ để học hôm nay, ngày mai quay lại đây để kiểm tra.') }}
+          </p>
+        </template>
+        <p v-else-if="!learnedItems">{{ tr('Đang tải danh sách từ…') }}</p>
+        <template v-else>
+          <p>{{ tr('Chưa có từ đã thuộc nào ở đây.') }}</p>
+          <p>
+            {{ tr('Bấm') }} <b>{{ tr('Đã thuộc?') }}</b> {{ tr('cạnh một từ trong') }}
+            <a :href="link('/tu-vung/')">{{ tr('các chủ đề') }}</a>{{ tr(' để đánh dấu, rồi quay lại đây kiểm tra.') }}
+          </p>
+        </template>
       </div>
     </template>
 
