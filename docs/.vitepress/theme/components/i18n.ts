@@ -87,6 +87,12 @@ const EN: Record<string, string> = {
   'Thẻ {a} / {b}': 'Card {a} / {b}',
   'Trộn thẻ': 'Shuffle',
   'Thẻ trước': 'Previous card',
+  'Còn {n} thẻ': '{n} cards left',
+  'đã thuộc {n}': '{n} learned',
+  'Hoàn thành!': 'All done!',
+  'Bạn đã thuộc cả {n} từ của lượt này.': 'You learned all {n} words in this round.',
+  'Ôn lại các thẻ này': 'Review these cards again',
+  'Về danh sách': 'Back to the list',
   'Chưa nhớ': 'Not yet',
   'Phím tắt: Space lật thẻ · → đã thuộc · ← chưa nhớ · Backspace thẻ trước':
     'Shortcuts: Space flips · → learned · ← not yet · Backspace previous card',

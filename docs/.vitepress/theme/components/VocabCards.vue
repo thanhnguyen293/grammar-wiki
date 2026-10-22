@@ -5,12 +5,16 @@ import SpeakButton from './SpeakButton.vue'
 import { itemKey, useToday, type Item } from './useVocab'
 
 const props = defineProps<{ items: Item[]; learned: Set<string> }>()
-const emit = defineEmits<{ toggle: [key: string] }>()
+const emit = defineEmits<{ toggle: [key: string]; exit: [] }>()
 const today = useToday()
 const { tr, pos } = useLocale()
 
-// The deck is a snapshot: marking a card as learned must not pull it out from under the learner.
+// The deck is a snapshot of the words when the cards opened. A card marked "Đã thuộc" leaves the
+// deck for this round; "Chưa nhớ" cards stay and come round again. An empty deck means done.
 const deck = ref<Item[]>([])
+/** All cards of this round, to start it over from the finish screen. */
+const round = ref<Item[]>([])
+const learnedInRound = ref(0)
 const index = ref(0)
 const flipped = ref(false)
 // How the deck moved, so the next card comes in from the right side. A swiped card has already
@@ -22,7 +26,13 @@ function reset(list: Item[]) {
   index.value = 0
   flipped.value = false
 }
-watch(() => props.items, reset, { immediate: true })
+function startRound(list: Item[]) {
+  round.value = [...list]
+  learnedInRound.value = 0
+  reset(list)
+}
+watch(() => props.items, startRound, { immediate: true })
+const finished = computed(() => !deck.value.length && round.value.length > 0)
 
 const card = computed(() => deck.value[index.value])
 const word = computed(() => card.value?.word)
@@ -42,11 +52,16 @@ function shuffle() {
   }
   reset(a)
 }
-/** "Đã thuộc": mark as learned and move on. */
+/** "Đã thuộc": mark as learned and take the card out of this round. */
 function know(how: typeof dir.value = 'next') {
   if (!card.value) return
   if (!isLearned.value) emit('toggle', itemKey(card.value))
-  go(1, how)
+  learnedInRound.value++
+  dir.value = how
+  flipped.value = false
+  deck.value = deck.value.filter((_, i) => i !== index.value)
+  // The next card slides into the same place; wrap around at the end of the deck.
+  if (index.value >= deck.value.length) index.value = 0
 }
 /** "Chưa nhớ": keep (or put back) the word among the ones to learn, and move on. */
 function notYet(how: typeof dir.value = 'next') {
@@ -120,7 +135,7 @@ const yesOpacity = computed(() => Math.min(1, Math.max(0, lean.value / 110)))
 const noOpacity = computed(() => Math.min(1, Math.max(0, -lean.value / 110)))
 
 function onKey(e: KeyboardEvent) {
-  if ((e.target as HTMLElement)?.closest('input, textarea, select, [contenteditable]')) return
+  if (!card.value || (e.target as HTMLElement)?.closest('input, textarea, select, [contenteditable]')) return
   if (e.key === ' ') {
     e.preventDefault()
     flipped.value = !flipped.value
@@ -140,7 +155,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
           <path d="M9 14 4 9l5-5M4 9h11a5 5 0 0 1 0 10h-3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </button>
-      <span class="cards-count">{{ tr('Thẻ {a} / {b}', { a: index + 1, b: deck.length }) }}</span>
+      <span class="cards-count">
+        {{ tr('Còn {n} thẻ', { n: deck.length }) }}
+        <small v-if="learnedInRound">· {{ tr('đã thuộc {n}', { n: learnedInRound }) }}</small>
+      </span>
       <span class="cards-tools">
         <button
           type="button"
@@ -167,7 +185,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
     <Transition :name="`card-${dir}`" mode="out-in">
       <div
-        :key="index"
+        :key="itemKey(card)"
         class="card"
         :class="{ flipped, learned: isLearned, dragging: drag.id !== -1 && drag.horizontal }"
         :style="cardStyle"
@@ -226,6 +244,20 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     </div>
     <p class="cards-keys">{{ tr('Phím tắt: Space lật thẻ · → đã thuộc · ← chưa nhớ · Backspace thẻ trước') }}</p>
     <p class="cards-swipe-hint">{{ tr('Chạm để lật · Vuốt phải: đã thuộc · Vuốt trái: chưa nhớ') }}</p>
+  </div>
+  <div v-else-if="finished" class="cards-done" role="status">
+    <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true">
+      <circle cx="24" cy="24" r="21" />
+      <path d="M14.5 24.5 21 31l12.5-13" />
+    </svg>
+    <p class="cards-done-title">{{ tr('Hoàn thành!') }}</p>
+    <p class="cards-done-text">
+      {{ tr('Bạn đã thuộc cả {n} từ của lượt này.', { n: round.length }) }}
+    </p>
+    <div class="cards-done-actions">
+      <button type="button" class="vbtn primary" @click="startRound(round)">{{ tr('Ôn lại các thẻ này') }}</button>
+      <button type="button" class="vbtn" @click="emit('exit')">{{ tr('Về danh sách') }}</button>
+    </div>
   </div>
   <p v-else class="vempty">{{ tr('Không còn thẻ nào trong bộ lọc này.') }}</p>
 </template>

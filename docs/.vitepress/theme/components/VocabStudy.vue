@@ -202,6 +202,6 @@ watch(
       <p v-else-if="items.length" class="vempty">{{ tr('Không có từ nào trong bộ lọc này.') }}</p>
     </template>
 
-    <VocabCards v-else :items="deck" :learned="learned" @toggle="toggle" />
+    <VocabCards v-else :items="deck" :learned="learned" @toggle="toggle" @exit="mode = 'list'" />
   </div>
 </template>
