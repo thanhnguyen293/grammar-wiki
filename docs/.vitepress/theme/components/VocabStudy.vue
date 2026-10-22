@@ -12,7 +12,8 @@ const props = defineProps<{ items: Item[]; loading?: boolean; showTopic?: boolea
 const emit = defineEmits<{ remove: [item: Item] }>()
 
 const mode = ref<'list' | 'cards'>('list')
-const filter = ref<'all' | 'todo' | 'done'>('all')
+// Opens on the words still to learn; learned ones are one click away.
+const filter = ref<'all' | 'todo' | 'done'>('todo')
 const hideMeaning = ref(false)
 const revealed = ref(new Set<string>())
 const speechOk = ref(true)
@@ -65,11 +66,10 @@ const relatedLine = (i: Item) => {
     .filter((g) => g.words.length)
 }
 
-// Grouping only changes the order on screen: each group keeps the place of its most common
-// word, and the related words of the same topic follow it. Numbers stay the frequency rank.
-const groupRelated = ref(false)
+// Related words are always grouped. Grouping only changes the order on screen: each group keeps
+// the place of its most common word, and the related words of the same topic follow it.
+// Numbers stay the frequency rank.
 const rows = computed(() => {
-  if (!groupRelated.value) return shown.value.map((it) => ({ it, kind: undefined as RelationKind | undefined }))
   const placed = new Set<Item>()
   const out: { it: Item; kind?: RelationKind }[] = []
   for (const it of shown.value) {
@@ -87,9 +87,6 @@ const rows = computed(() => {
   }
   return out
 })
-const canGroup = computed(() =>
-  props.items.some((it) => relatedOf(it).some((r) => relIndex.value.slug[r.w] === it.slug && onPage.value.has(`${it.slug}:${r.w}`))),
-)
 
 // Links from another topic point at a word (#w-friendly); the list renders only after the
 // words load, so the browser's own jump to the anchor has already missed it.
@@ -122,15 +119,9 @@ watch(
           <input id="hide-meaning" v-model="hideMeaning" type="checkbox" @change="revealed = new Set()" />
           {{ tr('Ẩn nghĩa') }}
         </label>
-        <label v-if="mode === 'list' && canGroup" class="vcheck" :title="tr('Đặt họ từ, từ đồng nghĩa và trái nghĩa cạnh nhau')">
-          <input id="group-related" v-model="groupRelated" type="checkbox" />
-          {{ tr('Nhóm theo liên quan') }}
-        </label>
-      </div>
-
-      <div class="vprog">
-        <span>{{ tr('Đã thuộc {a} / {b} từ', { a: learnedCount, b: items.length || (loading ? '…' : 0) }) }}</span>
-        <div class="vprog-bar"><i :style="{ width: items.length ? (learnedCount / items.length) * 100 + '%' : '0' }" /></div>
+        <span class="vbar-count" :aria-label="tr('Đã thuộc {a} / {b} từ', { a: learnedCount, b: items.length })" :title="tr('Đã thuộc {a} / {b} từ', { a: learnedCount, b: items.length })">
+          {{ learnedCount }}/{{ items.length || (loading ? '…' : 0) }}
+        </span>
       </div>
     </div>
 

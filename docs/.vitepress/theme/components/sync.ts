@@ -21,9 +21,12 @@ const user = ref<SyncUser | null>(null)
 const status = ref<SyncStatus>('off')
 const lastSynced = ref<number | null>(null)
 const errorCode = ref('')
+/** Sync on every change and on return to the tab. Off: only "Đồng bộ ngay" syncs. */
+const autoSync = ref(true)
 
 const META_KEY = 'stnp.sync.meta'
 const ENABLED_KEY = 'stnp.sync.enabled'
+const AUTO_KEY = 'stnp.sync.auto'
 const PUSH_DELAY = 1500
 
 /* ---------- Change tracking ---------- */
@@ -212,7 +215,9 @@ async function start(u: import('firebase/auth').User) {
       // Our own write echoing back before the server confirmed it.
       if (snap.metadata.hasPendingWrites) return
       remote = snap.exists() ? parseState(snap.data().data) : emptyState()
-      reconcile()
+      // With auto sync off, the latest account data is kept and merged on "Đồng bộ ngay".
+      if (autoSync.value) reconcile()
+      else if (status.value === 'syncing') status.value = 'synced'
     },
     fail,
   )
@@ -245,7 +250,7 @@ export function initSync() {
       prev = clone(next)
       if (!changed) return
       saveMeta(meta)
-      if (uid) {
+      if (uid && autoSync.value) {
         clearTimeout(pushTimer)
         pushTimer = setTimeout(reconcile, PUSH_DELAY)
       }
@@ -255,9 +260,14 @@ export function initSync() {
   let enabled = false
   try {
     enabled = localStorage.getItem(ENABLED_KEY) === '1'
+    autoSync.value = localStorage.getItem(AUTO_KEY) !== '0'
   } catch {
-    // Treated as signed out.
+    // Treated as signed out, with auto sync on.
   }
+  // Catch up when the learner comes back to the tab or the connection returns.
+  const catchUp = () => uid && autoSync.value && document.visibilityState === 'visible' && reconcile()
+  document.addEventListener('visibilitychange', catchUp)
+  window.addEventListener('online', catchUp)
   if (enabled) loadFirebase().catch(fail)
 }
 
@@ -295,5 +305,14 @@ export function useSync() {
     clearTimeout(pushTimer)
     reconcile()
   }
-  return { available: !!firebaseConfig, user, status, lastSynced, errorCode, signIn, signOut, syncNow }
+  function setAutoSync(on: boolean) {
+    autoSync.value = on
+    try {
+      localStorage.setItem(AUTO_KEY, on ? '1' : '0')
+    } catch {
+      // Applies to this visit only.
+    }
+    if (on) reconcile()
+  }
+  return { available: !!firebaseConfig, user, status, lastSynced, errorCode, autoSync, setAutoSync, signIn, signOut, syncNow }
 }

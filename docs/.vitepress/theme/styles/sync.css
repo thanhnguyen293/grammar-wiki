@@ -127,3 +127,19 @@
   border-color: var(--vp-c-danger-1);
   color: var(--vp-c-danger-1);
 }
+.sync-auto {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 8px;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.sync-auto input {
+  margin-top: 4px;
+}
+.sync-auto small {
+  display: block;
+  font-size: 12.5px;
+  color: var(--vp-c-text-2);
+}

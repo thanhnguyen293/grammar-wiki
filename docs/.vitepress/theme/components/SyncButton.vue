@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useLocale } from './i18n'
 import { useSync } from './sync'
 
-const { available, user, status, lastSynced, errorCode, signIn, signOut, syncNow } = useSync()
+const { available, user, status, lastSynced, errorCode, autoSync, setAutoSync, signIn, signOut, syncNow } = useSync()
 const { tr } = useLocale()
 const open = ref(false)
 const root = ref<HTMLElement>()
@@ -72,6 +72,13 @@ onBeforeUnmount(() => {
         <p class="sync-email">{{ user.email }}</p>
         <p class="sync-status" :class="status">{{ statusText }}</p>
         <p class="sync-note">{{ tr('Tiến độ, Hôm nay học, Từ của tôi và lịch sử ôn tập được lưu vào tài khoản này.') }}</p>
+        <label class="sync-auto">
+          <input id="sync-auto" type="checkbox" :checked="autoSync" @change="setAutoSync(($event.target as HTMLInputElement).checked)" />
+          <span>
+            {{ tr('Tự động đồng bộ') }}
+            <small>{{ tr(autoSync ? 'Mỗi thay đổi được lưu lên sau vài giây.' : 'Chỉ đồng bộ khi bấm "Đồng bộ ngay".') }}</small>
+          </span>
+        </label>
         <div class="sync-actions">
           <button type="button" class="vbtn" :disabled="status === 'syncing'" @click="syncNow">{{ tr('Đồng bộ ngay') }}</button>
           <button type="button" class="vbtn" @click="(open = false), signOut()">{{ tr('Đăng xuất') }}</button>

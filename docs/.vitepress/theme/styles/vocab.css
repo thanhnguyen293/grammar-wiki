@@ -1434,3 +1434,13 @@
     max-width: 960px;
   }
 }
+
+/* Compact toolbar: one row of controls with the learned count at its end. */
+.vsticky .vbar-count {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vp-c-text-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

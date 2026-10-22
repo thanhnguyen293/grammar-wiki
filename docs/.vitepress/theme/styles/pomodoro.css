@@ -1,0 +1,187 @@
+/* Pomodoro timer in the top bar: an icon (plus the time once a session has started) and a
+   panel with the dial, controls and settings. */
+.pomo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+.pomo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 999px;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg);
+  font-size: 13.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+.pomo-btn:hover,
+.pomo-btn.active {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+.pomo-btn.active.short,
+.pomo-btn.active.long {
+  border-color: var(--vp-c-tip-2);
+  color: var(--vp-c-tip-1);
+}
+.pomo-btn.running svg {
+  animation: pomo-pulse 2s ease-in-out infinite;
+}
+@keyframes pomo-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pomo-btn.running svg {
+    animation: none;
+  }
+}
+
+.pomo-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 50;
+  width: 300px;
+  padding: 16px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background: var(--vp-c-bg-elv);
+  box-shadow: var(--vp-shadow-3);
+  display: grid;
+  gap: 12px;
+  /* The top bar sets nowrap; the panel needs normal wrapping. */
+  white-space: normal;
+}
+.pomo-modes {
+  justify-self: center;
+}
+.pomo-modes button {
+  font-size: 12.5px;
+  padding: 4px 10px;
+}
+.pomo-dial {
+  position: relative;
+  justify-self: center;
+  width: 150px;
+  height: 150px;
+  display: grid;
+  place-items: center;
+}
+.pomo-dial svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.pomo-track,
+.pomo-fill {
+  fill: none;
+  stroke-width: 2;
+}
+.pomo-track {
+  stroke: var(--vp-c-divider);
+}
+.pomo-fill {
+  stroke: var(--vp-c-brand-1);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+.pomo-dial.short .pomo-fill,
+.pomo-dial.long .pomo-fill {
+  stroke: var(--vp-c-tip-2);
+}
+.pomo-big {
+  font-family: var(--font-display, inherit);
+  font-size: 36px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.pomo-actions {
+  display: flex;
+  gap: 8px;
+}
+.pomo-actions .vbtn {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+.vp-doc .pomo-stats,
+.pomo-stats {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+.pomo-settings-toggle {
+  justify-self: center;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+.pomo-settings-toggle:hover {
+  color: var(--vp-c-brand-1);
+}
+.pomo-settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 10px;
+}
+.pomo-settings label {
+  display: grid;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+.pomo-settings input[type='number'] {
+  padding: 5px 8px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 14px;
+}
+.pomo-settings .pomo-check {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+}
+@media (max-width: 640px) {
+  .pomo {
+    position: static;
+  }
+  /* On phones the panel spans the screen under the bar instead of hanging off the button. */
+  .pomo-panel {
+    position: fixed;
+    top: var(--vp-nav-height);
+    left: 8px;
+    right: 8px;
+    width: auto;
+  }
+}
+
+/* The top bar stays visible on phones too (VitePress only pins it from 960px). The "Mục lục"
+   bar and pinned toolbars move down by the bar's height. */
+@media (max-width: 959px) {
+  .VPNav {
+    position: sticky !important;
+    top: 0;
+  }
+  .VPLocalNav {
+    top: var(--vp-nav-height) !important;
+  }
+  .vsticky {
+    top: calc(var(--vp-layout-top-height, 0px) + var(--vp-nav-height) + 48px) !important;
+  }
+}
