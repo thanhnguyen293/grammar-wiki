@@ -253,6 +253,20 @@ const EN: Record<string, string> = {
   'Hủy': 'Cancel',
   'Không dịch được câu lúc này.': "Couldn't translate the sentence right now.",
 
+  // Account sync
+  'Đang đồng bộ…': 'Syncing…',
+  'Lỗi đồng bộ ({c})': 'Sync error ({c})',
+  'Đã đồng bộ lúc {t}': 'Synced at {t}',
+  'Đang kết nối…': 'Connecting…',
+  'Đăng nhập Google để đồng bộ tiến độ giữa các máy': 'Sign in with Google to sync your progress across devices',
+  'Đang đăng nhập…': 'Signing in…',
+  'Đồng bộ': 'Sync',
+  'Tài khoản và đồng bộ': 'Account and sync',
+  'Tiến độ, Hôm nay học, Từ của tôi và lịch sử ôn tập được lưu vào tài khoản này.':
+    "Your progress, today's words, My words and quiz history are saved to this account.",
+  'Đồng bộ ngay': 'Sync now',
+  'Đăng xuất': 'Sign out',
+
   // Lesson header
   'Chương {n} · {t}': 'Chapter {n} · {t}',
   'Mục {n}': 'Lesson {n}',

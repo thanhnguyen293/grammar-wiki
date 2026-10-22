@@ -15,12 +15,16 @@ import HomeChapters from './components/HomeChapters.vue'
 import SidebarToggle from './components/SidebarToggle.vue'
 import ProgressDashboard from './components/ProgressDashboard.vue'
 import { useScrollbarReveal } from './components/useScrollbarReveal'
+import SyncButton from './components/SyncButton.vue'
+import { initSync } from './components/sync'
+import { onMounted } from 'vue'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/content.css'
 import './styles/grammar.css'
 import './styles/vocab.css'
 import './styles/analyzer.css'
+import './styles/sync.css'
 
 export default {
   extends: DefaultTheme,
@@ -28,9 +32,11 @@ export default {
     h(DefaultTheme.Layout, null, {
       'doc-before': () => h(LevelBar),
       'nav-bar-content-before': () => h(SidebarToggle),
+      'nav-bar-content-after': () => h(SyncButton),
     }),
   setup() {
     useScrollbarReveal()
+    onMounted(initSync)
   },
   enhanceApp({ app }) {
     app.component('ChapterIndex', ChapterIndex)

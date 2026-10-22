@@ -6,6 +6,8 @@ Phần **Từ vựng** (`/tu-vung/`) có 3000 từ thông dụng chia theo 28 ch
 
 Web có hai ngôn ngữ: tiếng Việt (gốc `/`) và tiếng Anh (`/en/`), đổi bằng menu ngôn ngữ trên thanh điều hướng. Bản tiếng Anh dịch giao diện và 48 bài ngữ pháp; câu ví dụ vẫn giữ dòng dịch tiếng Việt và từ vựng vẫn giữ nghĩa tiếng Việt.
 
+Có thể đăng nhập Google để đồng bộ tiến độ giữa các máy (Firebase); cách cài đặt xem [SYNC_SETUP.md](SYNC_SETUP.md).
+
 Xây bằng [VitePress](https://vitepress.dev): mỗi bài là một file Markdown, có sẵn tìm kiếm, sidebar, chế độ sáng/tối.
 
 ## Chạy
@@ -41,8 +43,11 @@ docs/
     theme/                 CSS và các component (thanh nhãn bài, danh sách bài, từ vựng)
       components/textAnalyze.ts  tách từ, đưa về dạng gốc, nhận diện cụm từ trong bài viết
       components/i18n.ts         chuỗi giao diện tiếng Anh (khóa là chuỗi tiếng Việt)
+      components/sync.ts         đăng nhập Google và đồng bộ tiến độ lên Firestore
+    firebase.config.ts     cấu hình Firebase (null = tắt đồng bộ)
   tu-vung/
     data/<slug>.json       từ của từng chủ đề, xếp từ thông dụng nhất xuống
+firestore.rules            quy tắc bảo mật Firestore cho dữ liệu đồng bộ
 scripts/
   vocab-plan.json          danh sách 3000 từ đã chốt cho từng chủ đề
   check-vocab.mjs          kiểm tra định dạng, số lượng, trùng lặp

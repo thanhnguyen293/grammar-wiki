@@ -57,8 +57,7 @@ function writeStore(key: string, value: unknown) {
 }
 
 /** A set of word keys kept in this browser, shared by every component that uses it. */
-function keySet(storageKey: string) {
-  const list = ref<string[]>([])
+function keySet(storageKey: string, list = ref<string[]>([])) {
   let loaded = false
   return () => {
     if (!loaded && typeof window !== 'undefined') {
@@ -76,7 +75,8 @@ function keySet(storageKey: string) {
   }
 }
 
-const learnedSet = keySet('stnp.vocab.learned')
+const learnedList = ref<string[]>([])
+const learnedSet = keySet('stnp.vocab.learned', learnedList)
 // When each word was marked as learned (epoch ms), kept beside the plain key list so older
 // data stays valid. Words marked before this existed simply have no time.
 const LEARNED_AT_KEY = 'stnp.vocab.learnedAt'
@@ -104,7 +104,8 @@ export function useLearned() {
 }
 
 /** Words the learner said they don't know yet (from the article analyser). */
-export const useUnknown = keySet('stnp.vocab.unknown')
+const unknownList = ref<string[]>([])
+export const useUnknown = keySet('stnp.vocab.unknown', unknownList)
 
 const MINE_KEY = 'stnp.vocab.mine'
 const mineList = ref<Word[]>([])
@@ -292,4 +293,48 @@ export function useQuizLog() {
     writeStore(QUIZ_LOG_KEY, quizLog.value)
   }
   return { log: quizLog, record, upgrade }
+}
+
+/* ---------- Access for account sync (sync.ts) ---------- */
+
+export interface LocalData {
+  learned: string[]
+  learnedAt: Record<string, number>
+  unknown: string[]
+  days: Record<string, string[]>
+  mine: Word[]
+  quiz: Record<string, QuizDay>
+}
+
+/** Loads every store and returns their reactive contents. */
+export function localData() {
+  useLearned()
+  useUnknown()
+  useMine()
+  useToday()
+  useQuizLog()
+  return computed<LocalData>(() => ({
+    learned: learnedList.value,
+    learnedAt: learnedAt.value,
+    unknown: unknownList.value,
+    days: days.value,
+    mine: mineList.value,
+    quiz: quizLog.value,
+  }))
+}
+
+/** Replaces every store with data that came from the account, in memory and in this browser. */
+export function replaceLocalData(d: LocalData) {
+  learnedList.value = d.learned
+  learnedAt.value = d.learnedAt
+  unknownList.value = d.unknown
+  days.value = d.days
+  mineList.value = d.mine
+  quizLog.value = d.quiz
+  writeStore('stnp.vocab.learned', d.learned)
+  writeStore(LEARNED_AT_KEY, d.learnedAt)
+  writeStore('stnp.vocab.unknown', d.unknown)
+  writeStore(TODAY_KEY, d.days)
+  writeStore(MINE_KEY, d.mine)
+  writeStore(QUIZ_LOG_KEY, d.quiz)
 }
