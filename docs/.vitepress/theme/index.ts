@@ -10,11 +10,28 @@ import VocabToday from './components/VocabToday.vue'
 import VocabReview from './components/VocabReview.vue'
 import ArticleAnalyzer from './components/ArticleAnalyzer.vue'
 import VocabMine from './components/VocabMine.vue'
-import './custom.css'
+import HomeHero from './components/HomeHero.vue'
+import HomeChapters from './components/HomeChapters.vue'
+import SidebarToggle from './components/SidebarToggle.vue'
+import ProgressDashboard from './components/ProgressDashboard.vue'
+import { useScrollbarReveal } from './components/useScrollbarReveal'
+import './styles/tokens.css'
+import './styles/base.css'
+import './styles/content.css'
+import './styles/grammar.css'
+import './styles/vocab.css'
+import './styles/analyzer.css'
 
 export default {
   extends: DefaultTheme,
-  Layout: () => h(DefaultTheme.Layout, null, { 'doc-before': () => h(LevelBar) }),
+  Layout: () =>
+    h(DefaultTheme.Layout, null, {
+      'doc-before': () => h(LevelBar),
+      'nav-bar-content-before': () => h(SidebarToggle),
+    }),
+  setup() {
+    useScrollbarReveal()
+  },
   enhanceApp({ app }) {
     app.component('ChapterIndex', ChapterIndex)
     app.component('StudyPath', StudyPath)
@@ -24,5 +41,8 @@ export default {
     app.component('VocabReview', VocabReview)
     app.component('ArticleAnalyzer', ArticleAnalyzer)
     app.component('VocabMine', VocabMine)
+    app.component('HomeHero', HomeHero)
+    app.component('HomeChapters', HomeChapters)
+    app.component('ProgressDashboard', ProgressDashboard)
   },
 } satisfies Theme

@@ -12,6 +12,8 @@ const today = useToday()
 const deck = ref<Item[]>([])
 const index = ref(0)
 const flipped = ref(false)
+// Which way the deck moved, so the card slides out on the side it came from.
+const dir = ref<'next' | 'prev'>('next')
 
 function reset(list: Item[]) {
   deck.value = [...list]
@@ -25,6 +27,7 @@ const word = computed(() => card.value?.word)
 
 function go(step: number) {
   if (!deck.value.length) return
+  dir.value = step > 0 ? 'next' : 'prev'
   index.value = (index.value + step + deck.value.length) % deck.value.length
   flipped.value = false
 }
@@ -73,30 +76,33 @@ const { tr, pos } = useLocale()
       </span>
     </div>
 
-    <div
-      class="card"
-      :class="{ flipped, learned: learned.has(itemKey(card)) }"
-      role="button"
-      tabindex="0"
-      :aria-label="tr(flipped ? 'Úp thẻ' : 'Lật thẻ xem nghĩa')"
-      @click="flipped = !flipped"
-      @keydown.enter.prevent="flipped = !flipped"
-    >
-      <div class="card-word">
-        {{ word.w }}
-        <SpeakButton :text="word.w" />
-      </div>
-      <div class="card-meta">{{ [word.ipa, pos[word.pos], word.lv].filter(Boolean).join(' · ') }}</div>
-      <template v-if="flipped">
-        <div class="card-vi">{{ word.vi }}</div>
-        <div class="card-ex">
-          <span>{{ word.ex }}</span>
-          <SpeakButton :text="word.ex" :label="tr('Nghe câu ví dụ')" />
+    <Transition :name="`card-${dir}`" mode="out-in">
+      <div
+        :key="index"
+        class="card"
+        :class="{ flipped, learned: learned.has(itemKey(card)) }"
+        role="button"
+        tabindex="0"
+        :aria-label="tr(flipped ? 'Úp thẻ' : 'Lật thẻ xem nghĩa')"
+        @click="flipped = !flipped"
+        @keydown.enter.prevent="flipped = !flipped"
+      >
+        <div class="card-word">
+          {{ word.w }}
+          <SpeakButton :text="word.w" />
         </div>
-        <div v-if="word.exVi" class="card-exvi">{{ word.exVi }}</div>
-      </template>
-      <div v-else class="card-hint">{{ tr('Nhớ nghĩa trong đầu, rồi chạm để lật thẻ') }}</div>
-    </div>
+        <div class="card-meta">{{ [word.ipa, pos[word.pos], word.lv].filter(Boolean).join(' · ') }}</div>
+        <template v-if="flipped">
+          <div class="card-vi">{{ word.vi }}</div>
+          <div class="card-ex">
+            <span>{{ word.ex }}</span>
+            <SpeakButton :text="word.ex" :label="tr('Nghe câu ví dụ')" />
+          </div>
+          <div v-if="word.exVi" class="card-exvi">{{ word.exVi }}</div>
+        </template>
+        <div v-else class="card-hint">{{ tr('Nhớ nghĩa trong đầu, rồi chạm để lật thẻ') }}</div>
+      </div>
+    </Transition>
 
     <div class="cards-actions">
       <button type="button" class="vbtn" @click="go(-1)">{{ tr('← Trước') }}</button>

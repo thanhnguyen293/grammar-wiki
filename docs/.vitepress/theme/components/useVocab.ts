@@ -1,5 +1,5 @@
 import { computed, ref } from 'vue'
-import { learnedKey, MINE } from '../../vocabTopics'
+import { coreTopics, learnedKey, MINE, vocabTopics } from '../../vocabTopics'
 
 export type Pos = 'n' | 'v' | 'adj' | 'adv' | 'pron' | 'prep' | 'conj' | 'det' | 'num' | 'modal' | 'int' | 'phr'
 export type Cefr = 'A1' | 'A2' | 'B1' | 'B2'
@@ -77,10 +77,30 @@ function keySet(storageKey: string) {
 }
 
 const learnedSet = keySet('stnp.vocab.learned')
+// When each word was marked as learned (epoch ms), kept beside the plain key list so older
+// data stays valid. Words marked before this existed simply have no time.
+const LEARNED_AT_KEY = 'stnp.vocab.learnedAt'
+const learnedAt = ref<Record<string, number>>({})
+let learnedAtLoaded = false
+
 /** "Đã thuộc / đã biết". Keys come from learnedKey(). */
 export function useLearned() {
-  const { keys, set, toggle } = learnedSet()
-  return { learned: keys, set, toggle }
+  if (!learnedAtLoaded && typeof window !== 'undefined') {
+    learnedAtLoaded = true
+    learnedAt.value = readStore(LEARNED_AT_KEY, {})
+  }
+  const { keys, set: setKey } = learnedSet()
+  function set(key: string, on: boolean) {
+    if (keys.value.has(key) === on) return
+    setKey(key, on)
+    const next = { ...learnedAt.value }
+    if (on) next[key] = Date.now()
+    else delete next[key]
+    learnedAt.value = next
+    writeStore(LEARNED_AT_KEY, next)
+  }
+  const toggle = (key: string) => set(key, !keys.value.has(key))
+  return { learned: keys, learnedAt, set, toggle }
 }
 
 /** Words the learner said they don't know yet (from the article analyser). */
@@ -222,4 +242,54 @@ export async function resolveRefs(refs: string[]): Promise<Item[]> {
     const word = topics[slug]?.find((x) => x.w === w)
     return word ? [{ slug, word }] : []
   })
+}
+
+/** Turns "đã thuộc" keys (see learnedKey) back into items, in the order given. Core words are
+    stored bare, so every topic is loaded to find which one a bare word belongs to. */
+export async function resolveLearned(keys: string[]): Promise<Item[]> {
+  const slugs = [...vocabTopics.map((t) => t.slug), MINE.slug]
+  const data = Object.fromEntries(await Promise.all(slugs.map(async (s) => [s, await loadTopic(s)] as const)))
+  const coreSlug = new Map<string, string>()
+  for (const t of coreTopics) for (const w of data[t.slug] ?? []) if (!coreSlug.has(w.w)) coreSlug.set(w.w, t.slug)
+
+  return keys.flatMap((key) => {
+    const sep = key.indexOf(':')
+    const prefixed = sep > 0 && key.slice(0, sep) in data
+    const slug = prefixed ? key.slice(0, sep) : coreSlug.get(key)
+    const w = prefixed ? key.slice(sep + 1) : key
+    const word = slug ? data[slug]?.find((x) => x.w === w) : undefined
+    return slug && word ? [{ slug, word }] : []
+  })
+}
+
+/* Quiz activity per local date: how many answers were given and how many were right. Kept for
+   the progress page's daily chart; only counts are stored, not the words. */
+const QUIZ_LOG_KEY = 'stnp.vocab.quizLog'
+export interface QuizDay {
+  done: number
+  ok: number
+}
+const quizLog = ref<Record<string, QuizDay>>({})
+let quizLogLoaded = false
+
+export function useQuizLog() {
+  if (!quizLogLoaded && typeof window !== 'undefined') {
+    quizLogLoaded = true
+    quizLog.value = readStore(QUIZ_LOG_KEY, {})
+  }
+  function record(ok: boolean) {
+    const d = localDate()
+    const day = quizLog.value[d] ?? { done: 0, ok: 0 }
+    quizLog.value = { ...quizLog.value, [d]: { done: day.done + 1, ok: day.ok + (ok ? 1 : 0) } }
+    writeStore(QUIZ_LOG_KEY, quizLog.value)
+  }
+  /** "Từ của mình cũng đúng" turns a wrong answer from today into a right one. */
+  function upgrade() {
+    const d = localDate()
+    const day = quizLog.value[d]
+    if (!day || day.ok >= day.done) return
+    quizLog.value = { ...quizLog.value, [d]: { ...day, ok: day.ok + 1 } }
+    writeStore(QUIZ_LOG_KEY, quizLog.value)
+  }
+  return { log: quizLog, record, upgrade }
 }

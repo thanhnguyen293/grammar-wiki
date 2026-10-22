@@ -55,8 +55,9 @@ function vocabSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
 
 const viTheme: DefaultTheme.Config = {
   nav: [
-    { text: 'Ngữ pháp', link: '/lo-trinh', activeMatch: '^/(?!tu-vung|en/)' },
+    { text: 'Ngữ pháp', link: '/lo-trinh', activeMatch: '^/(?!tu-vung|tien-do|en/)' },
     { text: 'Từ vựng', link: '/tu-vung/', activeMatch: '^/tu-vung/' },
+    { text: 'Tiến độ', link: '/tien-do', activeMatch: '^/tien-do' },
   ],
   sidebar: { '/tu-vung/': vocabSidebar('vi'), '/': grammarSidebar('vi') },
   outline: { level: [2, 3], label: 'Trong bài này' },
@@ -72,8 +73,9 @@ const viTheme: DefaultTheme.Config = {
 
 const enTheme: DefaultTheme.Config = {
   nav: [
-    { text: 'Grammar', link: '/en/lo-trinh', activeMatch: '^/en/(?!tu-vung)' },
+    { text: 'Grammar', link: '/en/lo-trinh', activeMatch: '^/en/(?!tu-vung|tien-do)' },
     { text: 'Vocabulary', link: '/en/tu-vung/', activeMatch: '^/en/tu-vung/' },
+    { text: 'Progress', link: '/en/tien-do', activeMatch: '^/en/tien-do' },
   ],
   sidebar: { '/en/tu-vung/': vocabSidebar('en'), '/en/': grammarSidebar('en') },
   outline: { level: [2, 3], label: 'On this page' },
@@ -92,6 +94,9 @@ export default defineConfig({
   // The local search index ships in one chunk; it is expected to be large.
   vite: { build: { chunkSizeWarningLimit: 2000 } },
   head: [
+    // Restores a collapsed sidebar before first paint (see SidebarToggle.vue).
+    ['script', {}, "try{localStorage.getItem('sidebar-collapsed')==='1'&&document.documentElement.classList.add('sidebar-collapsed')}catch(e){}"],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${process.env.VITEPRESS_BASE || '/'}logo.svg` }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     [
@@ -119,6 +124,7 @@ export default defineConfig({
     },
   },
   themeConfig: {
+    logo: '/logo.svg',
     search: {
       provider: 'local',
       options: {

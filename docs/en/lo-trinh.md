@@ -1,3 +1,7 @@
+---
+pageClass: study-path-page
+---
+
 # Study path
 
 You don't need to study chapter 1 to chapter 9 in order. Each lesson has a label:

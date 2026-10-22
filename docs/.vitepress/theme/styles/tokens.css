@@ -1,0 +1,127 @@
+/* "Paper notebook" palette: warm paper, ink-blue brand, amber accent for what the learner
+   is doing right now (today's list, progress). Yellow / red / green still carry meaning only
+   (quan trọng / lỗi hay gặp / mẹo). Type: Literata for headings, Be Vietnam Pro for text. */
+:root {
+  --vp-font-family-base: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+  --font-display: 'Literata', Georgia, 'Times New Roman', serif;
+
+  /* Surfaces */
+  --vp-c-bg: #fbf8f1;
+  --vp-c-bg-alt: #f4efe4;
+  --vp-c-bg-soft: #f2ede1;
+  --vp-c-bg-elv: #fffdf8;
+  --vp-c-divider: #e7e1d3;
+  --vp-c-border: #ddd5c3;
+  --vp-c-gutter: #ece6d8;
+  --surface-card: #fffdf8;
+
+  /* Text: every step keeps at least 4.5:1 on --vp-c-bg. */
+  --vp-c-text-1: #1f2937;
+  --vp-c-text-2: #4b5563;
+  --vp-c-text-3: #6b6f76;
+
+  --vp-c-default-1: #6b6f76;
+  --vp-c-default-soft: rgba(120, 104, 72, 0.12);
+
+  /* Ink blue */
+  --vp-c-brand-1: #1e4e79;
+  --vp-c-brand-2: #173e61;
+  --vp-c-brand-3: #1e4e79;
+  --vp-c-brand-soft: rgba(30, 78, 121, 0.1);
+  --on-brand: #ffffff;
+
+  /* Amber */
+  --accent: #b45309;
+  --accent-strong: #92400e;
+  --accent-soft: rgba(180, 83, 9, 0.1);
+  --accent-border: #e8c79a;
+
+  /* "Mẹo" (tip) is green instead of the default brand color. */
+  --vp-c-tip-1: #1f6d47;
+  --vp-c-tip-2: #2a8a5b;
+  --vp-c-tip-3: #2a8a5b;
+  --vp-c-tip-soft: rgba(42, 138, 91, 0.11);
+
+  --formula-bg: #eef2f6;
+  --formula-border: #c9d6e6;
+  --lv-tc-bg: #ebe5d8;
+  --block-border-tip: #9fd0b4;
+  --block-border-warning: #e6c46a;
+  --block-border-danger: #eaa9a3;
+
+  /* Shape and depth */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --shadow-sm: 0 1px 2px rgba(64, 48, 20, 0.06);
+  --shadow-md: 0 1px 2px rgba(64, 48, 20, 0.05), 0 6px 18px -8px rgba(64, 48, 20, 0.18);
+  --shadow-lg: 0 2px 4px rgba(64, 48, 20, 0.05), 0 18px 40px -16px rgba(64, 48, 20, 0.28);
+  --ring: 0 0 0 3px rgba(30, 78, 121, 0.28);
+
+  /* Ruled lines for flashcards and the quiz card. */
+  --rule-line: rgba(30, 78, 121, 0.07);
+  --margin-line: rgba(180, 83, 9, 0.22);
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur: 220ms;
+
+  --vp-nav-bg-color: rgba(251, 248, 241, 0.86);
+  --vp-local-nav-bg-color: rgba(251, 248, 241, 0.92);
+  --vp-sidebar-bg-color: var(--vp-c-bg-alt);
+  --vp-code-block-bg: #f1ece0;
+  --vp-c-tip-block-bg: var(--vp-c-tip-soft);
+}
+
+.dark {
+  --vp-c-bg: #16181d;
+  --vp-c-bg-alt: #121418;
+  --vp-c-bg-soft: #1d2026;
+  --vp-c-bg-elv: #1f2329;
+  --vp-c-divider: #2a2e36;
+  --vp-c-border: #353a44;
+  --vp-c-gutter: #0e1013;
+  --surface-card: #1c1f25;
+
+  --vp-c-text-1: #ebe8e1;
+  --vp-c-text-2: #b7b2a8;
+  --vp-c-text-3: #8f8a80;
+  --vp-c-default-soft: rgba(183, 178, 168, 0.12);
+
+  --vp-c-brand-1: #8fb6e0;
+  --vp-c-brand-2: #a9c8ea;
+  --vp-c-brand-3: #4f7eae;
+  --vp-c-brand-soft: rgba(143, 182, 224, 0.14);
+  --on-brand: #11151b;
+
+  --accent: #f0a35e;
+  --accent-strong: #f5b97f;
+  --accent-soft: rgba(240, 163, 94, 0.13);
+  --accent-border: #6e4a26;
+
+  --vp-c-tip-1: #7bd2a2;
+  --vp-c-tip-2: #5cbf8a;
+  --vp-c-tip-3: #2f7a52;
+  --vp-c-tip-soft: rgba(92, 191, 138, 0.12);
+
+  --formula-bg: #182230;
+  --formula-border: #2c3b4f;
+  --lv-tc-bg: #272b33;
+  --block-border-tip: #2d6a49;
+  --block-border-warning: #7d6420;
+  --block-border-danger: #7b3934;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px -10px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.3), 0 20px 44px -18px rgba(0, 0, 0, 0.7);
+  --ring: 0 0 0 3px rgba(143, 182, 224, 0.35);
+
+  --rule-line: rgba(143, 182, 224, 0.06);
+  --margin-line: rgba(240, 163, 94, 0.22);
+
+  --vp-nav-bg-color: rgba(22, 24, 29, 0.86);
+  --vp-local-nav-bg-color: rgba(22, 24, 29, 0.92);
+  --vp-code-block-bg: #1a1d23;
+}

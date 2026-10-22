@@ -1,0 +1,1415 @@
+/* Vocabulary: shared controls, word list, flashcards, today list, review quiz, overview. */
+.vocab {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Controls ---------- */
+.vbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.vseg {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-md);
+  background: var(--vp-c-bg-alt);
+}
+.vseg button {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 7px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--vp-c-text-2);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.vseg button:hover {
+  color: var(--vp-c-text-1);
+}
+.vseg button[aria-pressed='true'] {
+  background: var(--surface-card);
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm), 0 0 0 1px var(--vp-c-divider);
+}
+.vcheck {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 32px;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+}
+.vcheck input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--vp-c-brand-1);
+}
+
+.vprog {
+  display: grid;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--vp-c-text-2);
+}
+.vprog-bar {
+  display: block;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--vp-c-default-soft);
+  overflow: hidden;
+}
+.vprog-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  border-radius: 99px;
+  transition: width 0.4s var(--ease);
+}
+.vnote,
+.vempty {
+  margin: 0;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+
+.vbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--vp-c-border);
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.vbtn:hover {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+.vbtn.primary {
+  background: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+  color: var(--on-brand);
+}
+.vbtn.primary:hover {
+  background: var(--vp-c-brand-2);
+  border-color: var(--vp-c-brand-2);
+  color: var(--on-brand);
+}
+.vbtn.done {
+  border-color: var(--block-border-tip);
+  color: var(--vp-c-tip-1);
+  background: var(--vp-c-tip-soft);
+}
+.vbtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.vsearch {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid var(--vp-c-border);
+  border-radius: var(--r-md);
+  background: var(--surface-card);
+  font-size: 15px;
+  color: var(--vp-c-text-1);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+.vsearch::placeholder {
+  color: var(--vp-c-text-3);
+}
+.vsearch:focus {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: var(--ring);
+  outline: none;
+}
+
+.speak {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--vp-c-brand-1);
+  flex: none;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+.speak:hover {
+  background: var(--vp-c-brand-soft);
+}
+
+/* ---------- Word list ---------- */
+.vlist {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.vp-doc .vlist li + li {
+  margin-top: 0;
+}
+.vitem {
+  display: grid;
+  grid-template-columns: 2.4em minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  transition: background-color var(--dur) var(--ease);
+}
+.vitem:last-child {
+  border-bottom: 0;
+}
+.vitem.learned {
+  background: var(--vp-c-tip-soft);
+}
+.vno {
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  padding-top: 5px;
+}
+.vmain {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+.vhead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 10px;
+}
+.vword {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--vp-c-text-1);
+}
+.vipa {
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+.vpos {
+  font-size: 12.5px;
+  color: var(--vp-c-text-2);
+  font-style: italic;
+}
+.vlv {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 1px 8px;
+  border-radius: 99px;
+  background: var(--vp-c-bg-alt);
+  border: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-2);
+}
+.vvi {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+  padding: 0;
+  cursor: default;
+  border-radius: var(--r-sm);
+}
+.vvi:not(:disabled) {
+  cursor: pointer;
+}
+.vvi.hidden,
+.vexvi.hidden {
+  color: transparent;
+  background: repeating-linear-gradient(-45deg, var(--vp-c-default-soft) 0 6px, transparent 6px 12px), var(--vp-c-default-soft);
+  user-select: none;
+}
+.vvi.hidden {
+  min-width: 8em;
+  justify-self: start;
+}
+.vex {
+  font-size: 14.5px;
+  color: var(--vp-c-text-1);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.vexvi {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+  justify-self: start;
+  border-radius: var(--r-sm);
+}
+/* Related words: the "Liên quan" line, and the grouped order ("Nhóm theo liên quan"). */
+.vitem[id] {
+  /* Clears the site header and the sticky study bar when a link jumps to a word. */
+  scroll-margin-top: calc(var(--vp-nav-height) + 150px);
+}
+.vp-doc .vrel {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
+}
+.vrel-label {
+  font-weight: 600;
+  margin-right: 6px;
+}
+.vrel-group + .vrel-group::before {
+  content: '·';
+  margin: 0 8px;
+  color: var(--vp-c-text-3);
+}
+.vrel-kind {
+  font-style: italic;
+  color: var(--vp-c-text-3);
+  margin-right: 4px;
+}
+.vrel-follow {
+  box-shadow: inset 3px 0 0 var(--vp-c-brand-soft);
+}
+.vitem:has(+ .vrel-follow) {
+  border-bottom-style: dashed;
+}
+.vrel-tag {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 99px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+}
+
+.vactions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+}
+.vmark,
+.vtoday {
+  min-height: 32px;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0 12px;
+  border-radius: 99px;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.vmark {
+  border: 1px solid var(--vp-c-border);
+  color: var(--vp-c-text-2);
+  background: var(--surface-card);
+}
+.vmark:hover {
+  border-color: var(--vp-c-tip-2);
+  color: var(--vp-c-tip-1);
+}
+.vmark[aria-pressed='true'] {
+  border-color: var(--block-border-tip);
+  color: var(--vp-c-tip-1);
+  background: var(--surface-card);
+}
+.vtoday {
+  border: 1px dashed var(--accent);
+  color: var(--accent);
+  background: transparent;
+}
+.vtoday:hover {
+  background: var(--accent-soft);
+}
+.vtoday[aria-pressed='true'] {
+  border-style: solid;
+  background: var(--accent-soft);
+}
+
+/* Toolbars that stay visible while a long list scrolls. On phones only the "Mục lục" bar
+   (about 48px) is pinned above the content; from 960px the site header (--vp-nav-height) is. */
+.vsticky {
+  position: sticky;
+  top: calc(var(--vp-layout-top-height, 0px) + 48px);
+  z-index: 10;
+  display: grid;
+  gap: 10px;
+  margin: 0 -12px;
+  padding: 10px 12px;
+  background: var(--vp-nav-bg-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+@media (min-width: 960px) {
+  .vsticky {
+    top: calc(var(--vp-layout-top-height, 0px) + var(--vp-nav-height));
+  }
+}
+.vsticky .vprog,
+.vsticky .an-bulk:empty {
+  margin: 0;
+}
+.vsticky .an-bulk:empty {
+  display: none;
+}
+
+/* ---------- Flashcards ---------- */
+.cards {
+  display: grid;
+  gap: 16px;
+}
+.cards-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+.cards-count {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.cards-tools {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+/* Paper card with a margin line, shared by flashcards and the quiz. Only the flashcard is
+   ruled: its text is laid out on the same 32px rows as the lines, so every line of text sits
+   on a rule. The quiz has inputs and buttons of other heights, so it stays unruled. */
+.card,
+.quiz {
+  --margin-x: 38px;
+  position: relative;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-xl);
+  background:
+    linear-gradient(90deg, transparent var(--margin-x), var(--margin-line) var(--margin-x) calc(var(--margin-x) + 1px), transparent calc(var(--margin-x) + 1px)),
+    var(--surface-card);
+  box-shadow: var(--shadow-lg);
+}
+.card {
+  --row: 32px;
+  /* Moves the rules down from the bottom of each row to the text baseline. */
+  --rule-shift: -9px;
+  min-height: calc(var(--row) * 9);
+  padding: calc(var(--row) * 2) 28px var(--row) 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  background:
+    linear-gradient(90deg, transparent var(--margin-x), var(--margin-line) var(--margin-x) calc(var(--margin-x) + 1px), transparent calc(var(--margin-x) + 1px)),
+    repeating-linear-gradient(transparent 0 calc(var(--row) - 1px), var(--rule-line) calc(var(--row) - 1px) var(--row)),
+    var(--surface-card);
+  background-position:
+    0 0,
+    0 var(--rule-shift),
+    0 0;
+  transition:
+    transform var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+.card:hover {
+  transform: translateY(-2px);
+}
+.card:active {
+  transform: translateY(0) scale(0.995);
+}
+.card.learned {
+  border-color: var(--block-border-tip);
+}
+/* Every child is a whole number of rows tall, with no gaps, so text never drifts off the
+   rules. The word keeps one size whether the card is flipped or not. */
+.card > * {
+  position: relative;
+  margin: 0;
+  line-height: var(--row);
+}
+/* Fonts of different sizes put their baseline at different heights inside a row; these
+   nudges (measured in the browser) bring each one onto the rule without changing layout. */
+.card-word {
+  top: 4px;
+}
+.card-vi {
+  top: -3px;
+}
+.card-ex {
+  top: -1px;
+}
+.card-word {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: calc(var(--row) * 2);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.card-word .speak {
+  align-self: center;
+}
+.card-meta {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+.card-vi {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--vp-c-brand-1);
+  animation: card-in var(--dur) var(--ease);
+}
+.card-ex {
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: card-in var(--dur) var(--ease);
+}
+.card-ex .speak {
+  width: 28px;
+  height: 28px;
+}
+.card-exvi {
+  font-size: 14.5px;
+  color: var(--vp-c-text-2);
+  animation: card-in var(--dur) var(--ease);
+}
+.card-hint {
+  margin-top: var(--row);
+  font-size: 13.5px;
+  color: var(--vp-c-text-3);
+}
+/* Switching cards: the old card slides off and tilts a little, the new one slides in from
+   the other side, like dealing from a deck. Leave is quicker than enter so it feels snappy. */
+.card-next-enter-active,
+.card-prev-enter-active {
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.card-next-leave-active,
+.card-prev-leave-active {
+  transition:
+    opacity var(--dur-fast) ease-in,
+    transform var(--dur-fast) ease-in;
+}
+.card-next-enter-from,
+.card-prev-leave-to {
+  opacity: 0;
+  transform: translateX(40px) rotate(2deg);
+}
+.card-next-leave-to,
+.card-prev-enter-from {
+  opacity: 0;
+  transform: translateX(-40px) rotate(-2deg);
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+  }
+}
+.cards-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.cards-keys {
+  margin: 0 !important;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--vp-c-text-3);
+}
+
+/* ---------- Overview page ---------- */
+.vhome-progress {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px 12px;
+  padding: 18px 20px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+.vhome-num {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.vhome-num b {
+  font-size: 34px;
+  color: var(--accent);
+}
+.vhome-label {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+.vhome-progress .vprog-bar {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  height: 8px;
+}
+
+.vquick {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.vp-doc a.vquick-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
+}
+.vp-doc a.vquick-card:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.vquick-card svg {
+  width: 36px;
+  height: 36px;
+  padding: 7px;
+  margin-bottom: 6px;
+  border-radius: var(--r-md);
+  background: var(--vp-c-brand-soft);
+  stroke: var(--vp-c-brand-1);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vquick-card b {
+  font-size: 15.5px;
+}
+.vquick-card span {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+  flex: 1;
+}
+.vquick-card em {
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+}
+
+.vsearch-wrap {
+  position: relative;
+}
+.vsearch-wrap svg {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  fill: none;
+  stroke: var(--vp-c-text-3);
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.vsearch-wrap .vsearch {
+  padding-left: 44px;
+}
+
+.vresults {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+.vresults li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 10px 16px;
+  margin: 0 !important;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.vresults li:last-child {
+  border-bottom: 0;
+}
+.vresults .vword {
+  font-size: 17px;
+}
+.vres-vi {
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+.vres-topic {
+  margin-left: auto;
+  font-size: 12.5px;
+}
+
+.vhome h2 {
+  margin-top: 28px;
+}
+.vtopics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.vp-doc a.vtopic-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
+  column-gap: 10px;
+  padding: 14px 14px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-md);
+  background: var(--surface-card);
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+.vp-doc a.vtopic-card:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: var(--shadow-md);
+}
+.vtopic-no {
+  grid-row: 1 / 3;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  background: var(--vp-c-bg-alt);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--vp-c-text-2);
+  font-variant-numeric: tabular-nums;
+}
+.vtopic-title {
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+.vtopic-card small {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--vp-c-text-3);
+}
+.vtopic-prog {
+  grid-column: 1 / -1;
+  align-self: end;
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.vtopic-prog .vprog-bar {
+  height: 4px;
+}
+
+/* ---------- Today list ---------- */
+.vtoday-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  font-size: 14px;
+}
+.vtoday-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding: 14px 18px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+.vtoday-head p {
+  margin: 0;
+}
+.vtoday-head b {
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+.vgoal {
+  margin-left: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 99px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.vgoal.ok {
+  background: var(--vp-c-tip-soft);
+  color: var(--vp-c-tip-1);
+}
+.vtopic-link {
+  font-size: 12.5px;
+}
+.vempty-state {
+  margin-top: 16px;
+  padding: 20px 22px;
+  border: 1.5px dashed var(--vp-c-border);
+  border-radius: var(--r-lg);
+  background: var(--vp-c-bg-alt);
+  color: var(--vp-c-text-2);
+}
+.vempty-state p {
+  margin: 4px 0;
+}
+.vreview-link {
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+
+/* ---------- Review quiz ---------- */
+.rv-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+.rv-group legend {
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+}
+.rv-sources {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+/* Radio cards: the whole card is the label, the native radio stays for keyboard and screen
+   readers and is drawn as a small dot in the corner. */
+.rv-source {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px 14px 42px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+.rv-source:hover {
+  border-color: var(--vp-c-border);
+  box-shadow: var(--shadow-sm);
+}
+.rv-source.on {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+}
+.rv-source input {
+  position: absolute;
+  left: 16px;
+  top: 17px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--vp-c-brand-1);
+}
+.rv-source b {
+  font-size: 15px;
+}
+.rv-source span {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--vp-c-text-2);
+}
+.rv-select {
+  min-width: min(100%, 320px);
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--vp-c-border);
+  border-radius: var(--r-md);
+  background: var(--surface-card);
+  color: var(--vp-c-text-1);
+  font-size: 14px;
+}
+.rv-select:focus {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: var(--ring);
+  outline: none;
+}
+.rv-start {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding-top: 4px;
+}
+@media (max-width: 560px) {
+  .rv-sources {
+    grid-template-columns: 1fr;
+  }
+  .rv-group .vseg {
+    flex-wrap: wrap;
+  }
+}
+.quiz {
+  padding: 30px 26px 26px 52px;
+  display: grid;
+  gap: 8px;
+  text-align: center;
+}
+.vp-doc .quiz p,
+.vp-doc .quiz-score p {
+  margin: 0;
+}
+.quiz-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+}
+.quiz-vi {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--vp-c-brand-1);
+}
+.quiz-meta {
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--vp-c-text-2);
+}
+.quiz-ex {
+  font-size: 14.5px;
+  color: var(--vp-c-text-2);
+}
+.quiz-pattern {
+  margin-top: 6px !important;
+  font-family: var(--vp-font-family-mono);
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  color: var(--vp-c-text-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.quiz-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+.quiz-form .vsearch {
+  min-height: 52px;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 600;
+}
+.quiz-form .vsearch.ok {
+  border-color: var(--vp-c-tip-2);
+}
+.quiz-form .vsearch.bad {
+  border-color: var(--vp-c-warning-1);
+}
+.quiz-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.quiz-result {
+  margin-top: 8px;
+  padding: 16px;
+  border-radius: var(--r-md);
+  border: 1px solid;
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  animation: card-in var(--dur) var(--ease);
+}
+.quiz-result.ok {
+  border-color: var(--block-border-tip);
+  background: var(--vp-c-tip-soft);
+}
+.quiz-result.bad {
+  border-color: var(--block-border-warning);
+  background: var(--vp-c-warning-soft);
+}
+.quiz-verdict {
+  font-weight: 700;
+  font-size: 15px;
+}
+.quiz-result.ok .quiz-verdict {
+  color: var(--vp-c-tip-1);
+}
+.quiz-result.bad .quiz-verdict {
+  color: var(--vp-c-warning-1);
+}
+.quiz-answer {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.quiz-yours {
+  font-size: 13.5px;
+  color: var(--vp-c-text-2);
+}
+.quiz-score {
+  text-align: center;
+  display: grid;
+  gap: 4px;
+  padding: 24px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+.quiz-score .quiz-vi {
+  font-size: 34px;
+  color: var(--accent);
+}
+.quiz-wrong {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 720px) {
+  .vquick {
+    grid-template-columns: 1fr;
+  }
+  .vp-doc a.vquick-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 12px;
+    align-items: center;
+  }
+  .vquick-card svg {
+    grid-row: 1 / 3;
+    margin: 0;
+  }
+  .vquick-card em {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .vitem {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 14px;
+  }
+  .vno {
+    display: none;
+  }
+  .vactions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .vmark,
+  .vtoday {
+    min-height: 36px;
+  }
+  .vbtn {
+    min-height: 44px;
+  }
+  .card,
+  .quiz {
+    --margin-x: 32px;
+  }
+  .card {
+    min-height: calc(var(--row) * 8);
+    padding: calc(var(--row) * 2) 18px var(--row) 46px;
+  }
+  .card-word {
+    font-size: 32px;
+    top: 7px;
+  }
+  .quiz {
+    padding: 24px 16px 20px 46px;
+  }
+
+  /* Keep the pinned bar short on phones so the list still has room. */
+  .vsticky {
+    gap: 6px;
+    padding-block: 8px;
+  }
+  .vsticky .vbar {
+    gap: 6px;
+  }
+  .vsticky .vseg button {
+    min-height: 30px;
+    padding: 0 9px;
+    font-size: 13px;
+  }
+  .vsticky .vcheck,
+  .vsticky .vprog {
+    font-size: 12.5px;
+  }
+  .vsticky .vprog {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+/* ---------- Progress page ---------- */
+.dash {
+  margin-top: 24px;
+  display: grid;
+  gap: 16px;
+}
+.dash-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.dash-tile,
+.dash-card {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+.dash-tile {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 16px 18px;
+}
+.dash-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-3);
+}
+.dash-num {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.dash-num b {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1.2;
+  color: var(--vp-c-text-1);
+}
+/* Only the first tile has a bar; it sits last so every tile's number and caption line up. */
+.dash-tile .vprog-bar {
+  margin-top: 6px;
+}
+.dash-sub {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+.dash-card {
+  padding: 18px 20px;
+  min-width: 0;
+}
+.dash-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-bottom: 14px;
+}
+.vp-doc .dash-head h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 19px;
+}
+.vp-doc .dash-head h2::before {
+  display: none;
+}
+.dash-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+/* Heatmap. One amber ramp, light to dark in light mode and dim to bright in dark mode, so
+   "more" always reads as "stronger"; empty days are a quiet neutral. */
+.hm-box {
+  --cell: 12px;
+  --hm-0: #ece6d8;
+  --hm-1: #f0c27c;
+  --hm-2: #de9a43;
+  --hm-3: #bb6714;
+  --hm-4: #7f3c06;
+  position: relative;
+}
+.dark .hm-box {
+  --hm-0: #252930;
+  --hm-1: #4d3520;
+  --hm-2: #85561f;
+  --hm-3: #c47e2e;
+  --hm-4: #f5b56c;
+}
+.hm-scroll {
+  overflow-x: auto;
+  padding-bottom: 4px;
+  /* Right-to-left scroller, left-to-right grid: when the year doesn't fit, the browser opens
+     it on the latest weeks without any script. */
+  direction: rtl;
+}
+.hm {
+  direction: ltr;
+  display: grid;
+  grid-template-columns: auto repeat(var(--weeks), var(--cell));
+  grid-template-rows: auto repeat(7, var(--cell));
+  gap: 3px;
+  width: max-content;
+}
+.hm-month {
+  grid-row: 1;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--vp-c-text-3);
+  white-space: nowrap;
+}
+.hm-wd {
+  grid-column: 1;
+  /* Stays in view while a narrow screen scrolls through the weeks. */
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface-card);
+  padding-right: 6px;
+  font-size: 10.5px;
+  line-height: var(--cell);
+  color: var(--vp-c-text-3);
+}
+.hm-cell {
+  display: block;
+  width: var(--cell);
+  height: var(--cell);
+  border-radius: 3px;
+  background: var(--hm-0);
+}
+.hm-cell.l1 {
+  background: var(--hm-1);
+}
+.hm-cell.l2 {
+  background: var(--hm-2);
+}
+.hm-cell.l3 {
+  background: var(--hm-3);
+}
+.hm-cell.l4 {
+  background: var(--hm-4);
+}
+.hm .hm-cell:hover {
+  outline: 2px solid var(--vp-c-text-1);
+  outline-offset: 1px;
+}
+.hm .hm-cell.today {
+  box-shadow: inset 0 0 0 1.5px var(--vp-c-brand-1);
+}
+.hm-tip {
+  position: absolute;
+  z-index: 5;
+  transform: translate(-50%, calc(-100% - 8px));
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  background: var(--vp-c-text-1);
+  color: var(--vp-c-bg);
+  font-size: 12.5px;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--shadow-md);
+}
+.hm-foot {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px 16px;
+}
+.hm-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+}
+.hm-legend .hm-cell {
+  margin: 0 1px;
+}
+.hm-table summary {
+  font-size: 13px;
+  color: var(--vp-c-brand-1);
+  cursor: pointer;
+}
+.hm-table table {
+  margin: 10px 0 0;
+  font-size: 13px;
+}
+
+.dash-topics {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: grid;
+  gap: 8px;
+}
+.vp-doc .dash-topics li {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30% 4.5em;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+}
+.dash-topics a {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dash-topics a:hover {
+  color: var(--vp-c-brand-1);
+}
+.dash-pct {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.dash-recent {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.vp-doc .dash-recent li {
+  margin: 0;
+  padding: 10px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 10px;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.vp-doc .dash-recent li:last-child {
+  border-bottom: 0;
+}
+.dash-recent .vword {
+  font-size: 17px;
+}
+.dash-vi {
+  grid-row: 2;
+  font-size: 14px;
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+.dash-meta {
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+  text-align: right;
+}
+.dash-recent a.dash-meta {
+  text-decoration: none;
+}
+@media (max-width: 860px) {
+  .dash-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dash-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 420px) {
+  .hm-box {
+    --cell: 11px;
+  }
+  .dash-num b {
+    font-size: 28px;
+  }
+}
+/* The progress page has no sidebar or outline; give it room for a full year of weeks. */
+@media (min-width: 960px) {
+  .progress-page .VPDoc:not(.has-sidebar) .container {
+    max-width: 1040px;
+  }
+  .progress-page .VPDoc:not(.has-sidebar) .content {
+    max-width: 960px;
+  }
+}

@@ -1,5 +1,6 @@
 // Validates docs/tu-vung/data/*.json against docs/.vitepress/vocabTopics.ts:
 // schema, allowed values, word counts, and that no word appears in two topics.
+// Also checks docs/tu-vung/relations.json: every word is a core word, and no group repeats.
 // Usage: node scripts/check-vocab.mjs [slug ...]   (no slugs = check every topic)
 import { readFileSync, existsSync } from 'node:fs'
 
@@ -60,6 +61,41 @@ for (const { slug, target, track } of topics) {
     if (x.ex && !/[.?!]$/.test(x.ex.trim())) errors.push(`${at}: example should end with . ? or !`)
   })
   if (!track) total += words.length
+}
+
+// Related words (scripts/suggest-relations.mjs). Only core words: specialist topics reuse
+// core words with another meaning, so a headword there would be ambiguous.
+const relFile = new URL('tu-vung/relations.json', root)
+if (existsSync(relFile)) {
+  let rel = {}
+  try {
+    rel = JSON.parse(readFileSync(relFile, 'utf8'))
+  } catch (e) {
+    errors.push(`relations.json: invalid JSON (${e.message})`)
+  }
+  const KINDS = ['family', 'synonym', 'antonym']
+  for (const k of Object.keys(rel)) if (!KINDS.includes(k)) errors.push(`relations.json: unknown group kind "${k}"`)
+  for (const kind of KINDS) {
+    const sets = []
+    const family = new Map()
+    ;(rel[kind] ?? []).forEach((g, i) => {
+      const at = `relations.json ${kind}[${i}]`
+      if (!Array.isArray(g) || g.length < 2) return errors.push(`${at}: needs at least two words`)
+      if (new Set(g).size !== g.length) errors.push(`${at}: repeats a word`)
+      for (const w of g) if (!seen.has(`core:${w}`)) errors.push(`${at}: "${w}" is not a core word`)
+      const set = new Set(g)
+      // A group inside another group of the same kind says nothing new.
+      const j = sets.findIndex((s) => [...set].every((w) => s.has(w)) || [...s].every((w) => set.has(w)))
+      if (j !== -1) errors.push(`${at}: duplicates ${kind}[${j}]`)
+      sets.push(set)
+      // Families are disjoint: a word belongs to one family.
+      if (kind === 'family')
+        for (const w of g) {
+          if (family.has(w)) errors.push(`${at}: "${w}" is also in family[${family.get(w)}]`)
+          family.set(w, i)
+        }
+    })
+  }
 }
 
 console.log(`${total} core words in ${topics.filter((t) => !t.track).length} topics`)
