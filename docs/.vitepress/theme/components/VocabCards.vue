@@ -92,15 +92,21 @@ const { tr, pos } = useLocale()
           <SpeakButton :text="word.w" />
         </div>
         <div class="card-meta">{{ [word.ipa, pos[word.pos], word.lv].filter(Boolean).join(' · ') }}</div>
-        <template v-if="flipped">
-          <div class="card-vi">{{ word.vi }}</div>
-          <div class="card-ex">
-            <span>{{ word.ex }}</span>
-            <SpeakButton :text="word.ex" :label="tr('Nghe câu ví dụ')" />
+        <!-- Both sides are always rendered in the same grid cell, so the card is as tall as its
+             taller side and does not change size when it is flipped. -->
+        <div class="card-body">
+          <div class="card-face" :class="{ shown: !flipped }" :aria-hidden="flipped">
+            <div class="card-hint">{{ tr('Nhớ nghĩa trong đầu, rồi chạm để lật thẻ') }}</div>
           </div>
-          <div v-if="word.exVi" class="card-exvi">{{ word.exVi }}</div>
-        </template>
-        <div v-else class="card-hint">{{ tr('Nhớ nghĩa trong đầu, rồi chạm để lật thẻ') }}</div>
+          <div class="card-face" :class="{ shown: flipped }" :aria-hidden="!flipped">
+            <div class="card-vi">{{ word.vi }}</div>
+            <div class="card-ex">
+              <span>{{ word.ex }}</span>
+              <SpeakButton :text="word.ex" :label="tr('Nghe câu ví dụ')" />
+            </div>
+            <div v-if="word.exVi" class="card-exvi">{{ word.exVi }}</div>
+          </div>
+        </div>
       </div>
     </Transition>
 
