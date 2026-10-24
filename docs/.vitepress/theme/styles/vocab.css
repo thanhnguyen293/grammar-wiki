@@ -942,6 +942,9 @@
   border-radius: 99px;
   background: var(--accent-soft);
   color: var(--accent);
+  /* A pill that wraps breaks its background in two; it moves to the next line whole. */
+  display: inline-block;
+  white-space: nowrap;
 }
 .vgoal.ok {
   background: var(--vp-c-tip-soft);

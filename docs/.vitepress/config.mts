@@ -1,4 +1,4 @@
-import { defineConfig, type DefaultTheme } from 'vitepress'
+import { defineConfig, type DefaultTheme, type MarkdownRenderer } from 'vitepress'
 import { chapters, LEVEL_LABEL, LEVEL_LABEL_EN, sectionLink, sectionNo } from './chapters'
 import { coreTopics, extraTopics } from './vocabTopics'
 
@@ -53,6 +53,22 @@ function vocabSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
   ]
 }
 
+// Copies each column's header into its cells as data-label, so a table stacked into blocks on
+// phones can still say which column a value came from (see content.css).
+function tableLabels(md: MarkdownRenderer) {
+  md.core.ruler.push('table_labels', (state) => {
+    let headers: string[] = []
+    let col = 0
+    for (let i = 0; i < state.tokens.length; i++) {
+      const t = state.tokens[i]
+      if (t.type === 'thead_open') headers = []
+      else if (t.type === 'th_open') headers.push(state.tokens[i + 1].content.replace(/[*_`]/g, ''))
+      else if (t.type === 'tr_open') col = 0
+      else if (t.type === 'td_open' && headers[col] !== undefined) t.attrSet('data-label', headers[col++])
+    }
+  })
+}
+
 const viTheme: DefaultTheme.Config = {
   // Logo only in the top bar: the title takes room the timer and sync buttons need.
   siteTitle: false,
@@ -94,6 +110,7 @@ export default defineConfig({
   // GitHub Pages serves the site under /<repo>/; the deploy workflow sets VITEPRESS_BASE.
   base: process.env.VITEPRESS_BASE || '/',
   cleanUrls: true,
+  markdown: { config: tableLabels },
   lastUpdated: false,
   // The local search index ships in one chunk; it is expected to be large.
   vite: { build: { chunkSizeWarningLimit: 2000 } },

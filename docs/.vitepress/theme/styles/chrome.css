@@ -201,6 +201,15 @@
     bottom: calc(var(--tabbar-h) + 96px + env(safe-area-inset-bottom, 0px));
   }
 }
+/* The narrowest phones (320px): the bar's buttons only fit with a tighter left edge and timer. */
+@media (max-width: 359px) {
+  .VPNavBar .wrapper {
+    padding-left: 12px !important;
+  }
+  .pomo-btn {
+    padding: 0 6px;
+  }
+}
 
 /* ---------- Touch screens (phones, iPad) ---------- */
 /* Fingers need about 40px. Toolbar controls grow to that; icon and pill buttons keep their look

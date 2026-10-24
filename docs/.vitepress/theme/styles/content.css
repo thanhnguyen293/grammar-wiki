@@ -244,4 +244,50 @@
     font-size: 23px;
     margin-top: 36px;
   }
+
+  /* Formula tables become one block per row: side by side on a phone, the structure column
+     breaks in the middle of a formula. The first cell heads the block; in wider tables each
+     other cell is prefixed with its column name (data-label, set in config.mts). */
+  .vp-doc .custom-block.info table {
+    display: block;
+    margin: 4px 0 0;
+  }
+  .vp-doc .custom-block.info thead {
+    display: none;
+  }
+  .vp-doc .custom-block.info :is(tbody, tr, td) {
+    display: block;
+  }
+  .vp-doc .custom-block.info tr {
+    padding: 10px 14px;
+    border-top: 1px solid var(--formula-border);
+    background: none;
+  }
+  .vp-doc .custom-block.info tr:first-child {
+    border-top: 0;
+  }
+  .vp-doc .custom-block.info td {
+    padding: 0;
+    border: 0;
+    line-height: 1.6;
+  }
+  .vp-doc .custom-block.info td:first-child {
+    margin-bottom: 2px;
+    font-family: var(--vp-font-family-base);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--vp-c-text-2);
+  }
+  /* Label | structure | example: the example reads as secondary without a column name. */
+  .vp-doc .custom-block.info table:has(th:nth-child(3):last-child) td:nth-child(3) {
+    color: var(--vp-c-text-2);
+  }
+  .vp-doc .custom-block.info table:has(th:nth-child(4)) td:not(:first-child)::before {
+    content: attr(data-label) ': ';
+    font-family: var(--vp-font-family-base);
+    font-size: 12.5px;
+    color: var(--vp-c-text-3);
+  }
 }
