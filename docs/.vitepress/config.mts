@@ -101,6 +101,14 @@ export default defineConfig({
     // Restores a collapsed sidebar before first paint (see SidebarToggle.vue).
     ['script', {}, "try{localStorage.getItem('sidebar-collapsed')==='1'&&document.documentElement.classList.add('sidebar-collapsed')}catch(e){}"],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: `${process.env.VITEPRESS_BASE || '/'}logo.svg` }],
+    // Added to the home screen, the site opens as its own app (see AppBackButton and TabBar).
+    ['link', { rel: 'manifest', href: `${process.env.VITEPRESS_BASE || '/'}manifest.webmanifest` }],
+    ['link', { rel: 'apple-touch-icon', href: `${process.env.VITEPRESS_BASE || '/'}icons/icon-180.png` }],
+    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+    ['meta', { name: 'apple-mobile-web-app-title', content: 'Ngữ Pháp' }],
+    ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
+    ['meta', { name: 'theme-color', content: '#fbf8f1', media: '(prefers-color-scheme: light)' }],
+    ['meta', { name: 'theme-color', content: '#16181d', media: '(prefers-color-scheme: dark)' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     [

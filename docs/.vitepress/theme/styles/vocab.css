@@ -397,9 +397,8 @@
   gap: 8px;
   align-items: center;
 }
-/* Paper card with a margin line, shared by flashcards and the quiz. Only the flashcard is
-   ruled: its text is laid out on the same 32px rows as the lines, so every line of text sits
-   on a rule. The quiz has inputs and buttons of other heights, so it stays unruled. */
+/* Paper card with a margin line, shared by flashcards and the quiz. Both are ruled: their text
+   is laid out on the same 32px rows as the lines, so every line of text sits on a rule. */
 .card,
 .quiz {
   --margin-x: 38px;
@@ -728,6 +727,25 @@
     bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   }
 }
+/* Tall tablet screens (iPad in portrait): a nine-row card leaves half the screen empty, so the
+   card grows to a size that fills it and is easier to swipe. */
+@media (min-width: 641px) and (min-height: 1000px) {
+  .card {
+    min-height: calc(var(--row) * 13);
+  }
+}
+/* Tablets: in landscape the card ends near the bottom edge, so the answer row sticks there
+   (above the tab bar when it shows) instead of falling below the screen. */
+@media (min-width: 641px) and (pointer: coarse) {
+  .cards-actions {
+    position: sticky;
+    bottom: calc(var(--tabbar-h, 0px) + env(safe-area-inset-bottom, 0px));
+    z-index: 5;
+    max-width: none;
+    padding: 10px max(0px, calc((100% - 560px) / 2));
+    background: var(--vp-c-bg);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .act:active {
     transform: none;
@@ -766,61 +784,6 @@
   height: 8px;
 }
 
-.vquick {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-.vp-doc a.vquick-card {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 16px;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: var(--r-lg);
-  background: var(--surface-card);
-  color: var(--vp-c-text-1);
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-  transition:
-    border-color var(--dur-fast) var(--ease),
-    box-shadow var(--dur) var(--ease),
-    transform var(--dur) var(--ease);
-}
-.vp-doc a.vquick-card:hover {
-  border-color: var(--vp-c-brand-1);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-.vquick-card svg {
-  width: 36px;
-  height: 36px;
-  padding: 7px;
-  margin-bottom: 6px;
-  border-radius: var(--r-md);
-  background: var(--vp-c-brand-soft);
-  stroke: var(--vp-c-brand-1);
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.vquick-card b {
-  font-size: 15.5px;
-}
-.vquick-card span {
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: var(--vp-c-text-2);
-  flex: 1;
-}
-.vquick-card em {
-  margin-top: 8px;
-  font-style: normal;
-  font-size: 13.5px;
-  font-weight: 600;
-  color: var(--vp-c-brand-1);
-}
 
 .vsearch-wrap {
   position: relative;
@@ -1131,31 +1094,228 @@
   font-size: 14.5px;
   color: var(--vp-c-text-2);
 }
-.quiz-pattern {
-  margin-top: 6px !important;
+/* ---------- Review quiz on the flashcard's ruled paper ----------
+   Same paper as the flashcard: a margin line and 32px rules moved up to the text baseline. Every
+   line of text, the typed letters and the verdict sit on whole 32px rows, and the small "top"
+   nudges (measured in the browser) put each font's baseline exactly on its rule. */
+.quiz {
+  --row: 32px;
+  --rule-shift: -9px;
+  gap: 0;
+  padding: calc(var(--row) * 2) 28px var(--row) 52px;
+  background:
+    linear-gradient(90deg, transparent var(--margin-x), var(--margin-line) var(--margin-x) calc(var(--margin-x) + 1px), transparent calc(var(--margin-x) + 1px)),
+    repeating-linear-gradient(transparent 0 calc(var(--row) - 1px), var(--rule-line) calc(var(--row) - 1px) var(--row)),
+    var(--surface-card);
+  background-position:
+    0 0,
+    0 var(--rule-shift),
+    0 0;
+}
+/* .vp-doc p sets its own line height, so these need the extra specificity. */
+.vp-doc .quiz > *,
+.vp-doc .quiz-result > *,
+.vp-doc .quiz-form > * {
+  position: relative;
+  margin: 0;
+  line-height: var(--row);
+}
+.vp-doc .quiz .quiz-vi {
+  top: -7px;
+  font-size: 30px;
+  line-height: var(--row);
+}
+.vp-doc .quiz .quiz-label,
+.vp-doc .quiz .quiz-type-hint {
+  top: 1.5px;
+}
+.vp-doc .quiz .quiz-meta,
+.vp-doc .quiz .quiz-ex,
+.vp-doc .quiz .quiz-yours,
+.vp-doc .quiz .quiz-result .vex {
+  top: 1px;
+}
+.vp-doc .quiz .quiz-verdict {
+  top: -3.5px;
+}
+.vp-doc .quiz .quiz-answer {
+  top: -2.5px;
+  /* The word and its IPA share the baseline, so both rest on the rule. */
+  align-items: baseline;
+}
+.vp-doc .quiz .quiz-answer .speak {
+  align-self: center;
+}
+.vp-doc .quiz .quiz-form {
+  margin-top: var(--row);
+  gap: 0;
+}
+
+/* The answer is typed straight onto the rules: one short stroke on the line marks each letter.
+   The real text field covers the letters invisibly, so a tap opens the keyboard. */
+.quiz-slots {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 26px;
+  border-radius: 6px;
+  cursor: text;
+  transition: background-color 0.2s;
+}
+.quiz-slots.focused {
+  background: var(--vp-c-default-soft);
+}
+.slot-group {
+  position: relative;
+  display: flex;
+  gap: 6px;
+}
+.slot {
+  position: relative;
+  box-sizing: border-box;
+  width: 0.95em;
+  height: calc(var(--row) * 2);
+  /* Puts the letter's baseline on the stroke: the mono font's baseline sits 0.355em below the
+     middle of a 40px line, so the padding scales with the font size. */
+  padding-top: calc(var(--row) * 2 - 10px - 20px - 0.355em);
+  line-height: 40px;
+  text-align: center;
   font-family: var(--vp-font-family-mono);
-  font-size: 22px;
-  letter-spacing: 0.06em;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+  /* The stroke lies on the rule: 9px above the bottom of the slot's second row. */
+  background: linear-gradient(var(--vp-c-text-3), var(--vp-c-text-3)) 50% calc(var(--row) * 2 - 10px) / 100% 2px no-repeat;
+}
+.slot > span {
+  position: relative;
+}
+.slot.filled {
+  background-image: linear-gradient(var(--vp-c-brand-1), var(--vp-c-brand-1));
+}
+.slot.hint {
+  color: var(--vp-c-text-3);
+}
+.slot.fixed {
+  width: auto;
+  background: none;
   color: var(--vp-c-text-2);
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+}
+.slot.extra {
+  color: var(--vp-c-warning-1);
+  background-image: linear-gradient(var(--vp-c-warning-1), var(--vp-c-warning-1));
+}
+.slot.caret::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  width: 2px;
+  height: 26px;
+  background: var(--vp-c-brand-1);
+  animation: slot-caret 1s steps(1) infinite;
+}
+@keyframes slot-caret {
+  50% {
+    opacity: 0;
+  }
+}
+.quiz-slots.ok .slot.filled {
+  color: var(--vp-c-tip-1);
+  background-image: linear-gradient(var(--vp-c-tip-2), var(--vp-c-tip-2));
+}
+.quiz-slots.bad .slot.filled,
+.quiz-slots.bad .slot.extra {
+  color: var(--vp-c-warning-1);
+  background-image: linear-gradient(var(--vp-c-warning-1), var(--vp-c-warning-1));
+}
+/* A wrong answer is struck through, like a correction in an exercise book. */
+.quiz-slots.bad .slot-group::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: calc(var(--row) * 2 - 24px);
+  height: 2px;
+  background: var(--vp-c-warning-1);
+  transform: rotate(-3deg);
+}
+.quiz-type-hint {
+  font-size: 13px;
+  color: var(--vp-c-text-3);
+}
+.quiz .quiz-actions {
+  min-height: calc(var(--row) * 2);
+  align-items: center;
+}
+
+/* The result continues on the same page: no box, each part on its own row. */
+.quiz .quiz-result,
+.quiz .quiz-result.ok,
+.quiz .quiz-result.bad {
+  margin-top: 0;
+  padding: 0;
+  gap: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.quiz-result .quiz-answer,
+.quiz-result .vex {
+  height: var(--row);
+}
+@media (max-width: 560px) {
+  .slot {
+    font-size: 24px;
+  }
+  .slot-group {
+    gap: 4px;
+  }
+  .quiz-slots {
+    gap: 0 16px;
+  }
+  .vp-doc .quiz .quiz-vi {
+    top: -5px;
+    font-size: 26px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .slot.caret::after {
+    animation: none;
+  }
+}
+.quiz-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  /* 16px stops iOS from zooming in when the field gets focus. */
+  font-size: 16px;
+  cursor: text;
+}
+.vp-doc .quiz-type-hint,
+.quiz-type-hint {
+  margin: -4px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--vp-c-text-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot.caret::after {
+    animation: none;
+  }
 }
 .quiz-form {
   display: grid;
   gap: 12px;
   margin-top: 8px;
-}
-.quiz-form .vsearch {
-  min-height: 52px;
-  text-align: center;
-  font-size: 19px;
-  font-weight: 600;
-}
-.quiz-form .vsearch.ok {
-  border-color: var(--vp-c-tip-2);
-}
-.quiz-form .vsearch.bad {
-  border-color: var(--vp-c-warning-1);
 }
 .quiz-actions {
   display: flex;
@@ -1182,8 +1342,9 @@
   background: var(--vp-c-warning-soft);
 }
 .quiz-verdict {
+  font-family: var(--font-display);
+  font-size: 22px;
   font-weight: 700;
-  font-size: 15px;
 }
 .quiz-result.ok .quiz-verdict {
   color: var(--vp-c-tip-1);
@@ -1219,24 +1380,6 @@
 }
 
 /* ---------- Small screens ---------- */
-@media (max-width: 720px) {
-  .vquick {
-    grid-template-columns: 1fr;
-  }
-  .vp-doc a.vquick-card {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: 12px;
-    align-items: center;
-  }
-  .vquick-card svg {
-    grid-row: 1 / 3;
-    margin: 0;
-  }
-  .vquick-card em {
-    display: none;
-  }
-}
 @media (max-width: 560px) {
   .vitem {
     grid-template-columns: minmax(0, 1fr);
@@ -1269,7 +1412,7 @@
     top: 7px;
   }
   .quiz {
-    padding: 24px 16px 20px 46px;
+    padding: calc(var(--row) * 2) 16px var(--row) 46px;
   }
 
   /* Keep the pinned bar short on phones so the list still has room. */

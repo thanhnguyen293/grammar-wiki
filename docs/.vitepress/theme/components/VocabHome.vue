@@ -40,33 +40,8 @@ const { tr, link, pos, topicTitle, isEn } = useLocale()
 
 <template>
   <div class="vocab vhome">
-    <div class="vhome-progress">
-      <span class="vhome-num"><b>{{ totalDone }}</b> / {{ total || '…' }}</span>
-      <span class="vhome-label">{{ tr('từ thông dụng đã thuộc') }}</span>
-      <div class="vprog-bar"><i :style="{ width: total ? (totalDone / total) * 100 + '%' : '0' }" /></div>
-    </div>
-
-    <div class="vquick">
-      <a class="vquick-card" :href="link('/tu-vung/hom-nay')">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 10h17M8 3v4M16 3v4M8.5 14.5l2 2 4-4" /></svg>
-        <b>{{ tr('Hôm nay học') }}</b>
-        <span>{{ tr('{n} từ đã chọn', { n: today.refs.value.length }) }}</span>
-        <em>{{ tr('Mở danh sách →') }}</em>
-      </a>
-      <a class="vquick-card" :href="link('/tu-vung/on-tap')">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4zM13.5 6.5l4 4" /></svg>
-        <b>{{ tr('Kiểm tra từ đã học') }}</b>
-        <span>{{ tr('nhìn nghĩa tiếng Việt, gõ từ tiếng Anh') }}</span>
-        <em>{{ tr('Bắt đầu →') }}</em>
-      </a>
-      <a class="vquick-card" :href="link('/tu-vung/phan-tich')">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8l4 4V20.5H6z" /><path d="M14 3.5v4h4M9 12h6M9 15.5h6" /></svg>
-        <b>{{ tr('Học từ bài viết') }}</b>
-        <span>{{ tr('dán một bài tiếng Anh, lọc ra từ và cụm từ để học') }}</span>
-        <em>{{ tr('Mở →') }}</em>
-      </a>
-    </div>
-
+    <!-- Looking a word up comes first; today's list, the quiz and the article tool live in the
+         sidebar and, on phones, the bottom tab bar. -->
     <div class="vsearch-wrap">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
       <input id="vocab-search" v-model="query" class="vsearch" type="search" :placeholder="tr('Tra từ tiếng Anh hoặc nghĩa tiếng Việt (vd: family, gia dinh)')" :aria-label="tr('Tra từ')" />
@@ -83,6 +58,12 @@ const { tr, link, pos, topicTitle, isEn } = useLocale()
       </li>
     </ol>
     <p v-else-if="query.trim().length >= 2 && total" class="vempty">{{ tr('Không tìm thấy từ nào khớp "{q}".', { q: query }) }}</p>
+
+    <div class="vhome-progress">
+      <span class="vhome-num"><b>{{ totalDone }}</b> / {{ total || '…' }}</span>
+      <span class="vhome-label">{{ tr('từ thông dụng đã thuộc') }}</span>
+      <div class="vprog-bar"><i :style="{ width: total ? (totalDone / total) * 100 + '%' : '0' }" /></div>
+    </div>
 
     <h2>{{ tr('3000 từ thông dụng') }}</h2>
     <div class="vtopics">

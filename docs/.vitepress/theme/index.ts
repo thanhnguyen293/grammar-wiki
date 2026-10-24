@@ -18,6 +18,9 @@ import SyncButton from './components/SyncButton.vue'
 import PomodoroTimer from './components/PomodoroTimer.vue'
 import SidebarMenuButton from './components/SidebarMenuButton.vue'
 import BackToTop from './components/BackToTop.vue'
+import TabBar from './components/TabBar.vue'
+import AppBackButton from './components/AppBackButton.vue'
+import { initAppMode } from './components/useAppMode'
 import { initPomodoro } from './components/usePomodoro'
 import { initSync } from './components/sync'
 import { onMounted } from 'vue'
@@ -38,12 +41,13 @@ export default {
       'doc-before': () => h(LevelBar),
       // Teleports itself next to the logo. Not 'nav-bar-title-before': that slot sits inside the
       // logo link, so a click there also followed the link to the home page.
-      'nav-bar-content-before': () => h(SidebarMenuButton),
+      'nav-bar-content-before': () => [h(AppBackButton), h(SidebarMenuButton)],
       'nav-bar-content-after': () => [h(PomodoroTimer), h(SyncButton)],
-      'layout-bottom': () => h(BackToTop),
+      'layout-bottom': () => [h(BackToTop), h(TabBar)],
     }),
   setup() {
     useScrollbarReveal()
+    initAppMode()
     onMounted(initSync)
     onMounted(() =>
       initPomodoro((ended, goalReached) => {

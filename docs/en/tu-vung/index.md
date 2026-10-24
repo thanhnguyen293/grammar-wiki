@@ -4,15 +4,15 @@ outline: false
 
 # Vocabulary by topic
 
-3000 common English words in 28 topics, plus 500 common phrases and specialist IT vocabulary for mobile developers. Inside each topic, words go from the most common down, so you can simply learn from the top.
+3000 common words in 28 topics, from the most common down, plus 500 phrases and IT vocabulary for mobile developers. Meanings are in Vietnamese.
 
-::: tip TIP
+<VocabHome />
+
+::: tip HOW TO STUDY
 Learn 5 new words a day:
 - Click the speaker to hear each word and say it out loud.
 - Read the example, then write one sentence of your own.
 - The next day, open **Flashcards** with the **Not learned** filter to review, and click **Learned** for the ones you remember.
+
+Your "learned" progress is saved in this browser, or in your account if you sign in to sync.
 :::
-
-Meanings are in Vietnamese. Your "learned" progress is saved in this browser, or in your account if you sign in to sync.
-
-<VocabHome />

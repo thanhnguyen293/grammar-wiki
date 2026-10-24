@@ -133,7 +133,10 @@ const norm = (s: string) =>
     .trim()
 const variant = (s: string) =>
   s.replace(/our\b/g, 'or').replace(/tre\b/g, 'ter').replace(/ise\b/g, 'ize').replace(/yse\b/g, 'yze')
-const same = (a: string, b: string) => norm(a) === norm(b) || variant(norm(a)) === variant(norm(b))
+// Spaces don't count: the slots already split the words, so "icecream" fills "ice cream".
+const squash = (s: string) => s.replace(/ /g, '')
+const same = (a: string, b: string) =>
+  squash(norm(a)) === squash(norm(b)) || squash(variant(norm(a))) === squash(variant(norm(b)))
 
 function check() {
   if (!current.value || checked.value) return
@@ -169,15 +172,48 @@ function onEnter() {
   else if (input.value.trim()) check()
 }
 
-// A pattern like "_ _ _ _   _ _ _" tells the learner how many letters (and words) to type.
-const pattern = computed(() => {
-  const w = current.value?.word.w ?? ''
-  return w
-    .split(' ')
-    .map((part, i) =>
-      [...part].map((ch, k) => (/[a-z]/i.test(ch) ? (hint.value && i === 0 && k === 0 ? ch : '_') : ch)).join(' '),
-    )
-    .join('   ')
+// The answer is typed straight into its letter slots: one slot per letter, words kept apart,
+// hyphens and apostrophes shown as fixed marks. A hidden text field underneath receives the
+// typing, so phone keyboards and Enter work as usual. Letters beyond the answer's length (a
+// longer synonym) appear as extra slots.
+interface Slot {
+  ch: string
+  fixed?: boolean
+  hint?: boolean
+  caret?: boolean
+  extra?: boolean
+}
+const focused = ref(false)
+const slotGroups = computed(() => {
+  const answer = current.value?.word.w ?? ''
+  const typed = [...input.value.replace(/\s+/g, '')]
+  const groups: Slot[][] = []
+  let p = 0
+  let first = true
+  let caretPlaced = false
+  for (const part of answer.split(' ')) {
+    const group: Slot[] = []
+    for (const ch of part) {
+      if (/[a-z0-9]/i.test(ch)) {
+        const c = typed[p]
+        if (c !== undefined) {
+          p++
+          group.push({ ch: c })
+        } else {
+          const caret = !caretPlaced && focused.value && !checked.value
+          if (caret) caretPlaced = true
+          group.push({ ch: hint.value && first ? ch : '', hint: hint.value && first, caret })
+        }
+        first = false
+      } else {
+        if (typed[p] === ch) p++
+        group.push({ ch, fixed: true })
+      }
+    }
+    groups.push(group)
+  }
+  if (p < typed.length) groups.push(typed.slice(p).map((c) => ({ ch: c, extra: true })))
+  return groups
 })
 
 // IT meanings and translations often keep the English term ("nhánh (branch trong Git)"),
@@ -298,23 +334,35 @@ const { tr, link, pos, isEn } = useLocale()
         <p class="quiz-vi">{{ mask(current.word.vi) }}</p>
         <p class="quiz-meta">{{ pos[current.word.pos] }}</p>
         <p class="quiz-ex">"{{ mask(current.word.exVi) }}"</p>
-        <p class="quiz-pattern" aria-hidden="true">{{ pattern }}</p>
-
         <form class="quiz-form" @submit.prevent="onEnter">
-          <input
-            id="quiz-answer"
-            ref="field"
-            v-model="input"
-            class="vsearch"
-            :class="{ ok: checked?.ok, bad: checked && !checked.ok }"
-            type="text"
-            autocomplete="off"
-            autocapitalize="off"
-            spellcheck="false"
-            :placeholder="tr('Gõ từ tiếng Anh rồi nhấn Enter')"
-            :aria-label="tr('Câu trả lời')"
-            :readonly="!!checked"
-          />
+          <label class="quiz-slots" :class="{ ok: checked?.ok, bad: checked && !checked.ok, focused }">
+            <span v-for="(g, gi) in slotGroups" :key="gi" class="slot-group" aria-hidden="true">
+              <span
+                v-for="(sl, si) in g"
+                :key="si"
+                class="slot"
+                :class="{ filled: sl.ch && !sl.hint && !sl.fixed, fixed: sl.fixed, hint: sl.hint, caret: sl.caret, extra: sl.extra }"
+                >{{ sl.ch }}</span
+              >
+            </span>
+            <input
+              id="quiz-answer"
+              ref="field"
+              v-model="input"
+              class="quiz-input"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              autocorrect="off"
+              spellcheck="false"
+              maxlength="60"
+              :aria-label="tr('Câu trả lời')"
+              :readonly="!!checked"
+              @focus="focused = true"
+              @blur="focused = false"
+            />
+          </label>
+          <p v-if="!checked" class="quiz-type-hint">{{ tr('Gõ từ tiếng Anh rồi nhấn Enter') }}</p>
           <div v-if="!checked" class="quiz-actions">
             <button type="submit" class="vbtn primary" :disabled="!input.trim()">{{ tr('Kiểm tra') }}</button>
             <button type="button" class="vbtn" :disabled="hint" @click="hint = true">{{ tr('Gợi ý chữ đầu') }}</button>
