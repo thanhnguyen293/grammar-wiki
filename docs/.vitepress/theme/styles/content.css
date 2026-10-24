@@ -245,6 +245,75 @@
     margin-top: 36px;
   }
 
+  /* Tables that stay tables on a phone (short cells, such as V1 | V2 | V3) need the width
+     for their text more than for cell padding. */
+  .vp-doc th,
+  .vp-doc td {
+    padding: 8px 10px;
+  }
+
+  /* Lesson tables too wide for a phone (class "stack", set in config.mts) become one block
+     per row: the column name on the left, the value on the right. Squeezed side by side, every
+     cell broke into one or two words a line. */
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) {
+    display: block;
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) thead {
+    display: none;
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) :is(tbody, tr) {
+    display: block;
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) tr {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--vp-c-divider);
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) tr:last-child {
+    border-bottom: 0;
+  }
+  /* flow-root keeps the floated label inside its cell when the label wraps. */
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) td,
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) td + td {
+    --label-w: 96px;
+    display: flow-root;
+    padding: 2px 0 2px var(--label-w);
+    border: 0;
+    line-height: 1.6;
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) td::before {
+    content: attr(data-label);
+    float: left;
+    box-sizing: border-box;
+    width: var(--label-w);
+    margin-left: calc(-1 * var(--label-w));
+    padding-right: 10px;
+    font-size: 12.5px;
+    line-height: 1.8;
+    font-weight: 400;
+    color: var(--vp-c-text-3);
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) td:first-child {
+    font-weight: 600;
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) td:first-child br + em {
+    font-weight: 400;
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table).stack-top td,
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table).stack-top td + td {
+    padding-left: 0;
+  }
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table).stack-top td::before {
+    display: block;
+    float: none;
+    width: auto;
+    margin: 0;
+  }
+  /* In "✗ Sai | ✓ Đúng" tables the wrong sentence must not stand out. */
+  .vp-doc table.stack:not(.custom-block.info table, .study-path-page table) td[data-label^='✗'] {
+    font-weight: 400;
+    color: var(--vp-c-text-2);
+  }
+
   /* Formula tables become one block per row: side by side on a phone, the structure column
      breaks in the middle of a formula. The first cell heads the block; in wider tables each
      other cell is prefixed with its column name (data-label, set in config.mts). */

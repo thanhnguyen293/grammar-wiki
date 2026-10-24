@@ -53,20 +53,54 @@ function vocabSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
   ]
 }
 
-// Copies each column's header into its cells as data-label, so a table stacked into blocks on
-// phones can still say which column a value came from (see content.css).
+// Prepares tables for phones (see content.css):
+// - each cell gets its column's header as data-label, so a table stacked into one block per
+//   row can still say which column a value came from;
+// - a table too wide for a phone gets the class "stack". The width is estimated from the
+//   average text length per column (about 7.5px a character at 14px, plus cell padding),
+//   against the 327px a 375px phone leaves for content; a table whose longest words alone
+//   don't fit side by side stacks too. Short tables such as V1 | V2 | V3 stay tables.
+const PHONE_CONTENT = 327
 function tableLabels(md: MarkdownRenderer) {
+  const text = (s: string) => s.replace(/[*_`]/g, '').replace(/<br\s*\/?>/g, ' ').trim()
   md.core.ruler.push('table_labels', (state) => {
+    let table: (typeof state.tokens)[number] | undefined
     let headers: string[] = []
+    let lengths: number[] = []
+    let words: number[] = []
+    let rows = 0
     let col = 0
     for (let i = 0; i < state.tokens.length; i++) {
       const t = state.tokens[i]
-      if (t.type === 'thead_open') headers = []
-      else if (t.type === 'th_open') headers.push(state.tokens[i + 1].content.replace(/[*_`]/g, ''))
+      if (t.type === 'table_open') {
+        table = t
+        headers = []
+        lengths = []
+        words = []
+        rows = 0
+      } else if (t.type === 'th_open') headers.push(text(state.tokens[i + 1].content))
       else if (t.type === 'tr_open') col = 0
-      else if (t.type === 'td_open' && headers[col] !== undefined) t.attrSet('data-label', headers[col++])
+      else if (t.type === 'td_open') {
+        if (col === 0) rows++
+        const cell = text(state.tokens[i + 1].content)
+        lengths[col] = (lengths[col] ?? 0) + cell.length
+        words[col] = Math.max(words[col] ?? 0, ...cell.split(/\s+/).map((w) => w.length))
+        if (headers[col] !== undefined) t.attrSet('data-label', headers[col])
+        col++
+      } else if (t.type === 'table_close' && table && rows) {
+        const pad = headers.length * 20
+        const width = lengths.reduce((sum, n) => sum + n / rows, 0) * 7.5 + pad
+        const minWidth = words.reduce((sum, n) => sum + n, 0) * 7.5 + pad
+        if (width <= PHONE_CONTENT && minWidth <= PHONE_CONTENT) continue
+        table.attrJoin('class', 'stack')
+        // Headers like "Hiện tại đơn: thường xuyên" are too long for the label column, so
+        // those labels go above their values instead.
+        if (Math.max(...headers.map((h) => h.length)) > 16) table.attrJoin('class', 'stack-top')
+      }
     }
   })
+  // VitePress renders <table> from a fixed string; this keeps its tabindex and adds the class.
+  md.renderer.rules.table_open = (tokens, idx, _options, _env, self) => `<table tabindex="0"${self.renderAttrs(tokens[idx])}>\n`
 }
 
 const viTheme: DefaultTheme.Config = {
