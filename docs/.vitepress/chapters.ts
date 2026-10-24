@@ -175,4 +175,15 @@ export const chapters: Chapter[] = [
 ]
 
 export const sectionLink = (c: Chapter, s: Section) => `/${c.dir}/${s.slug}`
-export const sectionNo = (c: Chapter, s: Section) => `${c.no}.${c.sections.indexOf(s) + 1}`
+// Chapters are numbered in Roman numerals (I, II, …) and lessons 1, 2, … within their chapter,
+// so the two never read as one decimal number.
+const ROMAN: [number, string][] = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]
+export const chapterNo = (c: Chapter) => {
+  let n = c.no
+  let out = ''
+  for (const [v, r] of ROMAN) for (; n >= v; n -= v) out += r
+  return out
+}
+export const lessonNo = (c: Chapter, s: Section) => c.sections.indexOf(s) + 1
+/** Full lesson number for lists that mix chapters, e.g. "II.3". */
+export const sectionNo = (c: Chapter, s: Section) => `${chapterNo(c)}.${lessonNo(c, s)}`

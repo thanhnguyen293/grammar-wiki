@@ -1,4 +1,4 @@
-# Chương 8. Sự diễn tả về số lượng
+# Chương VIII. Sự diễn tả về số lượng
 
 *Expression of Quantity*
 

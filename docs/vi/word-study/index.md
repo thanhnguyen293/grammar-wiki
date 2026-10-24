@@ -1,4 +1,4 @@
-# Chương 9. Từ vựng học
+# Chương IX. Từ vựng học
 
 *Word Study*
 

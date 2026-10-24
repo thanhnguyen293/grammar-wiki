@@ -1,4 +1,4 @@
-# Chương 1. Từ loại
+# Chương I. Từ loại
 
 *The Parts of Speech*
 

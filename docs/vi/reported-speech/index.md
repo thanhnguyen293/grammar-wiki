@@ -1,4 +1,4 @@
-# Chương 6. Lời nói gián tiếp
+# Chương VI. Lời nói gián tiếp
 
 *Indirect Speech*
 

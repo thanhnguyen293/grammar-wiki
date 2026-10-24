@@ -1,4 +1,4 @@
-# Chapter 7. Passive Sentences
+# Chapter VII. Passive Sentences
 
 Putting the thing affected first instead of the person doing the action.
 

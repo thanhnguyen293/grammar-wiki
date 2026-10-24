@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { chapters, LEVEL_LABEL, LEVEL_LABEL_EN, type Level } from '../../chapters'
+import { chapterNo, chapters, LEVEL_LABEL, LEVEL_LABEL_EN, type Level } from '../../chapters'
 import { useLocale } from './i18n'
 
 const { tr, link, isEn } = useLocale()
@@ -15,7 +15,7 @@ const cards = chapters.map((c) => ({
   <ul class="home-chapters">
     <li v-for="{ c, counts } in cards" :key="c.dir">
       <a class="ch-card" :href="link(`/${c.dir}/`)">
-        <span class="ch-no">{{ String(c.no).padStart(2, '0') }}</span>
+        <span class="ch-no">{{ chapterNo(c) }}</span>
         <span class="ch-title">{{ isEn ? c.en : c.title }}</span>
         <span class="ch-sub">{{ isEn ? c.title : c.en }}</span>
         <span class="ch-intro">{{ isEn ? c.introEn : c.intro }}</span>

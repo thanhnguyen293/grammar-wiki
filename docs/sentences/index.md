@@ -1,4 +1,4 @@
-# Chapter 4. Sentences
+# Chapter IV. Sentences
 
 Word order, asking questions, negatives, question tags and emphasis.
 

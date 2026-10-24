@@ -79,6 +79,45 @@ body {
   font-weight: 600;
 }
 
+/* Lesson rows: level dot | number | title, so a wrapped title lines up under its first line
+   instead of running back under the dot. */
+.sb-item {
+  display: grid;
+  grid-template-columns: 7px 15px minmax(0, 1fr);
+  column-gap: 7px;
+}
+.sb-item .sb-lv {
+  margin: 8.5px 0 0;
+}
+.sb-no {
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--vp-c-text-3);
+}
+.VPSidebarItem.is-active .sb-no {
+  color: var(--vp-c-brand-1);
+}
+
+/* Key to the level dots, under the grammar sidebar (SidebarLegend.vue). */
+.sb-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 8px 0 24px;
+  padding-top: 14px;
+  border-top: 1px solid var(--vp-c-divider);
+  font-size: 12.5px;
+  color: var(--vp-c-text-2);
+}
+.sb-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sb-legend .sb-lv {
+  margin: 0;
+}
+
 /* Prev / next pager */
 .VPDocFooter .pager-link {
   border-radius: var(--r-lg);

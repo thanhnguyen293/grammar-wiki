@@ -18,6 +18,8 @@ import SyncButton from './components/SyncButton.vue'
 import PomodoroTimer from './components/PomodoroTimer.vue'
 import SidebarMenuButton from './components/SidebarMenuButton.vue'
 import BackToTop from './components/BackToTop.vue'
+import SidebarLegend from './components/SidebarLegend.vue'
+import VocabAside from './components/VocabAside.vue'
 import TabBar from './components/TabBar.vue'
 import AppBackButton from './components/AppBackButton.vue'
 import { initAppMode } from './components/useAppMode'
@@ -44,6 +46,8 @@ export default {
       // logo link, so a click there also followed the link to the home page.
       'nav-bar-content-before': () => [h(AppBackButton), h(SidebarMenuButton)],
       'nav-bar-content-after': () => [h(PomodoroTimer), h(SyncButton)],
+      'sidebar-nav-after': () => h(SidebarLegend),
+      'aside-outline-before': () => h(VocabAside),
       'layout-bottom': () => [h(BackToTop), h(TabBar)],
     }),
   setup() {

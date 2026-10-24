@@ -1,5 +1,5 @@
 import { defineConfig, type DefaultTheme, type MarkdownRenderer } from 'vitepress'
-import { chapters, LEVEL_LABEL, LEVEL_LABEL_EN, sectionLink, sectionNo } from './chapters'
+import { chapterNo, chapters, LEVEL_LABEL, LEVEL_LABEL_EN, lessonNo, sectionLink } from './chapters'
 import { extraTopics, topicGroups, vocabTopics, type VocabTopic } from './vocabTopics'
 
 // English lives at the root, Vietnamese under /vi/ with the same file names.
@@ -19,12 +19,13 @@ function grammarSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
       ],
     },
     ...chapters.map((c) => ({
-      text: `${c.no}. ${en ? c.en : c.title}`,
+      text: `${chapterNo(c)}. ${en ? c.en : c.title}`,
       link: `${p}/${c.dir}/`,
       collapsed: true,
       items: c.sections.map((s) => ({
-        // Sidebar text is rendered as HTML, so the level dot can sit next to the title.
-        text: `<span class="sb-lv ${s.level}" title="${levels[s.level]}"></span>${sectionNo(c, s)} ${en ? s.titleEn : s.title}`,
+        // Sidebar text is rendered as HTML: the level dot, lesson number and title sit in
+        // columns so a long title wraps under itself (see .sb-item in base.css).
+        text: `<span class="sb-item"><span class="sb-lv ${s.level}" title="${levels[s.level]}"></span><span class="sb-no">${lessonNo(c, s)}</span><span>${en ? s.titleEn : s.title}</span></span>`,
         link: `${p}${sectionLink(c, s)}`,
       })),
     })),

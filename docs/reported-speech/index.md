@@ -1,4 +1,4 @@
-# Chapter 6. Indirect Speech
+# Chapter VI. Indirect Speech
 
 Reporting what someone else said.
 

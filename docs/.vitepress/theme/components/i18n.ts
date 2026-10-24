@@ -113,6 +113,10 @@ const EN: Record<string, string> = {
 
   // Vocabulary home
   'từ thông dụng đã thuộc': 'core words learned',
+  'từ đã thuộc': 'words learned',
+  'Tổng: {a}/{b} từ thông dụng': 'Overall: {a}/{b} core words',
+  'Chưa có từ nào. Bấm + Hôm nay cạnh một từ để thêm.': 'No words yet. Click + Today next to a word to add it.',
+  'Học danh sách hôm nay →': "Study today's list →",
   'Hôm nay học': "Today's words",
   '{n} từ đã chọn': '{n} words picked',
   'Mở danh sách →': 'Open list →',

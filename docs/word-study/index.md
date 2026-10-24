@@ -1,4 +1,4 @@
-# Chapter 9. Word Study
+# Chapter IX. Word Study
 
 Building words with prefixes and suffixes; word forms, idioms and style.
 
