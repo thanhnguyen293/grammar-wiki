@@ -1,4 +1,4 @@
-// Build-time copy of docs/tu-vung/relations.json plus the topic of each word in it, so a page
+// Build-time copy of docs/data/relations.json plus the topic of each word in it, so a page
 // can link to related words in other topics without downloading every topic file.
 import { readFileSync } from 'node:fs'
 import { basename } from 'node:path'
@@ -15,7 +15,7 @@ declare const data: RelationData
 export { data }
 
 export default {
-  watch: ['../../../tu-vung/relations.json', '../../../tu-vung/data/*.json'],
+  watch: ['../../../data/relations.json', '../../../data/vocab/*.json'],
   load(files: string[]): RelationData {
     const core = new Set(coreTopics.map((t) => t.slug))
     const topicOf = new Map<string, string>()

@@ -1,8 +1,8 @@
 # Hướng dẫn viết bài
 
-Mỗi bài là một file Markdown trong `docs/<thư-mục-chương>/<slug>.md`. Danh sách chương, slug, tên bài và nhãn vòng học nằm ở [docs/.vitepress/chapters.ts](docs/.vitepress/chapters.ts). Sidebar, trang chương và trang lộ trình đều sinh ra từ file đó, nên khi thêm bài mới chỉ cần thêm một dòng ở đó và tạo file `.md` tương ứng.
+Mỗi bài là một file Markdown trong `docs/vi/<thư-mục-chương>/<slug>.md` (bản tiếng Việt) và `docs/<thư-mục-chương>/<slug>.md` (bản tiếng Anh, ở gốc web). Thư mục và slug đều là tiếng Anh, ví dụ `tenses/present-simple`. Danh sách chương, slug, tên bài và nhãn vòng học nằm ở [docs/.vitepress/chapters.ts](docs/.vitepress/chapters.ts). Sidebar, trang chương và trang lộ trình đều sinh ra từ file đó, nên khi thêm bài mới chỉ cần thêm một dòng ở đó và tạo file `.md` tương ứng.
 
-Bài mẫu: [docs/2-thi/hien-tai-don.md](docs/2-thi/hien-tai-don.md). Bài mới theo đúng cấu trúc và mật độ ví dụ của bài này.
+Bài mẫu: [docs/vi/tenses/present-simple.md](docs/vi/tenses/present-simple.md). Bài mới theo đúng cấu trúc và mật độ ví dụ của bài này.
 
 ## Người đọc
 
@@ -50,7 +50,7 @@ Bài nhãn **Tra cứu** có thể bỏ phần 7, nhưng vẫn cần ví dụ tr
 
 Trong bản dịch, mỗi dòng kết thúc bằng `<br>` (trừ dòng cuối).
 
-**Liên kết**: cùng chương dùng `./slug`, khác chương dùng `/thu-muc-chuong/slug` (ví dụ `/5-cau-dieu-kien/cac-loai`).
+**Liên kết**: cùng chương dùng `./slug`, khác chương dùng `/vi/thu-muc-chuong/slug` (ví dụ `/vi/conditionals/types`).
 
 **Không** dùng emoji, không dùng ký tự `|` trong ô bảng (sẽ vỡ bảng), không chép nguyên văn từ sách.
 
@@ -62,7 +62,7 @@ Trong bản dịch, mỗi dòng kết thúc bằng `<br>` (trừ dòng cuối).
 
 # Từ vựng theo chủ đề
 
-Danh sách chủ đề nằm ở [docs/.vitepress/vocabTopics.ts](docs/.vitepress/vocabTopics.ts). Từ của mỗi chủ đề nằm trong `docs/tu-vung/data/<slug>.json`, là một mảng đã **xếp từ thông dụng nhất xuống**. Trang chủ đề `docs/tu-vung/<slug>.md` chỉ chứa `<VocabTopic slug="..." />`.
+Danh sách chủ đề nằm ở [docs/.vitepress/vocabTopics.ts](docs/.vitepress/vocabTopics.ts). Từ của mỗi chủ đề nằm trong `docs/data/vocab/<slug>.json`, là một mảng đã **xếp từ thông dụng nhất xuống**. `slug` là mã cố định của chủ đề (lưu cùng tiến độ học, không đổi); URL của trang dùng trường `path`. Trang chủ đề `docs/vocabulary/<path>.md` và `docs/vi/vocabulary/<path>.md` chỉ chứa `<VocabTopic slug="..." />`. Nhóm hiển thị trên sidebar khai báo ở `topicGroups`.
 
 Mỗi từ có đúng 7 trường:
 
@@ -84,7 +84,7 @@ Kiểm tra: `npm run check` (hoặc `node scripts/check-vocab.mjs <slug>` cho m�
 
 # Bản tiếng Anh (English version)
 
-The English site lives under `docs/en/` with the same folder and file names as the Vietnamese one (`docs/en/2-thi/hien-tai-don.md` mirrors `docs/2-thi/hien-tai-don.md`). Slugs stay Vietnamese so the two versions line up.
+The English site is the root of the web (`docs/`); the Vietnamese one lives under `docs/vi/` with the same folder and file names (`docs/vi/tenses/present-simple.md` mirrors `docs/tenses/present-simple.md`). All folder names and slugs are English. Links from before this layout (Vietnamese slugs, English under `/en/`) still work: `docs/.vitepress/legacyPaths.ts` maps them to the new pages.
 
 When writing or updating an English lesson:
 
@@ -93,4 +93,4 @@ When writing or updating an English lesson:
 - Keep every English example sentence unchanged, and **keep its Vietnamese translation line** (`<br>*...*`): readers are still Vietnamese learners.
 - Container titles: `::: info FORMULA`, `::: warning IMPORTANT`, `::: warning SUMMARY`, `::: danger COMMON MISTAKES`, `::: tip TIP`, `::: details Vietnamese translation` (the dialogue translation stays Vietnamese).
 - Section headings: Công thức → Formula, Cách dùng → How to use, Dấu hiệu nhận biết → Signal words, Lỗi hay gặp → Common mistakes, Ví dụ trong ngữ cảnh → In context, Ghi nhớ → Remember, "Xem thêm:" → "See also:".
-- Links: same-chapter `./slug` stays as is; links to another chapter must start with `/en/` (e.g. `/en/5-cau-dieu-kien/cac-loai`).
+- Links: same-chapter `./slug` stays as is; links to another chapter start at the root (e.g. `/conditionals/types`), while Vietnamese pages use `/vi/` (e.g. `/vi/conditionals/types`).

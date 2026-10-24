@@ -21,6 +21,7 @@ import BackToTop from './components/BackToTop.vue'
 import TabBar from './components/TabBar.vue'
 import AppBackButton from './components/AppBackButton.vue'
 import { initAppMode } from './components/useAppMode'
+import { useLegacyRedirect } from './components/useLegacyRedirect'
 import { initPomodoro } from './components/usePomodoro'
 import { initSync } from './components/sync'
 import { onMounted } from 'vue'
@@ -48,6 +49,7 @@ export default {
   setup() {
     useScrollbarReveal()
     initAppMode()
+    useLegacyRedirect()
     onMounted(initSync)
     onMounted(() =>
       initPomodoro((ended, goalReached) => {

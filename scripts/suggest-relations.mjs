@@ -1,4 +1,4 @@
-// Suggests docs/tu-vung/relations.json: word families, synonyms and antonyms among the core
+// Suggests docs/data/relations.json: word families, synonyms and antonyms among the core
 // words (specialist topics are left out: they reuse core words with other meanings).
 // - family: a word whose base form (after stripping a common suffix or prefix) is also a core
 //   word, e.g. happiness → happy, unlock → lock, plus the irregular families in EXTRA_FAMILY.
@@ -6,7 +6,7 @@
 // - synonym / antonym: the hand-made lists below, kept to the words that exist in the data.
 // Usage: node scripts/suggest-relations.mjs           print the suggested groups
 //        node scripts/suggest-relations.mjs --pairs   print each suffix/prefix link, to review NOT_FAMILY
-//        node scripts/suggest-relations.mjs --write   write docs/tu-vung/relations.json
+//        node scripts/suggest-relations.mjs --write   write docs/data/relations.json
 import { readFileSync, writeFileSync } from 'node:fs'
 
 const root = new URL('../docs/', import.meta.url)
@@ -16,7 +16,7 @@ const coreSlugs = [...topicsSrc.matchAll(/slug: '([^']+)'.*?target: \d+(, track)
 /** Every core word with its frequency order across topics, so groups list the most common first. */
 const order = new Map()
 for (const slug of coreSlugs)
-  for (const x of JSON.parse(readFileSync(new URL(`tu-vung/data/${slug}.json`, root), 'utf8'))) order.set(x.w, order.size)
+  for (const x of JSON.parse(readFileSync(new URL(`data/vocab/${slug}.json`, root), 'utf8'))) order.set(x.w, order.size)
 const has = (w) => order.has(w)
 const byOrder = (a, b) => order.get(a) - order.get(b)
 /** One group per line, words separated by commas. */
@@ -617,7 +617,7 @@ if (process.argv.includes('--write')) {
   const body = Object.entries(relations)
     .map(([k, gs]) => `  "${k}": [\n${gs.map((g) => `    ${JSON.stringify(g)}`).join(',\n')}\n  ]`)
     .join(',\n')
-  writeFileSync(new URL('tu-vung/relations.json', root), `{\n${body}\n}\n`)
+  writeFileSync(new URL('data/relations.json', root), `{\n${body}\n}\n`)
 }
 if (process.argv.includes('--pairs')) console.log(pairs.join('\n'))
 else for (const [k, gs] of Object.entries(relations)) console.log(`${k} (${gs.length}):\n${gs.map((g) => '  ' + g.join(', ')).join('\n')}`)

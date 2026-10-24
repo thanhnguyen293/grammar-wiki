@@ -14,7 +14,7 @@ const { tr, link } = useLocale()
   <div v-if="!items.length" class="vempty-state">
     <p>{{ tr('Chưa có từ nào.') }}</p>
     <p>
-      {{ tr('Khi') }} <a :href="link('/tu-vung/phan-tich')">{{ tr('phân tích một bài viết') }}</a>{{ tr(', những từ chưa có trong từ điển của wiki có nút') }}
+      {{ tr('Khi') }} <a :href="link('/vocabulary/article')">{{ tr('phân tích một bài viết') }}</a>{{ tr(', những từ chưa có trong từ điển của wiki có nút') }}
       <b>{{ tr('+ Thêm vào Từ của tôi') }}</b>{{ tr('. Bạn tự nhập nghĩa, câu trong bài được giữ làm ví dụ.') }}
     </p>
   </div>

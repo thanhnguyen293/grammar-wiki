@@ -1,6 +1,6 @@
-// Validates docs/tu-vung/data/*.json against docs/.vitepress/vocabTopics.ts:
+// Validates docs/data/vocab/*.json against docs/.vitepress/vocabTopics.ts:
 // schema, allowed values, word counts, and that no word appears in two topics.
-// Also checks docs/tu-vung/relations.json: every word is a core word, and no group repeats.
+// Also checks docs/data/relations.json: every word is a core word, and no group repeats.
 // Usage: node scripts/check-vocab.mjs [slug ...]   (no slugs = check every topic)
 import { readFileSync, existsSync } from 'node:fs'
 
@@ -26,7 +26,7 @@ const seen = new Map()
 let total = 0
 
 for (const { slug, target, track } of topics) {
-  const file = new URL(`tu-vung/data/${slug}.json`, root)
+  const file = new URL(`data/vocab/${slug}.json`, root)
   if (!existsSync(file)) {
     if (!only.length || only.includes(slug)) errors.push(`${slug}: missing data file`)
     continue
@@ -65,7 +65,7 @@ for (const { slug, target, track } of topics) {
 
 // Related words (scripts/suggest-relations.mjs). Only core words: specialist topics reuse
 // core words with another meaning, so a headword there would be ambiguous.
-const relFile = new URL('tu-vung/relations.json', root)
+const relFile = new URL('data/relations.json', root)
 if (existsSync(relFile)) {
   let rel = {}
   try {

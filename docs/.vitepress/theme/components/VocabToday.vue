@@ -47,7 +47,7 @@ const { tr, link } = useLocale()
   </div>
 
   <p class="vreview-link">
-    {{ tr('Muốn xem mình còn nhớ từ của những ngày trước?') }} <a :href="link('/tu-vung/on-tap')">{{ tr('Kiểm tra từ đã học →') }}</a>
+    {{ tr('Muốn xem mình còn nhớ từ của những ngày trước?') }} <a :href="link('/vocabulary/review')">{{ tr('Kiểm tra từ đã học →') }}</a>
   </p>
 
   <div v-if="!loading && carryable.length" class="custom-block tip">
@@ -62,7 +62,7 @@ const { tr, link } = useLocale()
   <div v-if="!loading && !items.length" class="vempty-state">
     <p>{{ tr('Danh sách hôm nay đang trống.') }}</p>
     <p>
-      {{ tr('Mở một') }} <a :href="link('/tu-vung/')">{{ tr('chủ đề') }}</a>{{ tr(', bấm') }} <b>{{ tr('+ Hôm nay') }}</b> {{ tr('cạnh từ bạn muốn học, hoặc bấm') }}
+      {{ tr('Mở một') }} <a :href="link('/vocabulary/')">{{ tr('chủ đề') }}</a>{{ tr(', bấm') }} <b>{{ tr('+ Hôm nay') }}</b> {{ tr('cạnh từ bạn muốn học, hoặc bấm') }}
       <b>{{ tr('+ Thêm 5 từ tiếp theo vào hôm nay') }}</b> {{ tr('ở đầu trang chủ đề.') }}
     </p>
   </div>

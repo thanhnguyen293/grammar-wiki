@@ -1,10 +1,10 @@
 import { defineConfig, type DefaultTheme, type MarkdownRenderer } from 'vitepress'
 import { chapters, LEVEL_LABEL, LEVEL_LABEL_EN, sectionLink, sectionNo } from './chapters'
-import { coreTopics, extraTopics } from './vocabTopics'
+import { extraTopics, topicGroups, vocabTopics, type VocabTopic } from './vocabTopics'
 
-// Vietnamese lives at the root, English under /en/ with the same file names.
+// English lives at the root, Vietnamese under /vi/ with the same file names.
 type Lang = 'vi' | 'en'
-const prefix = (lang: Lang) => (lang === 'en' ? '/en' : '')
+const prefix = (lang: Lang) => (lang === 'vi' ? '/vi' : '')
 
 function grammarSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
   const p = prefix(lang)
@@ -15,7 +15,7 @@ function grammarSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
       text: en ? 'Start here' : 'Bắt đầu',
       items: [
         { text: en ? 'Introduction' : 'Giới thiệu', link: `${p}/` },
-        { text: en ? 'Study path' : 'Lộ trình học', link: `${p}/lo-trinh` },
+        { text: en ? 'Study path' : 'Lộ trình học', link: `${p}/study-path` },
       ],
     },
     ...chapters.map((c) => ({
@@ -34,21 +34,31 @@ function grammarSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
 function vocabSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
   const p = prefix(lang)
   const en = lang === 'en'
+  const topic = (t: VocabTopic) => ({ text: en ? (t.short ?? t.en) : t.title, link: `${p}/vocabulary/${t.path}` })
+  const bySlug = new Map(vocabTopics.map((t) => [t.slug, t]))
   return [
     {
-      text: en ? 'Vocabulary by topic' : 'Từ vựng theo chủ đề',
+      text: en ? 'Study' : 'Học & ôn',
       items: [
-        { text: en ? 'Overview & search' : 'Tổng quan & tra từ', link: `${p}/tu-vung/` },
-        { text: en ? "Today's words" : 'Hôm nay học', link: `${p}/tu-vung/hom-nay` },
-        { text: en ? 'Review quiz' : 'Kiểm tra từ đã học', link: `${p}/tu-vung/on-tap` },
-        { text: en ? 'Learn from an article' : 'Học từ bài viết', link: `${p}/tu-vung/phan-tich` },
-        { text: en ? 'My words' : 'Từ của tôi', link: `${p}/tu-vung/cua-toi` },
-        ...coreTopics.map((t, i) => ({ text: `${i + 1}. ${en ? t.en : t.title}`, link: `${p}/tu-vung/${t.slug}` })),
+        { text: en ? 'Overview & search' : 'Tổng quan & tra từ', link: `${p}/vocabulary/` },
+        { text: en ? "Today's words" : 'Hôm nay học', link: `${p}/vocabulary/today` },
+        { text: en ? 'Review quiz' : 'Kiểm tra từ đã học', link: `${p}/vocabulary/review` },
+        { text: en ? 'Learn from an article' : 'Học từ bài viết', link: `${p}/vocabulary/article` },
+        { text: en ? 'My words' : 'Từ của tôi', link: `${p}/vocabulary/my-words` },
       ],
     },
     {
+      text: en ? '3000 core words' : '3000 từ thông dụng',
+      // One collapsed group per theme; the group holding the open page expands by itself.
+      items: topicGroups.map((g) => ({
+        text: en ? g.en : g.title,
+        collapsed: true,
+        items: g.slugs.map((s) => topic(bySlug.get(s)!)),
+      })),
+    },
+    {
       text: en ? 'Extra topics' : 'Mở rộng',
-      items: extraTopics.map((t) => ({ text: en ? t.en : t.title, link: `${p}/tu-vung/${t.slug}` })),
+      items: extraTopics.map(topic),
     },
   ]
 }
@@ -107,11 +117,11 @@ const viTheme: DefaultTheme.Config = {
   // Logo only in the top bar: the title takes room the timer and sync buttons need.
   siteTitle: false,
   nav: [
-    { text: 'Ngữ pháp', link: '/lo-trinh', activeMatch: '^/(?!tu-vung|tien-do|en/)' },
-    { text: 'Từ vựng', link: '/tu-vung/', activeMatch: '^/tu-vung/' },
-    { text: 'Tiến độ', link: '/tien-do', activeMatch: '^/tien-do' },
+    { text: 'Ngữ pháp', link: '/vi/study-path', activeMatch: '^/vi/(?!vocabulary|progress)' },
+    { text: 'Từ vựng', link: '/vi/vocabulary/', activeMatch: '^/vi/vocabulary/' },
+    { text: 'Tiến độ', link: '/vi/progress', activeMatch: '^/vi/progress' },
   ],
-  sidebar: { '/tu-vung/': vocabSidebar('vi'), '/': grammarSidebar('vi') },
+  sidebar: { '/vi/vocabulary/': vocabSidebar('vi'), '/vi/': grammarSidebar('vi') },
   outline: { level: [2, 3], label: 'Trong bài này' },
   docFooter: { prev: 'Bài trước', next: 'Bài tiếp' },
   darkModeSwitchLabel: 'Giao diện',
@@ -127,11 +137,11 @@ const enTheme: DefaultTheme.Config = {
   // Logo only in the top bar: the title takes room the timer and sync buttons need.
   siteTitle: false,
   nav: [
-    { text: 'Grammar', link: '/en/lo-trinh', activeMatch: '^/en/(?!tu-vung|tien-do)' },
-    { text: 'Vocabulary', link: '/en/tu-vung/', activeMatch: '^/en/tu-vung/' },
-    { text: 'Progress', link: '/en/tien-do', activeMatch: '^/en/tien-do' },
+    { text: 'Grammar', link: '/study-path', activeMatch: '^/(?!vocabulary|progress|vi/)' },
+    { text: 'Vocabulary', link: '/vocabulary/', activeMatch: '^/vocabulary/' },
+    { text: 'Progress', link: '/progress', activeMatch: '^/progress' },
   ],
-  sidebar: { '/en/tu-vung/': vocabSidebar('en'), '/en/': grammarSidebar('en') },
+  sidebar: { '/vocabulary/': vocabSidebar('en'), '/': grammarSidebar('en') },
   outline: { level: [2, 3], label: 'On this page' },
   docFooter: { prev: 'Previous', next: 'Next' },
   sidebarMenuLabel: 'Menu',
@@ -140,7 +150,7 @@ const enTheme: DefaultTheme.Config = {
 }
 
 export default defineConfig({
-  title: 'Sổ Tay Ngữ Pháp',
+  title: 'Grammar Notebook',
   // GitHub Pages serves the site under /<repo>/; the deploy workflow sets VITEPRESS_BASE.
   base: process.env.VITEPRESS_BASE || '/',
   cleanUrls: true,
@@ -172,18 +182,19 @@ export default defineConfig({
   ],
   locales: {
     root: {
-      label: 'Tiếng Việt',
-      lang: 'vi-VN',
-      description: 'Lý thuyết ngữ pháp tiếng Anh rút gọn, nhiều ví dụ, sắp theo 9 chương sách Giải thích ngữ pháp tiếng Anh.',
-      themeConfig: viTheme,
-    },
-    en: {
       label: 'English',
       lang: 'en-US',
-      link: '/en/',
       title: 'Grammar Notebook',
       description: 'Short English grammar lessons with many examples, plus 3000 core words, for Vietnamese learners.',
       themeConfig: enTheme,
+    },
+    vi: {
+      label: 'Tiếng Việt',
+      lang: 'vi-VN',
+      link: '/vi/',
+      title: 'Sổ Tay Ngữ Pháp',
+      description: 'Lý thuyết ngữ pháp tiếng Anh rút gọn, nhiều ví dụ, sắp theo 9 chương sách Giải thích ngữ pháp tiếng Anh.',
+      themeConfig: viTheme,
     },
   },
   themeConfig: {
@@ -192,7 +203,7 @@ export default defineConfig({
       provider: 'local',
       options: {
         locales: {
-          root: {
+          vi: {
             translations: {
               button: { buttonText: 'Tìm kiếm', buttonAriaLabel: 'Tìm kiếm' },
               modal: {

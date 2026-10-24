@@ -31,11 +31,11 @@ export const POS_LABEL: Record<Pos, string> = {
 }
 
 // Each topic file becomes its own chunk, so a topic page only downloads its own words.
-const loaders = import.meta.glob<Word[]>('../../../tu-vung/data/*.json', { import: 'default' })
+const loaders = import.meta.glob<Word[]>('../../../data/vocab/*.json', { import: 'default' })
 
 export async function loadTopic(slug: string): Promise<Word[]> {
   if (slug === MINE.slug) return useMine().words.value
-  const load = loaders[`../../../tu-vung/data/${slug}.json`]
+  const load = loaders[`../../../data/vocab/${slug}.json`]
   return load ? load() : []
 }
 

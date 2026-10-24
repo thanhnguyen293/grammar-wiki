@@ -2,9 +2,9 @@
 
 Wiki lý thuyết ngữ pháp tiếng Anh cho người Việt học lại từ đầu. Nội dung sắp theo 9 chương của cuốn *Giải thích ngữ pháp tiếng Anh* (Mai Lan Hương – Hà Thanh Uyên), tự biên soạn lại, mỗi quy tắc đều có ví dụ kèm dịch nghĩa. Mỗi bài được gắn nhãn **Vòng 1**, **Vòng 2** hoặc **Tra cứu** theo lộ trình học.
 
-Phần **Từ vựng** (`/tu-vung/`) có 3000 từ thông dụng chia theo 28 chủ đề, cộng 250 từ chuyên ngành công nghệ thông tin cho mobile developer. Mỗi từ có phiên âm, loại từ, nghĩa, câu ví dụ có dịch, nút nghe phát âm (giọng đọc của trình duyệt), chế độ thẻ ghi nhớ, ẩn nghĩa để tự kiểm tra và đánh dấu đã thuộc (lưu trên trình duyệt). Ngoài ra có 500 cụm từ thông dụng (phrasal verb, collocation, thành ngữ), danh sách **Hôm nay học**, trang **Kiểm tra từ đã học** (nhìn nghĩa, gõ từ) và trang **Học từ bài viết**: dán một bài tiếng Anh, wiki đưa từ về dạng gốc, gom cụm từ, cho đánh dấu đã biết / chưa biết và thêm từ vào danh sách học.
+Phần **Từ vựng** (`/vocabulary/`) có 3000 từ thông dụng chia theo 28 chủ đề, cộng 250 từ chuyên ngành công nghệ thông tin cho mobile developer. Mỗi từ có phiên âm, loại từ, nghĩa, câu ví dụ có dịch, nút nghe phát âm (giọng đọc của trình duyệt), chế độ thẻ ghi nhớ, ẩn nghĩa để tự kiểm tra và đánh dấu đã thuộc (lưu trên trình duyệt). Ngoài ra có 500 cụm từ thông dụng (phrasal verb, collocation, thành ngữ), danh sách **Hôm nay học**, trang **Kiểm tra từ đã học** (nhìn nghĩa, gõ từ) và trang **Học từ bài viết**: dán một bài tiếng Anh, wiki đưa từ về dạng gốc, gom cụm từ, cho đánh dấu đã biết / chưa biết và thêm từ vào danh sách học.
 
-Web có hai ngôn ngữ: tiếng Việt (gốc `/`) và tiếng Anh (`/en/`), đổi bằng menu ngôn ngữ trên thanh điều hướng. Bản tiếng Anh dịch giao diện và 48 bài ngữ pháp; câu ví dụ vẫn giữ dòng dịch tiếng Việt và từ vựng vẫn giữ nghĩa tiếng Việt.
+Web có hai ngôn ngữ: tiếng Anh (gốc `/`, mặc định) và tiếng Việt (`/vi/`), đổi bằng menu ngôn ngữ trên thanh điều hướng. Mọi đường dẫn đều bằng tiếng Anh (ví dụ `/tenses/present-simple`); link cũ kiểu `/2-thi/hien-tai-don` hay `/en/...` tự chuyển sang trang mới. Bản tiếng Anh dịch giao diện và 48 bài ngữ pháp; câu ví dụ vẫn giữ dòng dịch tiếng Việt và từ vựng vẫn giữ nghĩa tiếng Việt.
 
 Có thể đăng nhập Google để đồng bộ tiến độ giữa các máy (Firebase); cách cài đặt xem [SYNC_SETUP.md](SYNC_SETUP.md).
 
@@ -30,12 +30,13 @@ Mỗi lần push lên nhánh `main`, GitHub Actions ([.github/workflows/deploy.y
 
 ```
 docs/
-  index.md                 trang chủ
-  en/                      bản tiếng Anh, cùng tên file với bản tiếng Việt
-  lo-trinh.md              lộ trình Vòng 1 / Vòng 2 / Tra cứu
-  1-tu-loai/ … 9-tu-vung-hoc/
+  index.md                 trang chủ (tiếng Anh, gốc web)
+  vi/                      bản tiếng Việt, cùng tên file với bản tiếng Anh
+  study-path.md            lộ trình Vòng 1 / Vòng 2 / Tra cứu
+  parts-of-speech/ … word-study/
     index.md               trang chương (tự liệt kê các bài)
     <slug>.md              từng bài
+  vocabulary/              trang từ vựng: tổng quan, hôm nay, ôn tập, chủ đề
   .vitepress/
     chapters.ts            danh sách chương, bài, nhãn vòng học
     config.mts             cấu hình site, sidebar sinh từ chapters.ts
@@ -44,9 +45,11 @@ docs/
       components/textAnalyze.ts  tách từ, đưa về dạng gốc, nhận diện cụm từ trong bài viết
       components/i18n.ts         chuỗi giao diện tiếng Anh (khóa là chuỗi tiếng Việt)
       components/sync.ts         đăng nhập Google và đồng bộ tiến độ lên Firestore
+    legacyPaths.ts         đường dẫn cũ (slug tiếng Việt, /en/) → đường dẫn mới
     firebase.config.ts     cấu hình Firebase (null = tắt đồng bộ)
-  tu-vung/
-    data/<slug>.json       từ của từng chủ đề, xếp từ thông dụng nhất xuống
+  data/
+    vocab/<slug>.json      từ của từng chủ đề, xếp từ thông dụng nhất xuống
+    relations.json         họ từ, từ đồng nghĩa, trái nghĩa
 firestore.rules            quy tắc bảo mật Firestore cho dữ liệu đồng bộ
 scripts/
   vocab-plan.json          danh sách 3000 từ đã chốt cho từng chủ đề
@@ -55,4 +58,4 @@ scripts/
 
 ## Thêm hoặc sửa bài
 
-Xem [CONTENT_GUIDE.md](CONTENT_GUIDE.md). Tóm tắt: thêm một dòng vào `chapters.ts`, tạo file `.md` cùng slug, viết theo bài mẫu [docs/2-thi/hien-tai-don.md](docs/2-thi/hien-tai-don.md).
+Xem [CONTENT_GUIDE.md](CONTENT_GUIDE.md). Tóm tắt: thêm một dòng vào `chapters.ts`, tạo file `.md` cùng slug, viết theo bài mẫu [docs/vi/tenses/present-simple.md](docs/vi/tenses/present-simple.md).

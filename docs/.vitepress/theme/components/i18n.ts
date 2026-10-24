@@ -1,5 +1,5 @@
-// UI strings for the English version (/en/). Vietnamese text is the key, so components keep
-// reading naturally in Vietnamese and fall back to it when a translation is missing.
+// UI strings for the English version (the site root; Vietnamese lives under /vi/). Vietnamese
+// text is the key, so components keep reading naturally in Vietnamese and fall back to it.
 import { computed } from 'vue'
 import { useData, withBase } from 'vitepress'
 import { MINE, vocabTopics } from '../../vocabTopics'
@@ -345,7 +345,7 @@ export function useLocale() {
   const tr = (vi: string, params: Record<string, string | number> = {}) =>
     (isEn.value ? (EN[vi] ?? vi) : vi).replace(/\{(\w+)\}/g, (_, k) => String(params[k] ?? ''))
   /** Site path in the current language, with the deploy base. */
-  const link = (path: string) => withBase((isEn.value ? '/en' : '') + path)
+  const link = (path: string) => withBase((isEn.value ? '' : '/vi') + path)
   const pos = computed(() => (isEn.value ? POS_LABEL_EN : POS_LABEL))
   const topicTitle = (slug: string) => {
     if (slug === MINE.slug) return isEn.value ? 'My words' : MINE.title

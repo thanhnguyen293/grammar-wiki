@@ -30,7 +30,7 @@ const { tr, link } = useLocale()
       <button v-if="nextBatch.length" type="button" class="vbtn primary" @click="today.add(nextBatch)">
         {{ tr('+ Thêm {n} từ tiếp theo vào hôm nay', { n: nextBatch.length }) }}
       </button>
-      <a :href="link('/tu-vung/hom-nay')">{{ tr('Hôm nay học: {n} từ →', { n: today.refs.value.length }) }}</a>
+      <a :href="link('/vocabulary/today')">{{ tr('Hôm nay học: {n} từ →', { n: today.refs.value.length }) }}</a>
     </div>
   </VocabStudy>
 </template>

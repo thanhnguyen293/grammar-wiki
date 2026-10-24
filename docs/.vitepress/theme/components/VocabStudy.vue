@@ -6,6 +6,7 @@ import SpeakButton from './SpeakButton.vue'
 import VocabCards from './VocabCards.vue'
 import { useRelations } from './useRelations'
 import { canSpeak, itemKey, useLearned, useToday, type Item } from './useVocab'
+import { topicLink } from '../../vocabTopics'
 
 /** List + flashcards for any set of words: a topic, or today's list. */
 const props = defineProps<{ items: Item[]; loading?: boolean; showTopic?: boolean; removable?: boolean }>()
@@ -57,7 +58,7 @@ const anchor = (w: string) => `w-${w.replace(/\s+/g, '-')}`
 const onPage = computed(() => new Set(props.items.map((i) => `${i.slug}:${i.word.w}`)))
 const relatedHref = (w: string) => {
   const slug = relIndex.value.slug[w]
-  return onPage.value.has(`${slug}:${w}`) ? `#${anchor(w)}` : `${link(`/tu-vung/${slug}`)}#${anchor(w)}`
+  return onPage.value.has(`${slug}:${w}`) ? `#${anchor(w)}` : `${link(topicLink(slug))}#${anchor(w)}`
 }
 /** The "Liên quan" line: related words grouped by kind. */
 const relatedLine = (i: Item) => {
@@ -148,7 +149,7 @@ watch(
               <span v-if="it.word.ipa" class="vipa">{{ it.word.ipa }}</span>
               <span class="vpos">{{ pos[it.word.pos] }}</span>
               <span v-if="kind" class="vrel-tag" :class="kind">{{ tr(KIND_LABEL[kind]) }}</span>
-              <a v-if="showTopic" class="vtopic-link" :href="link(`/tu-vung/${it.slug}`)">{{ topicTitle(it.slug) }}</a>
+              <a v-if="showTopic" class="vtopic-link" :href="link(topicLink(it.slug))">{{ topicTitle(it.slug) }}</a>
             </div>
             <button
               type="button"

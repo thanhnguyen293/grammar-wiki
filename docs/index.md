@@ -2,47 +2,49 @@
 pageClass: home-page
 ---
 
-# Sổ Tay Ngữ Pháp
+# Grammar Notebook
 
-Lý thuyết ngữ pháp tiếng Anh rút gọn cho người học lại từ đầu, sắp theo 9 chương của cuốn *Giải thích ngữ pháp tiếng Anh* (Mai Lan Hương – Hà Thanh Uyên). Mỗi bài chỉ giữ những gì cần để nói và viết câu đúng, và mỗi quy tắc đều đi kèm ví dụ có dịch nghĩa.
+Short English grammar lessons for learners starting again from the basics, ordered by the 9 chapters of *Giải thích ngữ pháp tiếng Anh* (Mai Lan Hương – Hà Thanh Uyên). Each lesson keeps only what you need to speak and write correct sentences, and every rule comes with examples. Example sentences keep their Vietnamese translation.
 
 <HomeHero />
 
-## Mục lục
+## Contents
 
 <HomeChapters />
 
-## Cách đọc một bài
+There is also a [vocabulary section](/vocabulary/) with 3000 core words, 500 common phrases and IT words for mobile developers.
 
-::: info CÔNG THỨC
-Khung xanh nhạt chứa công thức và cấu trúc câu.
+## How to read a lesson
+
+::: info FORMULA
+The light blue box holds formulas and sentence patterns.
 :::
 
-::: warning QUAN TRỌNG
-Khung vàng là quy tắc phải nhớ.
+::: warning IMPORTANT
+The yellow box is a rule to remember.
 :::
 
-::: danger LỖI HAY GẶP
-Khung đỏ là chỗ người học hay sai, kèm câu sửa đúng.
+::: danger COMMON MISTAKES
+The red box shows typical mistakes with the correct version.
 :::
 
-::: tip MẸO
-Khung xanh lá là mẹo nhớ nhanh hoặc ghi chú thêm.
+::: tip TIP
+The green box is a quick memory trick or an extra note.
 :::
 
-Ví dụ luôn có dạng câu tiếng Anh, chữ **in đậm** là phần ngữ pháp đang học, dòng dưới là nghĩa tiếng Việt:
+Examples always look like this: the English sentence, the grammar point in **bold**, and the Vietnamese translation underneath.
 
 - She **works** in a bank.<br>*Cô ấy làm việc ở ngân hàng.*
 
-## Ký hiệu
+## Symbols
 
-| Ký hiệu | Nghĩa |
+| Symbol | Meaning |
 |---|---|
-| S | Chủ ngữ (subject) |
-| V | Động từ nguyên mẫu (verb) |
-| V2 / V-ed | Động từ dạng quá khứ (cột 2 bảng bất quy tắc) |
-| V3 | Quá khứ phân từ (cột 3) |
-| O | Tân ngữ (object) |
-| N · adj · adv | Danh từ · tính từ · trạng từ |
+| S | Subject |
+| V | Base form of the verb |
+| V2 / V-ed | Past form (column 2 of the irregular verb table) |
+| V3 | Past participle (column 3) |
+| O | Object |
+| N · adj · adv | Noun · adjective · adverb |
 
-Nội dung tự biên soạn để ôn lý thuyết, không chép lại sách. Nên làm bài tập trong sách gốc sau mỗi bài.
+The content is written from scratch for revision, not copied from the book. After each lesson, do the matching exercises in the original book.

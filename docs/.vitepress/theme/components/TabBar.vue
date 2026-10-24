@@ -13,25 +13,25 @@ const { tr, link } = useLocale()
 const today = useToday()
 
 const active = computed<Tab>(() => {
-  const p = page.value.relativePath.replace(/^en\//, '')
-  if (p === 'tu-vung/hom-nay.md') return 'today'
-  if (p === 'tu-vung/on-tap.md') return 'review'
-  if (p.startsWith('tu-vung/')) return 'vocab'
-  if (p === 'tien-do.md') return 'progress'
+  const p = page.value.relativePath.replace(/^vi\//, '')
+  if (p === 'vocabulary/today.md') return 'today'
+  if (p === 'vocabulary/review.md') return 'review'
+  if (p.startsWith('vocabulary/')) return 'vocab'
+  if (p === 'progress.md') return 'progress'
   return 'grammar'
 })
 
 const TABS: { id: Tab; label: string; path: string; icon: string }[] = [
-  { id: 'grammar', label: 'Ngữ pháp', path: '/lo-trinh', icon: 'M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z' },
-  { id: 'vocab', label: 'Từ vựng', path: '/tu-vung/', icon: 'M3 18 8 6l5 12M5 14h6M15 18v-5a3 3 0 0 1 6 0v5M15 15h6' },
+  { id: 'grammar', label: 'Ngữ pháp', path: '/study-path', icon: 'M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z' },
+  { id: 'vocab', label: 'Từ vựng', path: '/vocabulary/', icon: 'M3 18 8 6l5 12M5 14h6M15 18v-5a3 3 0 0 1 6 0v5M15 15h6' },
   {
     id: 'today',
     label: 'Hôm nay',
-    path: '/tu-vung/hom-nay',
+    path: '/vocabulary/today',
     icon: 'M8 2v4M16 2v4M3 9h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9 15l2 2 4-4',
   },
-  { id: 'review', label: 'Ôn tập', path: '/tu-vung/on-tap', icon: 'M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11' },
-  { id: 'progress', label: 'Tiến độ', path: '/tien-do', icon: 'M4 20V10M10 20V4M16 20v-8M22 20H2' },
+  { id: 'review', label: 'Ôn tập', path: '/vocabulary/review', icon: 'M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11' },
+  { id: 'progress', label: 'Tiến độ', path: '/progress', icon: 'M4 20V10M10 20V4M16 20v-8M22 20H2' },
 ]
 </script>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { coreTopics, extraTopics, learnedKey, vocabTopics } from '../../vocabTopics'
+import { coreTopics, extraTopics, learnedKey, topicLink, vocabTopics } from '../../vocabTopics'
 import ActivityHeatmap from './ActivityHeatmap.vue'
 import { useLocale } from './i18n'
 import { activityScore, useActivity } from './useActivity'
@@ -83,11 +83,11 @@ const when = (key: string) => {
       <section class="dash-card">
         <header class="dash-head">
           <h2>{{ tr('Theo chủ đề') }}</h2>
-          <a :href="link('/tu-vung/')" class="vnote">{{ tr('Tất cả chủ đề →') }}</a>
+          <a :href="link('/vocabulary/')" class="vnote">{{ tr('Tất cả chủ đề →') }}</a>
         </header>
         <ol class="dash-topics">
           <li v-for="t in [...coreTopics, ...extraTopics]" :key="t.slug">
-            <a :href="link(`/tu-vung/${t.slug}`)">{{ isEn ? t.en : t.title }}</a>
+            <a :href="link(topicLink(t.slug))">{{ isEn ? t.en : t.title }}</a>
             <span class="vprog-bar"><i :style="{ width: pct(t.slug) + '%' }" /></span>
             <span class="dash-pct">{{ done(t.slug) }}/{{ count(t.slug) || t.target }}</span>
           </li>
@@ -97,13 +97,13 @@ const when = (key: string) => {
       <section class="dash-card">
         <header class="dash-head">
           <h2>{{ tr('Vừa thuộc') }}</h2>
-          <a :href="link('/tu-vung/on-tap')" class="vnote">{{ tr('Kiểm tra lại →') }}</a>
+          <a :href="link('/vocabulary/review')" class="vnote">{{ tr('Kiểm tra lại →') }}</a>
         </header>
         <ul v-if="recent.length" class="dash-recent">
           <li v-for="i in recent" :key="i.slug + i.word.w">
             <span class="vword">{{ i.word.w }}</span>
             <span class="dash-vi">{{ i.word.vi }}</span>
-            <a class="dash-meta" :href="link(`/tu-vung/${i.slug}`)">{{ topicTitle(i.slug) }}</a>
+            <a class="dash-meta" :href="link(topicLink(i.slug))">{{ topicTitle(i.slug) }}</a>
             <span class="dash-meta">{{ when(learnedKey(i.slug, i.word.w)) }}</span>
           </li>
         </ul>

@@ -20,8 +20,8 @@ const stats = [
 <template>
   <div class="home-hero">
     <div class="home-cta">
-      <a class="btn primary" :href="link('/lo-trinh')">{{ tr('Xem lộ trình học') }}</a>
-      <a class="btn" :href="link('/tu-vung/')">{{ tr('Học từ vựng') }}</a>
+      <a class="btn primary" :href="link('/study-path')">{{ tr('Xem lộ trình học') }}</a>
+      <a class="btn" :href="link('/vocabulary/')">{{ tr('Học từ vựng') }}</a>
     </div>
     <ul class="home-stats">
       <li v-for="s in stats" :key="s.label">

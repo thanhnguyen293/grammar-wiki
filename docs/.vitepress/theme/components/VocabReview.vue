@@ -306,7 +306,7 @@ const { tr, link, pos, isEn } = useLocale()
         <template v-if="source === 'today'">
           <p>{{ tr('Chưa có từ nào để ôn trong khoảng này.') }}</p>
           <p>
-            {{ tr('Bài ôn tập lấy từ danh sách') }} <a :href="link('/tu-vung/hom-nay')">{{ tr('Hôm nay học') }}</a>
+            {{ tr('Bài ôn tập lấy từ danh sách') }} <a :href="link('/vocabulary/today')">{{ tr('Hôm nay học') }}</a>
             {{ tr('của những ngày trước. Hãy chọn từ để học hôm nay, ngày mai quay lại đây để kiểm tra.') }}
           </p>
         </template>
@@ -315,7 +315,7 @@ const { tr, link, pos, isEn } = useLocale()
           <p>{{ tr('Chưa có từ đã thuộc nào ở đây.') }}</p>
           <p>
             {{ tr('Bấm') }} <b>{{ tr('Đã thuộc?') }}</b> {{ tr('cạnh một từ trong') }}
-            <a :href="link('/tu-vung/')">{{ tr('các chủ đề') }}</a>{{ tr(' để đánh dấu, rồi quay lại đây kiểm tra.') }}
+            <a :href="link('/vocabulary/')">{{ tr('các chủ đề') }}</a>{{ tr(' để đánh dấu, rồi quay lại đây kiểm tra.') }}
           </p>
         </template>
       </div>
