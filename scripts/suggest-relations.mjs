@@ -13,7 +13,7 @@ const root = new URL('../docs/', import.meta.url)
 const topicsSrc = readFileSync(new URL('.vitepress/vocabTopics.ts', root), 'utf8')
 const coreSlugs = [...topicsSrc.matchAll(/slug: '([^']+)'.*?target: \d+(, track)?/g)].filter((m) => !m[2]).map((m) => m[1])
 
-/** Every core word with its frequency order across topics, so groups list the most common first. */
+/** Every core word with its place across topics (common groups first), so groups list the most common first. */
 const order = new Map()
 for (const slug of coreSlugs)
   for (const x of JSON.parse(readFileSync(new URL(`data/vocab/${slug}.json`, root), 'utf8'))) order.set(x.w, order.size)

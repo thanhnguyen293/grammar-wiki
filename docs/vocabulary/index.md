@@ -4,7 +4,7 @@ outline: false
 
 # Vocabulary by topic
 
-3000 common words in 28 topics, from the most common down, plus 500 phrases and IT vocabulary for mobile developers. Meanings are in Vietnamese.
+3000 common words in 28 topics, grouped by meaning with the most common first, plus 500 phrases and IT vocabulary for mobile developers. Meanings are in Vietnamese.
 
 <VocabHome />
 

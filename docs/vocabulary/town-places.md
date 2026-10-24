@@ -4,6 +4,6 @@ outline: false
 
 # Town & places
 
-*Thành phố & địa điểm* · Words are sorted from the most common to the less common.
+*Thành phố & địa điểm* · Words are grouped by meaning, so related words sit together; more common groups come first.
 
 <VocabTopic slug="thanh-pho-dia-diem" />

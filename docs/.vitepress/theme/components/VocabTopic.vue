@@ -17,7 +17,7 @@ onMounted(async () => {
   loading.value = false
 })
 
-// Words are sorted by how common they are, so "next" means the first ones not yet learned or picked.
+// The most common word groups come first, so "next" means the first words not yet learned or picked.
 const nextBatch = computed(() =>
   items.value.filter((i) => !learned.value.has(itemKey(i)) && !today.has(i.slug, i.word.w)).slice(0, DAILY),
 )

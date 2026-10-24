@@ -4,6 +4,6 @@ outline: false
 
 # Food & drink
 
-*Ăn uống* · Words are sorted from the most common to the less common.
+*Ăn uống* · Words are grouped by meaning, so related words sit together; more common groups come first.
 
 <VocabTopic slug="an-uong" />

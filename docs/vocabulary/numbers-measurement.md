@@ -4,6 +4,6 @@ outline: false
 
 # Numbers, quantity & measurement
 
-*Số đếm, số lượng & đo lường* · Words are sorted from the most common to the less common.
+*Số đếm, số lượng & đo lường* · Words are grouped by meaning, so related words sit together; more common groups come first.
 
 <VocabTopic slug="so-luong-do-luong" />

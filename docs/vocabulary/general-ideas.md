@@ -4,6 +4,6 @@ outline: false
 
 # General ideas (problem, reason, way…)
 
-*Khái niệm chung* · Words are sorted from the most common to the less common.
+*Khái niệm chung* · Words are grouped by meaning, so related words sit together; more common groups come first.
 
 <VocabTopic slug="khai-niem-chung" />

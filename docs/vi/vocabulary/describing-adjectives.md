@@ -4,6 +4,6 @@ outline: false
 
 # Tính từ mô tả thường gặp
 
-*Common describing adjectives* · Từ được sắp xếp từ thông dụng nhất đến ít thông dụng hơn.
+*Common describing adjectives* · Từ được xếp theo nhóm nghĩa, các từ liên quan đứng cạnh nhau; nhóm thông dụng hơn đứng trước.
 
 <VocabTopic slug="tinh-tu-mo-ta" />

@@ -69,7 +69,7 @@ const relatedLine = (i: Item) => {
 
 // Related words are always grouped. Grouping only changes the order on screen: each group keeps
 // the place of its most common word, and the related words of the same topic follow it.
-// Numbers stay the frequency rank.
+// Numbers stay the place in the topic.
 const rows = computed(() => {
   const placed = new Set<Item>()
   const out: { it: Item; kind?: RelationKind }[] = []
@@ -77,7 +77,7 @@ const rows = computed(() => {
     if (placed.has(it)) continue
     placed.add(it)
     out.push({ it })
-    // Family first, then synonyms, then antonyms; each by frequency.
+    // Family first, then synonyms, then antonyms; each in topic order.
     const kinds = new Map(relatedOf(it).map((r) => [r.w, r.kind]))
     const rank = (o: Item) => KIND_ORDER.indexOf(kinds.get(o.word.w) ?? 'family')
     const follow = shown.value.filter((o) => kinds.has(o.word.w) && o.slug === it.slug && !placed.has(o))

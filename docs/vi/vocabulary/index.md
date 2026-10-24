@@ -4,7 +4,7 @@ outline: false
 
 # Từ vựng theo chủ đề
 
-3000 từ thông dụng trong 28 chủ đề, xếp từ thông dụng nhất xuống, cùng 500 cụm từ và từ vựng IT cho mobile developer.
+3000 từ thông dụng trong 28 chủ đề, xếp theo nhóm nghĩa, nhóm thông dụng nhất trước, cùng 500 cụm từ và từ vựng IT cho mobile developer.
 
 <VocabHome />
 

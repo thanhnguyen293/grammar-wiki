@@ -4,6 +4,6 @@ outline: false
 
 # Nhà cửa & đồ dùng
 
-*Home & household objects* · Từ được sắp xếp từ thông dụng nhất đến ít thông dụng hơn.
+*Home & household objects* · Từ được xếp theo nhóm nghĩa, các từ liên quan đứng cạnh nhau; nhóm thông dụng hơn đứng trước.
 
 <VocabTopic slug="nha-cua-do-dung" />

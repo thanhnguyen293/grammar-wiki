@@ -1,5 +1,6 @@
 // Vocabulary topics, in the order a beginner should meet them. Each topic's words live in
-// docs/data/vocab/<slug>.json, already sorted from most to least common.
+// docs/data/vocab/<slug>.json, grouped by meaning (related words side by side), the most
+// common groups first.
 
 export interface VocabTopic {
   /** Stable id: names the data file and is stored with the learner's progress (in the browser

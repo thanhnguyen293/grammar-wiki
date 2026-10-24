@@ -62,7 +62,7 @@ Trong bản dịch, mỗi dòng kết thúc bằng `<br>` (trừ dòng cuối).
 
 # Từ vựng theo chủ đề
 
-Danh sách chủ đề nằm ở [docs/.vitepress/vocabTopics.ts](docs/.vitepress/vocabTopics.ts). Từ của mỗi chủ đề nằm trong `docs/data/vocab/<slug>.json`, là một mảng đã **xếp từ thông dụng nhất xuống**. `slug` là mã cố định của chủ đề (lưu cùng tiến độ học, không đổi); URL của trang dùng trường `path`. Trang chủ đề `docs/vocabulary/<path>.md` và `docs/vi/vocabulary/<path>.md` chỉ chứa `<VocabTopic slug="..." />`. Nhóm hiển thị trên sidebar khai báo ở `topicGroups`.
+Danh sách chủ đề nằm ở [docs/.vitepress/vocabTopics.ts](docs/.vitepress/vocabTopics.ts). Từ của mỗi chủ đề nằm trong `docs/data/vocab/<slug>.json`, là một mảng **xếp theo nhóm nghĩa**: từ đồng nghĩa, trái nghĩa, cùng họ hoặc cùng một bộ nhỏ (grandfather, grandmother, grandpa, grandma) đứng cạnh nhau, nhóm thông dụng hơn đứng trước. Thêm từ mới thì đặt cạnh nhóm của nó. Tiến độ học lưu theo chủ đề + từ chứ không theo vị trí, nên đổi thứ tự trong một chủ đề không ảnh hưởng dữ liệu người học; chuyển từ sang chủ đề khác thì có. `slug` là mã cố định của chủ đề (lưu cùng tiến độ học, không đổi); URL của trang dùng trường `path`. Trang chủ đề `docs/vocabulary/<path>.md` và `docs/vi/vocabulary/<path>.md` chỉ chứa `<VocabTopic slug="..." />`. Nhóm hiển thị trên sidebar khai báo ở `topicGroups`.
 
 Mỗi từ có đúng 7 trường:
 

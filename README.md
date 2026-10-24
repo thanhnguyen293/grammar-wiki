@@ -48,7 +48,7 @@ docs/
     legacyPaths.ts         đường dẫn cũ (slug tiếng Việt, /en/) → đường dẫn mới
     firebase.config.ts     cấu hình Firebase (null = tắt đồng bộ)
   data/
-    vocab/<slug>.json      từ của từng chủ đề, xếp từ thông dụng nhất xuống
+    vocab/<slug>.json      từ của từng chủ đề, xếp theo nhóm nghĩa, nhóm thông dụng nhất trước
     relations.json         họ từ, từ đồng nghĩa, trái nghĩa
 firestore.rules            quy tắc bảo mật Firestore cho dữ liệu đồng bộ
 scripts/

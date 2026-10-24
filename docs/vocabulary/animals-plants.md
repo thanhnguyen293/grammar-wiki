@@ -4,6 +4,6 @@ outline: false
 
 # Animals & plants
 
-*Động vật & cây cối* · Words are sorted from the most common to the less common.
+*Động vật & cây cối* · Words are grouped by meaning, so related words sit together; more common groups come first.
 
 <VocabTopic slug="dong-vat-cay-coi" />
