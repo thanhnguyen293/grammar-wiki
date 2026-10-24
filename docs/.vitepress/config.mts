@@ -162,6 +162,10 @@ export default defineConfig({
   head: [
     // Restores a collapsed sidebar before first paint (see SidebarToggle.vue).
     ['script', {}, "try{localStorage.getItem('sidebar-collapsed')==='1'&&document.documentElement.classList.add('sidebar-collapsed')}catch(e){}"],
+    // Google Translate's voice (speak() in useVocab.ts) answers 404 to any request that names another
+    // site as referrer, and <audio> has no per-element referrer setting. So the Firebase API key must
+    // not be restricted by HTTP referrer, or sync would stop working.
+    ['meta', { name: 'referrer', content: 'no-referrer' }],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: `${process.env.VITEPRESS_BASE || '/'}logo.svg` }],
     // Added to the home screen, the site opens as its own app (see AppBackButton and TabBar).
     ['link', { rel: 'manifest', href: `${process.env.VITEPRESS_BASE || '/'}manifest.webmanifest` }],

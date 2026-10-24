@@ -131,20 +131,47 @@ let voice: SpeechSynthesisVoice | undefined
 
 function pickVoice() {
   const voices = window.speechSynthesis.getVoices().filter((v) => v.lang.replace('_', '-').startsWith('en-US'))
-  return voices.find((v) => /Samantha|Google US English|Aria|Jenny/i.test(v.name)) ?? voices[0]
+  // No fallback to the first voice: on iPad it can be a novelty or not-downloaded voice that stays silent.
+  return voices.find((v) => /Samantha|Google US English|Aria|Jenny/i.test(v.name))
 }
 
-export const canSpeak = () => typeof window !== 'undefined' && 'speechSynthesis' in window
+export const canSpeak = () => typeof window !== 'undefined' && ('Audio' in window || 'speechSynthesis' in window)
 
-export function speak(text: string, rate = 0.9) {
-  if (!canSpeak()) return
+function speakWithBrowser(text: string, rate: number) {
+  if (!('speechSynthesis' in window)) return
   voice ??= pickVoice()
   const u = new SpeechSynthesisUtterance(text)
   u.lang = 'en-US'
   u.rate = rate
   if (voice) u.voice = voice
-  window.speechSynthesis.cancel()
-  window.speechSynthesis.speak(u)
+  const synth = window.speechSynthesis
+  // Safari can drop an utterance queued right after cancel(), so only cancel when something is playing.
+  if (synth.speaking || synth.pending) synth.cancel()
+  synth.speak(u)
+}
+
+let playing: HTMLAudioElement | undefined
+
+/** Plays Google Translate's voice: the same on every device, and an <audio> still plays when an
+    iPad is on silent, unlike speechSynthesis. The endpoint is unofficial, so when it fails
+    (offline, blocked) the browser's own voice reads the word instead. */
+export function speak(text: string, rate = 0.9) {
+  if (!canSpeak()) return
+  playing?.pause()
+  if (window.speechSynthesis?.speaking) window.speechSynthesis.cancel()
+  const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodeURIComponent(text)}`)
+  // Loading resets playbackRate to the default rate, so set both.
+  audio.defaultPlaybackRate = audio.playbackRate = rate
+  playing = audio
+  let fellBack = false
+  const fallback = () => {
+    // A newer click paused this one on purpose; that is not a failure.
+    if (fellBack || playing !== audio) return
+    fellBack = true
+    speakWithBrowser(text, rate)
+  }
+  audio.addEventListener('error', fallback)
+  audio.play().catch(fallback)
 }
 
 /** Lowercase and strip Vietnamese diacritics so "gia dinh" finds "gia đình". */
