@@ -60,6 +60,28 @@ Trong bản dịch, mỗi dòng kết thúc bằng `<br>` (trừ dòng cuối).
 - Mỗi cách dùng có ít nhất 3 ví dụ.
 - `npm run dev` rồi mở bài: không vỡ bảng, khung hiện đúng màu.
 
+# Giao tiếp công sở IT
+
+Mục `/workplace/` dạy tiếng Anh giao tiếp ở công ty công nghệ, mỗi bài là một tình huống (họp, stand-up, review code…). Danh sách bài nằm ở [docs/.vitepress/workplace.ts](docs/.vitepress/workplace.ts); sidebar, trang mục lục và thanh trên đầu bài sinh từ đó. File: `docs/vi/workplace/<slug>.md` và `docs/workplace/<slug>.md`. Bài mẫu: [docs/vi/workplace/introductions.md](docs/vi/workplace/introductions.md).
+
+Người đọc là dân IT người Việt đi làm, biết từ chuyên ngành nhưng ngại nói. Câu mẫu ngắn, dùng được ngay, tình huống thật (Jira, Slack, pull request, sprint, release). Tên nhân vật trộn tên Việt và tên nước ngoài.
+
+Cấu trúc: học kiến thức nền trước, rồi mới đến mẫu câu, cuối bài luyện lại mẫu câu.
+
+1. `# Tên bài` đúng tên trong `workplace.ts`, rồi 1–2 câu mở đầu: tình huống nào, nói với ai.
+2. `## Cần biết trước` gồm:
+   - `### Từ vựng`: một câu dẫn rồi `<VocabTopic slug="cong-so-<slug>" />`. Từ của bài nằm ở `docs/data/vocab/cong-so-<slug>.json` (15 từ, cùng quy ước 7 trường như phần Từ vựng bên dưới) và khai báo trong `vocabTopics.ts` với `track: 'work'`. Một từ chỉ xuất hiện ở một bài giao tiếp.
+   - `### Ngữ pháp`: bảng **Điểm ngữ pháp | Dùng để | Ví dụ**, 2–3 dòng, cột đầu là liên kết tới bài ngữ pháp, ví dụ lấy từ chính bài này.
+3. `## Mẫu câu` gồm 4–6 nhóm `### 1. …` theo mục đích, mỗi nhóm 3–4 câu. Câu tiếng Anh trước, `<br>` rồi nghĩa tiếng Việt in nghiêng. **Phần in đậm thành chỗ trống trong bài luyện tập**, nên chỉ in đậm cụm cần học, không in đậm cả câu.
+4. Phần riêng của tình huống khi cần, ví dụ bảng **Nghe hơi cứng | Tự nhiên hơn | Vì sao** để chỉ cách nói lịch sự.
+5. `## Lỗi hay gặp`: khung `::: danger LỖI HAY GẶP`, bảng **✗ Sai | ✓ Đúng | Vì sao**, 4–5 lỗi người Việt hay mắc.
+6. `## Hội thoại mẫu`: một câu nói bối cảnh, đoạn hội thoại 6–10 dòng, mẫu câu in đậm, rồi `::: details Xem bản dịch`.
+7. `## Luyện tập`: một câu dẫn rồi `<PhraseDrill lesson="<slug>" />`. Bài tập tự lấy các câu trong phần Mẫu câu của bản tiếng Việt (`phrases.data.ts`), không cần chép lại.
+8. `## Ghi nhớ`: khung `::: warning TÓM TẮT`, 3–4 gạch đầu dòng.
+9. `Xem thêm:` 2–3 liên kết (bài ngữ pháp liên quan, bài giao tiếp kế tiếp), ngăn bằng ` · `.
+
+Bản tiếng Anh đổi tiêu đề: Cần biết trước → Before you start, Từ vựng → Vocabulary, Ngữ pháp → Grammar, Mẫu câu → Key phrases, Hội thoại mẫu → Sample dialogue, Lỗi hay gặp → Common mistakes, Luyện tập → Practice, Ghi nhớ → Remember; cột **Vì sao** dịch sang tiếng Anh.
+
 # Từ vựng theo chủ đề
 
 Danh sách chủ đề nằm ở [docs/.vitepress/vocabTopics.ts](docs/.vitepress/vocabTopics.ts). Từ của mỗi chủ đề nằm trong `docs/data/vocab/<slug>.json`, là một mảng **xếp theo nhóm nghĩa**: từ đồng nghĩa, trái nghĩa, cùng họ hoặc cùng một bộ nhỏ (grandfather, grandmother, grandpa, grandma) đứng cạnh nhau, nhóm thông dụng hơn đứng trước. Thêm từ mới thì đặt cạnh nhóm của nó. Tiến độ học lưu theo chủ đề + từ chứ không theo vị trí, nên đổi thứ tự trong một chủ đề không ảnh hưởng dữ liệu người học; chuyển từ sang chủ đề khác thì có. `slug` là mã cố định của chủ đề (lưu cùng tiến độ học, không đổi); URL của trang dùng trường `path`. Trang chủ đề `docs/vocabulary/<path>.md` và `docs/vi/vocabulary/<path>.md` chỉ chứa `<VocabTopic slug="..." />`. Nhóm hiển thị trên sidebar khai báo ở `topicGroups`.

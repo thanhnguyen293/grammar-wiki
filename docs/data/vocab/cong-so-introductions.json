@@ -1,0 +1,17 @@
+[
+  {"w": "role", "ipa": "/roʊl/", "pos": "n", "vi": "vai trò", "ex": "What's your role on the team?", "exVi": "Vai trò của bạn trong team là gì?", "lv": "A2"},
+  {"w": "tech lead", "ipa": "/ˈtɛk ˌlid/", "pos": "n", "vi": "trưởng nhóm kỹ thuật", "ex": "Hùng is our tech lead.", "exVi": "Anh Hùng là tech lead của tụi mình.", "lv": "B1"},
+  {"w": "engineering manager", "ipa": "/ˌɛndʒɪˈnɪrɪŋ ˈmænɪdʒər/", "pos": "n", "vi": "quản lý kỹ thuật", "ex": "I report to the engineering manager.", "exVi": "Mình báo cáo cho quản lý kỹ thuật.", "lv": "B1"},
+  {"w": "report to", "ipa": "/rɪˈpɔrt tu/", "pos": "phr", "vi": "báo cáo trực tiếp cho (cấp trên)", "ex": "Who do you report to?", "exVi": "Bạn báo cáo trực tiếp cho ai?", "lv": "B1"},
+  {"w": "be responsible for", "ipa": "/bi rɪˈspɑnsəbəl fɔr/", "pos": "phr", "vi": "phụ trách, chịu trách nhiệm", "ex": "I'm responsible for the iOS app.", "exVi": "Mình phụ trách app iOS.", "lv": "B1"},
+  {"w": "be in charge of", "ipa": "/bi ɪn ˈtʃɑrdʒ əv/", "pos": "phr", "vi": "quản lý, lo phần", "ex": "She's in charge of the release.", "exVi": "Chị ấy lo phần phát hành.", "lv": "B1"},
+  {"w": "work on", "ipa": "/ˈwɜrk ɑn/", "pos": "phr", "vi": "làm (một việc, dự án)", "ex": "I mainly work on the login screen.", "exVi": "Mình chủ yếu làm màn hình đăng nhập.", "lv": "A2"},
+  {"w": "take care of", "ipa": "/teɪk ˈkɛr əv/", "pos": "phr", "vi": "lo, đảm nhận", "ex": "I'll take care of the API integration.", "exVi": "Mình sẽ lo phần tích hợp API.", "lv": "A2"},
+  {"w": "join", "ipa": "/dʒɔɪn/", "pos": "v", "vi": "vào, gia nhập (công ty, team)", "ex": "I joined the company last month.", "exVi": "Mình vào công ty tháng trước.", "lv": "A2"},
+  {"w": "onboarding", "ipa": "/ˈɑnˌbɔrdɪŋ/", "pos": "n", "vi": "giai đoạn làm quen của nhân viên mới", "ex": "My onboarding takes two weeks.", "exVi": "Giai đoạn làm quen của mình kéo dài hai tuần.", "lv": "B2"},
+  {"w": "colleague", "ipa": "/ˈkɑliɡ/", "pos": "n", "vi": "đồng nghiệp", "ex": "My colleagues are very friendly.", "exVi": "Đồng nghiệp của mình rất thân thiện.", "lv": "B1"},
+  {"w": "teammate", "ipa": "/ˈtimˌmeɪt/", "pos": "n", "vi": "người cùng team", "ex": "Sarah is my new teammate.", "exVi": "Sarah là đồng đội mới của mình.", "lv": "B1"},
+  {"w": "experience", "ipa": "/ɪkˈspɪriəns/", "pos": "n", "vi": "kinh nghiệm", "ex": "I have five years of experience in Android.", "exVi": "Mình có năm năm kinh nghiệm làm Android.", "lv": "A2"},
+  {"w": "introduce", "ipa": "/ˌɪntrəˈdus/", "pos": "v", "vi": "giới thiệu", "ex": "Let me introduce our new teammate, Minh.", "exVi": "Để mình giới thiệu đồng đội mới của tụi mình, Minh.", "lv": "A2"},
+  {"w": "look forward to", "ipa": "/lʊk ˈfɔrwərd tu/", "pos": "phr", "vi": "mong chờ, mong được", "ex": "I look forward to working with you.", "exVi": "Mình rất mong được làm việc với bạn.", "lv": "B1"}
+]

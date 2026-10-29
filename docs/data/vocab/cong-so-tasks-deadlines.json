@@ -1,0 +1,17 @@
+[
+  {"w": "assign", "ipa": "/əˈsaɪn/", "pos": "v", "vi": "giao, gán (việc)", "ex": "Can you assign this ticket to me?", "exVi": "Anh gán ticket này cho em được không?", "lv": "B1"},
+  {"w": "take on", "ipa": "/teɪk ˈɑn/", "pos": "phr", "vi": "nhận thêm (việc)", "ex": "I can't take on any more tasks this week.", "exVi": "Tuần này mình không nhận thêm việc được nữa.", "lv": "B1"},
+  {"w": "workload", "ipa": "/ˈwɜrkˌloʊd/", "pos": "n", "vi": "khối lượng công việc", "ex": "My workload is very heavy this sprint.", "exVi": "Sprint này khối lượng việc của mình rất nặng.", "lv": "B2"},
+  {"w": "fully booked", "ipa": "/ˌfʊli ˈbʊkt/", "pos": "phr", "vi": "kín lịch, kín việc", "ex": "I'm fully booked until next week.", "exVi": "Mình kín việc đến tuần sau.", "lv": "B1"},
+  {"w": "priority", "ipa": "/praɪˈɔrəti/", "pos": "n", "vi": "việc ưu tiên, mức ưu tiên", "ex": "The payment bug is our top priority.", "exVi": "Lỗi thanh toán là việc ưu tiên hàng đầu.", "lv": "B1"},
+  {"w": "estimate", "ipa": "/ˈɛstəmət/", "pos": "n", "vi": "ước lượng", "ex": "My rough estimate is two days.", "exVi": "Ước lượng sơ bộ của mình là hai ngày.", "lv": "B1"},
+  {"w": "story point", "ipa": "/ˈstɔri ˌpɔɪnt/", "pos": "n", "vi": "điểm ước lượng độ khó của việc", "ex": "This ticket is three story points.", "exVi": "Ticket này ba điểm.", "lv": "B2"},
+  {"w": "depend on", "ipa": "/dɪˈpɛnd ɑn/", "pos": "phr", "vi": "tùy thuộc vào", "ex": "It depends on the backend team.", "exVi": "Còn tùy vào team backend.", "lv": "A2"},
+  {"w": "deadline", "ipa": "/ˈdɛdˌlaɪn/", "pos": "n", "vi": "hạn chót", "ex": "The deadline is next Monday.", "exVi": "Hạn chót là thứ Hai tuần sau.", "lv": "B1"},
+  {"w": "miss a deadline", "ipa": "/ˈmɪs ə ˈdɛdˌlaɪn/", "pos": "phr", "vi": "trễ hạn", "ex": "We can't miss this deadline.", "exVi": "Mình không được trễ hạn lần này.", "lv": "B1"},
+  {"w": "behind schedule", "ipa": "/bɪˈhaɪnd ˈskɛdʒul/", "pos": "phr", "vi": "chậm tiến độ", "ex": "The project is a week behind schedule.", "exVi": "Dự án đang chậm một tuần so với kế hoạch.", "lv": "B1"},
+  {"w": "ahead of schedule", "ipa": "/əˈhɛd əv ˈskɛdʒul/", "pos": "phr", "vi": "sớm hơn kế hoạch", "ex": "We finished ahead of schedule.", "exVi": "Tụi mình xong sớm hơn kế hoạch.", "lv": "B1"},
+  {"w": "delay", "ipa": "/dɪˈleɪ/", "pos": "n", "vi": "sự chậm trễ", "ex": "Sorry for the delay.", "exVi": "Xin lỗi vì sự chậm trễ.", "lv": "B1"},
+  {"w": "postpone", "ipa": "/poʊstˈpoʊn/", "pos": "v", "vi": "hoãn, dời lại", "ex": "Can we postpone the release to Monday?", "exVi": "Mình dời đợt phát hành sang thứ Hai được không?", "lv": "B1"},
+  {"w": "push back", "ipa": "/pʊʃ ˈbæk/", "pos": "phr", "vi": "phản đối, không đồng ý (một yêu cầu)", "ex": "Don't be afraid to push back on unrealistic dates.", "exVi": "Đừng ngại phản đối những hạn chót không thực tế.", "lv": "B2"}
+]

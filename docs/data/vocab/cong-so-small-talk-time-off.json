@@ -1,0 +1,17 @@
+[
+  {"w": "small talk", "ipa": "/ˈsmɔːl ˌtɔːk/", "pos": "n", "vi": "chuyện phiếm, trò chuyện xã giao", "ex": "Small talk helps you get to know your team.", "exVi": "Trò chuyện xã giao giúp bạn hiểu đồng nghiệp hơn.", "lv": "B1"},
+  {"w": "how's it going", "ipa": "/ˌhaʊz ɪt ˈɡoʊɪŋ/", "pos": "phr", "vi": "dạo này thế nào", "ex": "Hey Minh, how's it going?", "exVi": "Chào Minh, dạo này thế nào?", "lv": "A2"},
+  {"w": "weekend", "ipa": "/ˈwiːkend/", "pos": "n", "vi": "cuối tuần", "ex": "How was your weekend?", "exVi": "Cuối tuần của bạn thế nào?", "lv": "A1"},
+  {"w": "grab", "ipa": "/ɡræb/", "pos": "v", "vi": "đi làm (ly cà phê, bữa trưa) nhanh", "ex": "Do you want to grab a coffee?", "exVi": "Đi làm ly cà phê không?", "lv": "B1"},
+  {"w": "chat", "ipa": "/tʃæt/", "pos": "v", "vi": "trò chuyện", "ex": "It was nice chatting with you.", "exVi": "Nói chuyện với bạn vui lắm.", "lv": "A2"},
+  {"w": "catch up", "ipa": "/ˌkætʃ ˈʌp/", "pos": "phr", "vi": "trò chuyện, cập nhật tình hình", "ex": "Let's catch up after the meeting.", "exVi": "Họp xong mình nói chuyện chút nhé.", "lv": "B1"},
+  {"w": "anyway", "ipa": "/ˈeniweɪ/", "pos": "adv", "vi": "thôi thì, dù sao", "ex": "Anyway, I should get back to work.", "exVi": "Thôi, mình phải quay lại làm việc đây.", "lv": "A2"},
+  {"w": "take a day off", "ipa": "/ˌteɪk ə ˈdeɪ ˈɔːf/", "pos": "phr", "vi": "nghỉ một ngày", "ex": "I'm taking a day off tomorrow.", "exVi": "Mai mình nghỉ một ngày.", "lv": "B1"},
+  {"w": "annual leave", "ipa": "/ˌænjuəl ˈliːv/", "pos": "n", "vi": "phép năm", "ex": "I have five days of annual leave left.", "exVi": "Mình còn năm ngày phép năm.", "lv": "B1"},
+  {"w": "on leave", "ipa": "/ɑːn ˈliːv/", "pos": "phr", "vi": "đang nghỉ phép", "ex": "Hà is on leave until Monday.", "exVi": "Hà nghỉ phép đến thứ Hai.", "lv": "B1"},
+  {"w": "sick day", "ipa": "/ˈsɪk ˌdeɪ/", "pos": "n", "vi": "ngày nghỉ ốm", "ex": "I need to take a sick day.", "exVi": "Mình cần xin nghỉ ốm một ngày.", "lv": "B1"},
+  {"w": "under the weather", "ipa": "/ˌʌndər ðə ˈweðər/", "pos": "phr", "vi": "hơi mệt, không khỏe", "ex": "I'm feeling a bit under the weather.", "exVi": "Mình thấy hơi mệt trong người.", "lv": "B2"},
+  {"w": "cover for", "ipa": "/ˈkʌvər fɔːr/", "pos": "phr", "vi": "làm thay ai", "ex": "Can you cover for me on Friday?", "exVi": "Thứ Sáu bạn làm thay mình được không?", "lv": "B1"},
+  {"w": "leave early", "ipa": "/ˌliːv ˈɝːli/", "pos": "phr", "vi": "về sớm", "ex": "I have to leave early today.", "exVi": "Hôm nay mình phải về sớm.", "lv": "A2"},
+  {"w": "doctor's appointment", "ipa": "/ˌdɑːktərz əˈpɔɪntmənt/", "pos": "n", "vi": "lịch khám bệnh", "ex": "I have a doctor's appointment at four.", "exVi": "Mình có lịch khám bệnh lúc bốn giờ.", "lv": "B1"}
+]

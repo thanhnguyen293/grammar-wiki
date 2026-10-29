@@ -86,6 +86,10 @@ body {
   grid-template-columns: 7px 15px minmax(0, 1fr);
   column-gap: 7px;
 }
+/* Workplace lessons have no level, so no dot column. */
+.sb-item.plain {
+  grid-template-columns: 15px minmax(0, 1fr);
+}
 .sb-item .sb-lv {
   margin: 8.5px 0 0;
 }

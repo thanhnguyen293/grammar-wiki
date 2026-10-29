@@ -1,0 +1,17 @@
+[
+  {"w": "stand-up", "ipa": "/ˈstændˌʌp/", "pos": "n", "vi": "cuộc họp đứng ngắn hằng ngày", "ex": "Our stand-up starts at nine.", "exVi": "Buổi stand-up của tụi mình bắt đầu lúc chín giờ.", "lv": "B1"},
+  {"w": "sprint", "ipa": "/sprɪnt/", "pos": "n", "vi": "chu kỳ làm việc 1–2 tuần", "ex": "This sprint ends on Friday.", "exVi": "Sprint này kết thúc vào thứ Sáu.", "lv": "B1"},
+  {"w": "ticket", "ipa": "/ˈtɪkɪt/", "pos": "n", "vi": "đầu việc (trên Jira…)", "ex": "I closed three tickets yesterday.", "exVi": "Hôm qua mình đóng được ba ticket.", "lv": "A2"},
+  {"w": "pick up", "ipa": "/pɪk ˈʌp/", "pos": "phr", "vi": "nhận làm (một việc)", "ex": "I'll pick up the next ticket.", "exVi": "Mình sẽ nhận ticket tiếp theo.", "lv": "B1"},
+  {"w": "status update", "ipa": "/ˈsteɪtəs ˈʌpˌdeɪt/", "pos": "n", "vi": "báo cáo tình hình", "ex": "Please give a short status update.", "exVi": "Mỗi người báo cáo tình hình ngắn gọn nhé.", "lv": "B1"},
+  {"w": "blocker", "ipa": "/ˈblɑkər/", "pos": "n", "vi": "vướng mắc khiến việc không làm tiếp được", "ex": "No blockers for me today.", "exVi": "Hôm nay mình không có vướng mắc gì.", "lv": "B2"},
+  {"w": "be blocked on", "ipa": "/bi ˈblɑkt ɑn/", "pos": "phr", "vi": "bị kẹt ở, không làm tiếp được vì", "ex": "I'm blocked on the payment API.", "exVi": "Mình đang bị kẹt ở API thanh toán.", "lv": "B2"},
+  {"w": "wait for", "ipa": "/ˈweɪt fɔr/", "pos": "phr", "vi": "chờ, đợi", "ex": "I'm waiting for the new designs.", "exVi": "Mình đang chờ thiết kế mới.", "lv": "A2"},
+  {"w": "on track", "ipa": "/ɑn ˈtræk/", "pos": "phr", "vi": "đúng tiến độ", "ex": "We're on track for Friday.", "exVi": "Tụi mình vẫn đúng tiến độ để xong vào thứ Sáu.", "lv": "B1"},
+  {"w": "halfway through", "ipa": "/ˌhæfˈweɪ θru/", "pos": "phr", "vi": "làm được một nửa", "ex": "I'm about halfway through the migration.", "exVi": "Mình làm phần chuyển dữ liệu được khoảng một nửa.", "lv": "B1"},
+  {"w": "take longer than expected", "ipa": "/teɪk ˈlɔŋɡər ðən ɪkˈspɛktɪd/", "pos": "phr", "vi": "mất nhiều thời gian hơn dự kiến", "ex": "The fix is taking longer than expected.", "exVi": "Việc sửa lỗi đang mất nhiều thời gian hơn dự kiến.", "lv": "B1"},
+  {"w": "plan to", "ipa": "/ˈplæn tu/", "pos": "phr", "vi": "định, dự định (làm gì)", "ex": "Today I plan to write unit tests.", "exVi": "Hôm nay mình định viết unit test.", "lv": "A2"},
+  {"w": "continue with", "ipa": "/kənˈtɪnju wɪð/", "pos": "phr", "vi": "làm tiếp (việc gì)", "ex": "I'll continue with the profile page.", "exVi": "Mình sẽ làm tiếp trang hồ sơ.", "lv": "A2"},
+  {"w": "integration", "ipa": "/ˌɪntəˈɡreɪʃən/", "pos": "n", "vi": "sự tích hợp, ghép nối", "ex": "The API integration is almost done.", "exVi": "Phần tích hợp API gần xong rồi.", "lv": "B2"},
+  {"w": "take offline", "ipa": "/teɪk ˌɔfˈlaɪn/", "pos": "phr", "vi": "bàn riêng sau, ngoài cuộc họp", "ex": "Let's take this offline.", "exVi": "Chuyện này mình bàn riêng sau nhé.", "lv": "B2"}
+]

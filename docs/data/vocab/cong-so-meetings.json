@@ -1,0 +1,17 @@
+[
+  {"w": "agenda", "ipa": "/əˈdʒɛndə/", "pos": "n", "vi": "chương trình họp", "ex": "Let's look at the agenda first.", "exVi": "Mình xem chương trình họp trước nhé.", "lv": "B1"},
+  {"w": "action item", "ipa": "/ˈækʃən ˌaɪtəm/", "pos": "n", "vi": "việc cần làm sau cuộc họp", "ex": "I have two action items from the meeting.", "exVi": "Mình có hai việc cần làm sau buổi họp.", "lv": "B2"},
+  {"w": "opinion", "ipa": "/əˈpɪnjən/", "pos": "n", "vi": "ý kiến", "ex": "In my opinion, we should wait.", "exVi": "Theo mình, chúng ta nên đợi.", "lv": "A2"},
+  {"w": "point", "ipa": "/pɔɪnt/", "pos": "n", "vi": "ý, luận điểm", "ex": "That's a good point.", "exVi": "Đó là một ý hay.", "lv": "A2"},
+  {"w": "make sense", "ipa": "/meɪk ˈsɛns/", "pos": "phr", "vi": "hợp lý, có lý", "ex": "Your idea makes sense to me.", "exVi": "Mình thấy ý của bạn hợp lý.", "lv": "B1"},
+  {"w": "agree with", "ipa": "/əˈɡri wɪð/", "pos": "phr", "vi": "đồng ý với", "ex": "I agree with Sarah.", "exVi": "Mình đồng ý với Sarah.", "lv": "A2"},
+  {"w": "disagree", "ipa": "/ˌdɪsəˈɡri/", "pos": "v", "vi": "không đồng ý", "ex": "I'm sorry, but I disagree.", "exVi": "Xin lỗi, nhưng mình không đồng ý.", "lv": "B1"},
+  {"w": "suggest", "ipa": "/səɡˈdʒɛst/", "pos": "v", "vi": "đề xuất, gợi ý", "ex": "I'd like to suggest another option.", "exVi": "Mình xin đề xuất một phương án khác.", "lv": "B1"},
+  {"w": "approach", "ipa": "/əˈproʊtʃ/", "pos": "n", "vi": "cách làm, cách tiếp cận", "ex": "Let's try a simpler approach.", "exVi": "Mình thử một cách làm đơn giản hơn nhé.", "lv": "B1"},
+  {"w": "consider", "ipa": "/kənˈsɪdər/", "pos": "v", "vi": "cân nhắc, tính đến", "ex": "Have we considered older phones?", "exVi": "Mình đã tính đến điện thoại đời cũ chưa?", "lv": "B1"},
+  {"w": "interrupt", "ipa": "/ˌɪntəˈrʌpt/", "pos": "v", "vi": "ngắt lời, chen ngang", "ex": "Sorry to interrupt, but I have a question.", "exVi": "Xin lỗi chen ngang, nhưng mình có một câu hỏi.", "lv": "B1"},
+  {"w": "go ahead", "ipa": "/ɡoʊ əˈhɛd/", "pos": "phr", "vi": "cứ nói đi, cứ làm đi", "ex": "Go ahead, I'm listening.", "exVi": "Bạn cứ nói đi, mình đang nghe.", "lv": "A2"},
+  {"w": "sum up", "ipa": "/sʌm ˈʌp/", "pos": "phr", "vi": "tóm tắt lại", "ex": "Let me sum up the decision.", "exVi": "Để mình tóm tắt lại quyết định.", "lv": "B1"},
+  {"w": "recap", "ipa": "/ˈriˌkæp/", "pos": "v", "vi": "tóm tắt nhanh", "ex": "Can you recap the main points?", "exVi": "Bạn tóm tắt nhanh các ý chính được không?", "lv": "B2"},
+  {"w": "on mute", "ipa": "/ɑn ˈmjut/", "pos": "phr", "vi": "đang tắt micro", "ex": "Sorry, I was on mute.", "exVi": "Xin lỗi, nãy mình tắt micro.", "lv": "B1"}
+]

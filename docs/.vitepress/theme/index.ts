@@ -13,6 +13,8 @@ import VocabMine from './components/VocabMine.vue'
 import HomeHero from './components/HomeHero.vue'
 import HomeChapters from './components/HomeChapters.vue'
 import ProgressDashboard from './components/ProgressDashboard.vue'
+import WorkplaceIndex from './components/WorkplaceIndex.vue'
+import PhraseDrill from './components/PhraseDrill.vue'
 import { useScrollbarReveal } from './components/useScrollbarReveal'
 import SyncButton from './components/SyncButton.vue'
 import PomodoroTimer from './components/PomodoroTimer.vue'
@@ -33,6 +35,7 @@ import './styles/content.css'
 import './styles/grammar.css'
 import './styles/vocab.css'
 import './styles/analyzer.css'
+import './styles/drill.css'
 import './styles/sync.css'
 import './styles/pomodoro.css'
 import './styles/chrome.css'
@@ -81,5 +84,7 @@ export default {
     app.component('HomeHero', HomeHero)
     app.component('HomeChapters', HomeChapters)
     app.component('ProgressDashboard', ProgressDashboard)
+    app.component('WorkplaceIndex', WorkplaceIndex)
+    app.component('PhraseDrill', PhraseDrill)
   },
 } satisfies Theme

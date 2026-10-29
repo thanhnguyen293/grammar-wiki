@@ -6,7 +6,7 @@ import { useToday } from './useVocab'
 
 // Phones and tablets: the main sections stay one tap away at the bottom edge, which also gives
 // the home-screen app a way around without browser controls.
-type Tab = 'grammar' | 'vocab' | 'today' | 'review' | 'progress'
+type Tab = 'grammar' | 'vocab' | 'today' | 'review' | 'workplace' | 'progress'
 
 const { page } = useData()
 const { tr, link } = useLocale()
@@ -17,6 +17,7 @@ const active = computed<Tab>(() => {
   if (p === 'vocabulary/today.md') return 'today'
   if (p === 'vocabulary/review.md') return 'review'
   if (p.startsWith('vocabulary/')) return 'vocab'
+  if (p.startsWith('workplace/')) return 'workplace'
   if (p === 'progress.md') return 'progress'
   return 'grammar'
 })
@@ -31,6 +32,12 @@ const TABS: { id: Tab; label: string; path: string; icon: string }[] = [
     icon: 'M8 2v4M16 2v4M3 9h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9 15l2 2 4-4',
   },
   { id: 'review', label: 'Ôn tập', path: '/vocabulary/review', icon: 'M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11' },
+  {
+    id: 'workplace',
+    label: 'Giao tiếp',
+    path: '/workplace/',
+    icon: 'M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12zM8.5 12h.01M12 12h.01M15.5 12h.01',
+  },
   { id: 'progress', label: 'Tiến độ', path: '/progress', icon: 'M4 20V10M10 20V4M16 20v-8M22 20H2' },
 ]
 </script>

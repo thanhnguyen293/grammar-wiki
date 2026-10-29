@@ -12,7 +12,7 @@ Short English grammar lessons for learners starting again from the basics, order
 
 <HomeChapters />
 
-There is also a [vocabulary section](/vocabulary/) with 3000 core words, 500 common phrases and IT words for mobile developers.
+There is also a [vocabulary section](/vocabulary/) with 3000 core words, 500 common phrases and IT words for mobile developers, and a [workplace English section](/workplace/) with phrases and dialogues for meetings, stand-ups, code review, chat and email at a tech company.
 
 ## How to read a lesson
 

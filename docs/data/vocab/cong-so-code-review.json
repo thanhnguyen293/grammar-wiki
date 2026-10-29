@@ -1,0 +1,17 @@
+[
+  {"w": "pull request", "ipa": "/ˈpʊl rɪˌkwest/", "pos": "n", "vi": "yêu cầu gộp code (PR)", "ex": "I've opened a pull request for the fix.", "exVi": "Mình đã tạo pull request cho bản sửa.", "lv": "B1"},
+  {"w": "review", "ipa": "/rɪˈvjuː/", "pos": "v", "vi": "xem xét, review (code)", "ex": "Could you review my code today?", "exVi": "Hôm nay bạn review code giúp mình được không?", "lv": "B1"},
+  {"w": "comment", "ipa": "/ˈkɑːment/", "pos": "n", "vi": "bình luận, góp ý", "ex": "I left two comments on your PR.", "exVi": "Mình để lại hai góp ý trong PR của bạn.", "lv": "A2"},
+  {"w": "suggestion", "ipa": "/səɡˈdʒestʃən/", "pos": "n", "vi": "gợi ý, đề xuất", "ex": "Thanks for the suggestion.", "exVi": "Cảm ơn bạn đã gợi ý.", "lv": "B1"},
+  {"w": "nit", "ipa": "/nɪt/", "pos": "n", "vi": "góp ý rất nhỏ", "ex": "Just a nit: please rename this variable.", "exVi": "Góp ý nhỏ thôi: bạn đổi tên biến này nhé.", "lv": "B2"},
+  {"w": "approve", "ipa": "/əˈpruːv/", "pos": "v", "vi": "duyệt, chấp thuận", "ex": "Anna approved my pull request.", "exVi": "Anna đã duyệt pull request của mình.", "lv": "B1"},
+  {"w": "LGTM", "ipa": "/ˌel dʒiː tiː ˈem/", "pos": "phr", "vi": "ổn rồi (looks good to me)", "ex": "LGTM, you can merge it.", "exVi": "Ổn rồi, bạn merge được rồi.", "lv": "B1"},
+  {"w": "request changes", "ipa": "/rɪˌkwest ˈtʃeɪndʒɪz/", "pos": "phr", "vi": "yêu cầu sửa", "ex": "She requested changes on my PR.", "exVi": "Chị ấy yêu cầu sửa PR của mình.", "lv": "B2"},
+  {"w": "address", "ipa": "/əˈdres/", "pos": "v", "vi": "xử lý (góp ý, vấn đề)", "ex": "I've addressed all your comments.", "exVi": "Mình đã xử lý hết các góp ý của bạn.", "lv": "B2"},
+  {"w": "good catch", "ipa": "/ˌɡʊd ˈkætʃ/", "pos": "phr", "vi": "bắt lỗi hay đấy", "ex": "Good catch! I missed that.", "exVi": "Bắt lỗi hay đấy! Mình bỏ sót chỗ đó.", "lv": "B1"},
+  {"w": "take another look", "ipa": "/ˌteɪk əˌnʌðər ˈlʊk/", "pos": "phr", "vi": "xem lại lần nữa", "ex": "Could you take another look, please?", "exVi": "Bạn xem lại giúp mình lần nữa nhé?", "lv": "B1"},
+  {"w": "merge", "ipa": "/mɝːdʒ/", "pos": "v", "vi": "gộp (code)", "ex": "I'll merge the branch after lunch.", "exVi": "Ăn trưa xong mình sẽ gộp nhánh.", "lv": "B1"},
+  {"w": "refactor", "ipa": "/riːˈfæktər/", "pos": "v", "vi": "viết lại code cho gọn", "ex": "Let's refactor this function later.", "exVi": "Để sau mình viết lại hàm này cho gọn nhé.", "lv": "B2"},
+  {"w": "helper", "ipa": "/ˈhelpər/", "pos": "n", "vi": "hàm hỗ trợ (helper)", "ex": "We already have a helper for dates.", "exVi": "Mình đã có sẵn hàm hỗ trợ xử lý ngày.", "lv": "B1"},
+  {"w": "readable", "ipa": "/ˈriːdəbəl/", "pos": "adj", "vi": "dễ đọc", "ex": "Short functions are more readable.", "exVi": "Hàm ngắn thì dễ đọc hơn.", "lv": "B1"}
+]

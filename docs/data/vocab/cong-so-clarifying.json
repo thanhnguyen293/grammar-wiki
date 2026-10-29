@@ -1,0 +1,17 @@
+[
+  {"w": "requirement", "ipa": "/rɪˈkwaɪərmənt/", "pos": "n", "vi": "yêu cầu", "ex": "The requirements changed again.", "exVi": "Yêu cầu lại thay đổi nữa rồi.", "lv": "B1"},
+  {"w": "product owner", "ipa": "/ˈprɑdʌkt ˈoʊnər/", "pos": "n", "vi": "người phụ trách sản phẩm (PO)", "ex": "Ask the product owner about this rule.", "exVi": "Hỏi product owner về quy tắc này nhé.", "lv": "B1"},
+  {"w": "clarify", "ipa": "/ˈklɛrəˌfaɪ/", "pos": "v", "vi": "làm rõ", "ex": "Could you clarify the second point?", "exVi": "Bạn làm rõ giúp ý thứ hai được không?", "lv": "B1"},
+  {"w": "explain something to someone", "ipa": "/ɪkˈspleɪn ˈsʌmθɪŋ tu ˈsʌmˌbɑdi/", "pos": "phr", "vi": "giải thích điều gì cho ai", "ex": "Can you explain this flow to me?", "exVi": "Bạn giải thích luồng này cho mình được không?", "lv": "A2"},
+  {"w": "what do you mean by", "ipa": "/ˈwʌt du ju ˈmin baɪ/", "pos": "phr", "vi": "ý bạn là gì khi nói…", "ex": "What do you mean by \"real time\"?", "exVi": "Ý bạn là gì khi nói \"thời gian thực\"?", "lv": "A2"},
+  {"w": "if I understand correctly", "ipa": "/ɪf aɪ ˌʌndərˈstænd kəˈrɛktli/", "pos": "phr", "vi": "nếu mình hiểu đúng thì", "ex": "If I understand correctly, we need two buttons.", "exVi": "Nếu mình hiểu đúng thì mình cần hai nút.", "lv": "B1"},
+  {"w": "just to confirm", "ipa": "/dʒʌst tu kənˈfɜrm/", "pos": "phr", "vi": "cho mình xác nhận lại", "ex": "Just to confirm, the limit is 5 MB?", "exVi": "Cho mình xác nhận lại, giới hạn là 5 MB à?", "lv": "B1"},
+  {"w": "assumption", "ipa": "/əˈsʌmpʃən/", "pos": "n", "vi": "giả định", "ex": "My assumption was wrong.", "exVi": "Giả định của mình sai rồi.", "lv": "B2"},
+  {"w": "acceptance criteria", "ipa": "/əkˈsɛptəns kraɪˈtɪriə/", "pos": "n", "vi": "tiêu chí nghiệm thu", "ex": "The acceptance criteria are in the ticket.", "exVi": "Tiêu chí nghiệm thu có trong ticket.", "lv": "B2"},
+  {"w": "in scope", "ipa": "/ɪn ˈskoʊp/", "pos": "phr", "vi": "trong phạm vi (công việc)", "ex": "Is dark mode in scope for this sprint?", "exVi": "Dark mode có nằm trong phạm vi sprint này không?", "lv": "B2"},
+  {"w": "out of scope", "ipa": "/aʊt əv ˈskoʊp/", "pos": "phr", "vi": "ngoài phạm vi (công việc)", "ex": "The camera feature is out of scope.", "exVi": "Tính năng camera nằm ngoài phạm vi.", "lv": "B2"},
+  {"w": "limit", "ipa": "/ˈlɪmɪt/", "pos": "n", "vi": "giới hạn", "ex": "Is there a limit on the file size?", "exVi": "Có giới hạn dung lượng file không?", "lv": "B1"},
+  {"w": "handle", "ipa": "/ˈhændəl/", "pos": "v", "vi": "xử lý", "ex": "How should we handle an empty list?", "exVi": "Mình xử lý danh sách trống thế nào?", "lv": "B1"},
+  {"w": "mockup", "ipa": "/ˈmɑkˌʌp/", "pos": "n", "vi": "bản thiết kế mẫu", "ex": "The mockup shows three tabs.", "exVi": "Bản thiết kế mẫu có ba tab.", "lv": "B2"},
+  {"w": "documentation", "ipa": "/ˌdɑkjəmɛnˈteɪʃən/", "pos": "n", "vi": "tài liệu (kỹ thuật)", "ex": "Is there any documentation for this API?", "exVi": "API này có tài liệu nào không?", "lv": "B1"}
+]

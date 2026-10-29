@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { coreTopics, extraTopics, learnedKey, topicLink, vocabTopics } from '../../vocabTopics'
+import { coreTopics, extraTopics, learnedKey, topicLink, vocabTopics, workTopics } from '../../vocabTopics'
 import ActivityHeatmap from './ActivityHeatmap.vue'
 import { useLocale } from './i18n'
 import { activityScore, useActivity } from './useActivity'
@@ -31,7 +31,7 @@ const pct = (slug: string) => (count(slug) ? Math.round((done(slug) / count(slug
 
 const coreTotal = computed(() => coreTopics.reduce((n, t) => n + (count(t.slug) || t.target), 0))
 const coreDone = computed(() => coreTopics.reduce((n, t) => n + done(t.slug), 0))
-const extraDone = computed(() => extraTopics.reduce((n, t) => n + done(t.slug), 0))
+const extraDone = computed(() => [...extraTopics, ...workTopics].reduce((n, t) => n + done(t.slug), 0))
 
 const week = computed(() => (mounted.value ? lastDays(7) : { learned: 0, done: 0, ok: 0 }))
 const month = computed(() => (mounted.value ? lastDays(30) : { learned: 0, done: 0, ok: 0 }))
@@ -86,7 +86,7 @@ const when = (key: string) => {
           <a :href="link('/vocabulary/')" class="vnote">{{ tr('Tất cả chủ đề →') }}</a>
         </header>
         <ol class="dash-topics">
-          <li v-for="t in [...coreTopics, ...extraTopics]" :key="t.slug">
+          <li v-for="t in [...coreTopics, ...extraTopics, ...workTopics]" :key="t.slug">
             <a :href="link(topicLink(t.slug))">{{ isEn ? t.en : t.title }}</a>
             <span class="vprog-bar"><i :style="{ width: pct(t.slug) + '%' }" /></span>
             <span class="dash-pct">{{ done(t.slug) }}/{{ count(t.slug) || t.target }}</span>

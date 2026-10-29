@@ -12,6 +12,8 @@ Lý thuyết ngữ pháp tiếng Anh rút gọn cho người học lại từ đ
 
 <HomeChapters />
 
+Ngoài ngữ pháp còn có phần [từ vựng](/vi/vocabulary/) với 3000 từ thông dụng, 500 cụm từ và từ vựng IT cho mobile developer, và phần [giao tiếp công sở IT](/vi/workplace/) với mẫu câu, hội thoại cho các buổi họp, daily stand-up, review code, nhắn tin và email ở công ty công nghệ.
+
 ## Cách đọc một bài
 
 ::: info CÔNG THỨC

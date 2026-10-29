@@ -1,0 +1,93 @@
+/* ---------- Phrase practice (PhraseDrill.vue) ---------- */
+.drill {
+  margin: 20px 0;
+  padding: 18px 20px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--r-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+}
+.drill-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vp-c-text-3);
+  font-variant-numeric: tabular-nums;
+}
+.vp-doc .drill p {
+  margin: 10px 0;
+}
+.vp-doc .drill-vi {
+  font-style: italic;
+  color: var(--vp-c-text-2);
+}
+.vp-doc .drill-en {
+  font-size: 17px;
+  line-height: 2.2;
+}
+.drill-blank {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: top;
+  max-width: 100%;
+}
+.drill-blank input {
+  max-width: 100%;
+  min-height: 34px;
+  padding: 0 6px;
+  border: 0;
+  border-bottom: 2px solid var(--vp-c-brand-1);
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-text-1);
+  font: inherit;
+  font-weight: 600;
+}
+.drill-blank input::placeholder {
+  color: var(--vp-c-text-3);
+  font-weight: 400;
+}
+.drill-blank input:focus {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 1px;
+}
+.drill-blank.ok input {
+  border-color: var(--vp-c-tip-2);
+  background: var(--vp-c-tip-soft);
+  color: var(--vp-c-tip-1);
+}
+.drill-blank.bad input {
+  border-color: var(--vp-c-warning-1);
+  background: var(--vp-c-warning-soft);
+  text-decoration: line-through;
+}
+/* The right answer sits under a wrong blank, like a correction in an exercise book. */
+.drill-answer {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--vp-c-tip-1);
+}
+.drill-en .speak {
+  vertical-align: middle;
+  margin-left: 4px;
+}
+.drill-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.vp-doc .drill-done p {
+  margin-top: 0;
+  font-weight: 600;
+}
+@media (max-width: 640px) {
+  .drill {
+    padding: 14px 14px;
+  }
+  .vp-doc .drill-en {
+    font-size: 16px;
+  }
+}

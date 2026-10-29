@@ -1,0 +1,17 @@
+[
+  {"w": "FYI", "ipa": "/ˌef waɪ ˈaɪ/", "pos": "phr", "vi": "để bạn biết (for your information)", "ex": "FYI, the meeting moved to 3 pm.", "exVi": "Để bạn biết, cuộc họp dời sang 3 giờ chiều.", "lv": "B1"},
+  {"w": "ASAP", "ipa": "/ˌeɪ es eɪ ˈpiː/", "pos": "phr", "vi": "càng sớm càng tốt (as soon as possible)", "ex": "Please fix this bug ASAP.", "exVi": "Bạn sửa lỗi này càng sớm càng tốt nhé.", "lv": "B1"},
+  {"w": "EOD", "ipa": "/ˌiː oʊ ˈdiː/", "pos": "phr", "vi": "cuối ngày làm việc (end of day)", "ex": "I'll send the report by EOD.", "exVi": "Mình sẽ gửi báo cáo trước cuối ngày.", "lv": "B1"},
+  {"w": "PTAL", "ipa": "/ˌpiː tiː eɪ ˈel/", "pos": "phr", "vi": "xem giúp (please take a look)", "ex": "PTAL at my latest commit.", "exVi": "Xem giúp commit mới nhất của mình nhé.", "lv": "B2"},
+  {"w": "WFH", "ipa": "/ˌdʌbəljuː ef ˈeɪtʃ/", "pos": "phr", "vi": "làm việc ở nhà (work from home)", "ex": "I'm WFH today.", "exVi": "Hôm nay mình làm ở nhà.", "lv": "B1"},
+  {"w": "OOO", "ipa": "/ˌoʊ oʊ ˈoʊ/", "pos": "phr", "vi": "vắng mặt, nghỉ (out of office)", "ex": "I'll be OOO next Monday.", "exVi": "Thứ Hai tuần sau mình nghỉ.", "lv": "B1"},
+  {"w": "thread", "ipa": "/θred/", "pos": "n", "vi": "chuỗi trả lời của một tin nhắn", "ex": "Please reply in the thread.", "exVi": "Bạn trả lời trong chuỗi tin nhắn nhé.", "lv": "B1"},
+  {"w": "loop in", "ipa": "/ˌluːp ˈɪn/", "pos": "phr", "vi": "thêm ai vào cuộc trao đổi", "ex": "Let me loop in our tester.", "exVi": "Để mình thêm bạn tester vào cuộc trao đổi.", "lv": "B2"},
+  {"w": "reply", "ipa": "/rɪˈplaɪ/", "pos": "n", "vi": "câu trả lời, hồi âm", "ex": "Sorry for the late reply.", "exVi": "Xin lỗi vì trả lời muộn.", "lv": "A2"},
+  {"w": "reminder", "ipa": "/rɪˈmaɪndər/", "pos": "n", "vi": "lời nhắc", "ex": "This is a gentle reminder about the survey.", "exVi": "Đây là lời nhắc nhẹ về bản khảo sát.", "lv": "B1"},
+  {"w": "urgent", "ipa": "/ˈɝːdʒənt/", "pos": "adj", "vi": "gấp, khẩn cấp", "ex": "Is this urgent, or can it wait?", "exVi": "Việc này có gấp không, hay để sau được?", "lv": "B1"},
+  {"w": "bother", "ipa": "/ˈbɑːðər/", "pos": "v", "vi": "làm phiền", "ex": "Sorry to bother you on a Friday.", "exVi": "Xin lỗi làm phiền bạn vào thứ Sáu.", "lv": "B1"},
+  {"w": "attachment", "ipa": "/əˈtætʃmənt/", "pos": "n", "vi": "tệp đính kèm", "ex": "The test report is in the attachment.", "exVi": "Báo cáo kiểm thử nằm trong tệp đính kèm.", "lv": "B1"},
+  {"w": "regards", "ipa": "/rɪˈɡɑːrdz/", "pos": "n", "vi": "lời chào cuối thư (trân trọng)", "ex": "Best regards, Minh.", "exVi": "Trân trọng, Minh.", "lv": "B1"},
+  {"w": "no rush", "ipa": "/ˌnoʊ ˈrʌʃ/", "pos": "phr", "vi": "không gấp đâu", "ex": "No rush, next week is fine.", "exVi": "Không gấp đâu, tuần sau cũng được.", "lv": "B1"}
+]

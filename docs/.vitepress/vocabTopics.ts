@@ -15,8 +15,9 @@ export interface VocabTopic {
   /** Planned number of words; scripts/check-vocab.mjs checks the data against it. */
   target: number
   /** Specialist topics sit outside the 3000 core words: they may reuse a core word with its
-      specialist meaning (bug, branch, release), so their progress is tracked separately. */
-  track?: 'it' | 'phrase'
+      specialist meaning (bug, branch, release), so their progress is tracked separately.
+      'work' topics hold the words of one workplace lesson. */
+  track?: 'it' | 'phrase' | 'work'
 }
 
 export const vocabTopics: VocabTopic[] = [
@@ -50,6 +51,18 @@ export const vocabTopics: VocabTopic[] = [
   { slug: 'khoa-hoc-moi-truong', path: 'science-environment', title: 'Khoa học & môi trường', en: 'Science & environment', target: 90 },
   { slug: 'cntt-mobile', path: 'it-mobile', title: 'Công nghệ thông tin cho mobile developer', en: 'IT for mobile developers', target: 250, track: 'it' },
   { slug: 'cum-tu', path: 'phrases', title: 'Cụm từ thông dụng', en: 'Phrasal verbs, collocations & fixed expressions', short: 'Common phrases', target: 500, track: 'phrase' },
+  // One topic per workplace lesson (workplace.ts); shown inside the lesson, so `path` is the
+  // lesson's slug under /workplace/ rather than a page under /vocabulary/.
+  { slug: 'cong-so-introductions', path: 'introductions', title: 'Giới thiệu bản thân & team', en: 'Introducing yourself and your team', target: 15, track: 'work' },
+  { slug: 'cong-so-daily-standup', path: 'daily-standup', title: 'Họp daily stand-up', en: 'The daily stand-up', target: 15, track: 'work' },
+  { slug: 'cong-so-meetings', path: 'meetings', title: 'Phát biểu trong cuộc họp', en: 'Speaking up in meetings', target: 15, track: 'work' },
+  { slug: 'cong-so-clarifying', path: 'clarifying', title: 'Hỏi lại & làm rõ yêu cầu', en: 'Asking questions and clarifying requirements', target: 15, track: 'work' },
+  { slug: 'cong-so-tasks-deadlines', path: 'tasks-deadlines', title: 'Nhận việc, ước lượng & deadline', en: 'Tasks, estimates and deadlines', target: 15, track: 'work' },
+  { slug: 'cong-so-reporting-bugs', path: 'reporting-bugs', title: 'Báo lỗi & sự cố', en: 'Reporting bugs and incidents', target: 15, track: 'work' },
+  { slug: 'cong-so-code-review', path: 'code-review', title: 'Góp ý & nhận góp ý khi review code', en: 'Giving and receiving code review feedback', target: 15, track: 'work' },
+  { slug: 'cong-so-chat-email', path: 'chat-email', title: 'Tin nhắn chat & email công việc', en: 'Work chat and email', target: 15, track: 'work' },
+  { slug: 'cong-so-demos', path: 'demos', title: 'Demo & trình bày tính năng', en: 'Demos and presentations', target: 15, track: 'work' },
+  { slug: 'cong-so-small-talk-time-off', path: 'small-talk-time-off', title: 'Small talk & xin nghỉ phép', en: 'Small talk and time off', target: 15, track: 'work' },
 ]
 
 export const coreTopics = vocabTopics.filter((t) => !t.track)
@@ -92,7 +105,10 @@ export const topicGroups: { title: string; en: string; slugs: string[] }[] = [
 export const MINE = { slug: 'cua-toi', path: 'my-words', title: 'Từ của tôi' }
 
 /** Topics outside the 3000 core words: IT vocabulary and common phrases. */
-export const extraTopics = vocabTopics.filter((t) => t.track)
+export const extraTopics = vocabTopics.filter((t) => t.track === 'it' || t.track === 'phrase')
+
+/** The words of each workplace lesson, in lesson order. */
+export const workTopics = vocabTopics.filter((t) => t.track === 'work')
 
 /** Key under which "đã thuộc" is stored for a word. Core words use the bare word; everything
     else (specialist topics, phrases, the learner's own words) is prefixed with its slug. */
@@ -100,5 +116,8 @@ export const learnedKey = (slug: string, word: string) =>
   coreTopics.some((t) => t.slug === slug) ? word : `${slug}:${word}`
 
 /** URL of a topic page (or "my words") from its id, without the locale prefix. */
-export const topicLink = (slug: string) =>
-  `/vocabulary/${slug === MINE.slug ? MINE.path : vocabTopics.find((t) => t.slug === slug)?.path ?? ''}`
+export const topicLink = (slug: string) => {
+  const t = vocabTopics.find((x) => x.slug === slug)
+  if (t?.track === 'work') return `/workplace/${t.path}`
+  return `/vocabulary/${slug === MINE.slug ? MINE.path : t?.path ?? ''}`
+}

@@ -1,6 +1,7 @@
 import { defineConfig, type DefaultTheme, type MarkdownRenderer } from 'vitepress'
 import { chapterNo, chapters, LEVEL_LABEL, LEVEL_LABEL_EN, lessonNo, sectionLink } from './chapters'
 import { extraTopics, topicGroups, vocabTopics, type VocabTopic } from './vocabTopics'
+import { workplace, workplaceLessons, workplaceLink, workplaceNo } from './workplace'
 
 // English lives at the root, Vietnamese under /vi/ with the same file names.
 type Lang = 'vi' | 'en'
@@ -59,7 +60,23 @@ function vocabSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
     },
     {
       text: en ? 'Extra topics' : 'Mở rộng',
-      items: extraTopics.map(topic),
+      // Workplace words live in their lessons, so the section links to the lesson list.
+      items: [...extraTopics.map(topic), { text: en ? workplace.en : workplace.title, link: `${p}/workplace/` }],
+    },
+  ]
+}
+
+function workplaceSidebar(lang: Lang): DefaultTheme.SidebarItem[] {
+  const p = prefix(lang)
+  const en = lang === 'en'
+  return [
+    {
+      text: en ? workplace.en : workplace.title,
+      link: `${p}/workplace/`,
+      items: workplaceLessons.map((l) => ({
+        text: `<span class="sb-item plain"><span class="sb-no">${workplaceNo(l)}</span><span>${en ? l.titleEn : l.title}</span></span>`,
+        link: `${p}${workplaceLink(l)}`,
+      })),
     },
   ]
 }
@@ -118,11 +135,12 @@ const viTheme: DefaultTheme.Config = {
   // Logo only in the top bar: the title takes room the timer and sync buttons need.
   siteTitle: false,
   nav: [
-    { text: 'Ngữ pháp', link: '/vi/study-path', activeMatch: '^/vi/(?!vocabulary|progress)' },
+    { text: 'Ngữ pháp', link: '/vi/study-path', activeMatch: '^/vi/(?!vocabulary|workplace|progress)' },
     { text: 'Từ vựng', link: '/vi/vocabulary/', activeMatch: '^/vi/vocabulary/' },
+    { text: 'Giao tiếp', link: '/vi/workplace/', activeMatch: '^/vi/workplace/' },
     { text: 'Tiến độ', link: '/vi/progress', activeMatch: '^/vi/progress' },
   ],
-  sidebar: { '/vi/vocabulary/': vocabSidebar('vi'), '/vi/': grammarSidebar('vi') },
+  sidebar: { '/vi/vocabulary/': vocabSidebar('vi'), '/vi/workplace/': workplaceSidebar('vi'), '/vi/': grammarSidebar('vi') },
   outline: { level: [2, 3], label: 'Trong bài này' },
   docFooter: { prev: 'Bài trước', next: 'Bài tiếp' },
   darkModeSwitchLabel: 'Giao diện',
@@ -138,11 +156,12 @@ const enTheme: DefaultTheme.Config = {
   // Logo only in the top bar: the title takes room the timer and sync buttons need.
   siteTitle: false,
   nav: [
-    { text: 'Grammar', link: '/study-path', activeMatch: '^/(?!vocabulary|progress|vi/)' },
+    { text: 'Grammar', link: '/study-path', activeMatch: '^/(?!vocabulary|workplace|progress|vi/)' },
     { text: 'Vocabulary', link: '/vocabulary/', activeMatch: '^/vocabulary/' },
+    { text: 'Workplace', link: '/workplace/', activeMatch: '^/workplace/' },
     { text: 'Progress', link: '/progress', activeMatch: '^/progress' },
   ],
-  sidebar: { '/vocabulary/': vocabSidebar('en'), '/': grammarSidebar('en') },
+  sidebar: { '/vocabulary/': vocabSidebar('en'), '/workplace/': workplaceSidebar('en'), '/': grammarSidebar('en') },
   outline: { level: [2, 3], label: 'On this page' },
   docFooter: { prev: 'Previous', next: 'Next' },
   sidebarMenuLabel: 'Menu',
@@ -170,6 +189,10 @@ export default defineConfig({
     // Added to the home screen, the site opens as its own app (see AppBackButton and TabBar).
     ['link', { rel: 'manifest', href: `${process.env.VITEPRESS_BASE || '/'}manifest.webmanifest` }],
     ['link', { rel: 'apple-touch-icon', href: `${process.env.VITEPRESS_BASE || '/'}icons/icon-180.png` }],
+    // viewport-fit=cover makes iOS report the safe-area insets the tab bar pads itself with; without
+    // it env(safe-area-inset-*) is 0 and, opened from the home screen, the bar sits under the home
+    // indicator. Replaces VitePress's default viewport tag.
+    ['meta', { name: 'viewport', content: 'width=device-width,initial-scale=1,viewport-fit=cover' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-title', content: 'Ngữ Pháp' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],

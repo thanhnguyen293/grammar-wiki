@@ -5,10 +5,10 @@ import { LEVEL_LABEL, LEVEL_LABEL_EN, type Level } from '../../chapters'
 import { useLocale } from './i18n'
 
 // The grammar sidebar marks each lesson with a dot; this says what the dots mean. The
-// vocabulary sidebar has no dots, so it gets no key.
+// vocabulary and workplace sidebars have no dots, so they get no key.
 const { page } = useData()
 const { isEn } = useLocale()
-const show = computed(() => !page.value.relativePath.replace(/^vi\//, '').startsWith('vocabulary/'))
+const show = computed(() => !/^(vocabulary|workplace)\//.test(page.value.relativePath.replace(/^vi\//, '')))
 const LEVELS: Level[] = ['v1', 'v2', 'tc']
 </script>
 

@@ -4,6 +4,8 @@ Wiki lý thuyết ngữ pháp tiếng Anh cho người Việt học lại từ �
 
 Phần **Từ vựng** (`/vocabulary/`) có 3000 từ thông dụng chia theo 28 chủ đề, cộng 250 từ chuyên ngành công nghệ thông tin cho mobile developer. Mỗi từ có phiên âm, loại từ, nghĩa, câu ví dụ có dịch, nút nghe phát âm (giọng Google Dịch, mất mạng thì dùng giọng đọc của trình duyệt), chế độ thẻ ghi nhớ, ẩn nghĩa để tự kiểm tra và đánh dấu đã thuộc (lưu trên trình duyệt). Ngoài ra có 500 cụm từ thông dụng (phrasal verb, collocation, thành ngữ), danh sách **Hôm nay học**, trang **Kiểm tra từ đã học** (nhìn nghĩa, gõ từ) và trang **Học từ bài viết**: dán một bài tiếng Anh, wiki đưa từ về dạng gốc, gom cụm từ, cho đánh dấu đã biết / chưa biết và thêm từ vào danh sách học.
 
+Phần **Giao tiếp công sở IT** (`/workplace/`) có 10 bài theo tình huống ở công ty công nghệ: giới thiệu bản thân, daily stand-up, họp, làm rõ yêu cầu, ước lượng và deadline, báo lỗi, review code, chat và email, demo, small talk và xin nghỉ. Mỗi bài bắt đầu bằng 15 từ vựng (học được như các chủ đề từ vựng) và các điểm ngữ pháp cần nắm, rồi đến mẫu câu kèm dịch nghĩa, lỗi hay gặp, hội thoại mẫu và bài luyện điền mẫu câu; danh sách bài nằm ở `docs/.vitepress/workplace.ts`.
+
 Web có hai ngôn ngữ: tiếng Anh (gốc `/`, mặc định) và tiếng Việt (`/vi/`), đổi bằng menu ngôn ngữ trên thanh điều hướng. Mọi đường dẫn đều bằng tiếng Anh (ví dụ `/tenses/present-simple`); link cũ kiểu `/2-thi/hien-tai-don` hay `/en/...` tự chuyển sang trang mới. Bản tiếng Anh dịch giao diện và 48 bài ngữ pháp; câu ví dụ vẫn giữ dòng dịch tiếng Việt và từ vựng vẫn giữ nghĩa tiếng Việt.
 
 Có thể đăng nhập Google để đồng bộ tiến độ giữa các máy (Firebase); cách cài đặt xem [SYNC_SETUP.md](SYNC_SETUP.md).
@@ -37,10 +39,12 @@ docs/
     index.md               trang chương (tự liệt kê các bài)
     <slug>.md              từng bài
   vocabulary/              trang từ vựng: tổng quan, hôm nay, ôn tập, chủ đề
+  workplace/               giao tiếp công sở IT: trang mục lục và từng bài tình huống
   .vitepress/
     chapters.ts            danh sách chương, bài, nhãn vòng học
     config.mts             cấu hình site, sidebar sinh từ chapters.ts
     vocabTopics.ts         danh sách chủ đề từ vựng
+    workplace.ts           danh sách bài giao tiếp công sở IT
     theme/                 CSS và các component (thanh nhãn bài, danh sách bài, từ vựng)
       components/textAnalyze.ts  tách từ, đưa về dạng gốc, nhận diện cụm từ trong bài viết
       components/i18n.ts         chuỗi giao diện tiếng Anh (khóa là chuỗi tiếng Việt)

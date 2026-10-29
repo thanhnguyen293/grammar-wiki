@@ -1,0 +1,17 @@
+[
+  {"w": "demo", "ipa": "/ˈdemoʊ/", "pos": "n", "vi": "buổi trình diễn, bản demo", "ex": "The demo is on Friday afternoon.", "exVi": "Buổi demo vào chiều thứ Sáu.", "lv": "B1"},
+  {"w": "feature", "ipa": "/ˈfiːtʃər/", "pos": "n", "vi": "tính năng", "ex": "This feature saves a lot of time.", "exVi": "Tính năng này tiết kiệm nhiều thời gian.", "lv": "B1"},
+  {"w": "walk through", "ipa": "/ˌwɔːk ˈθruː/", "pos": "phr", "vi": "dẫn đi qua từng bước", "ex": "Let me walk you through the new flow.", "exVi": "Để mình dẫn mọi người đi qua luồng mới.", "lv": "B2"},
+  {"w": "share screen", "ipa": "/ˌʃer ˈskriːn/", "pos": "phr", "vi": "chia sẻ màn hình", "ex": "I'll share my screen now.", "exVi": "Bây giờ mình sẽ chia sẻ màn hình.", "lv": "B1"},
+  {"w": "as you can see", "ipa": "/æz ˌjuː kən ˈsiː/", "pos": "phr", "vi": "như mọi người thấy", "ex": "As you can see, the list loads faster.", "exVi": "Như mọi người thấy, danh sách tải nhanh hơn.", "lv": "A2"},
+  {"w": "slide", "ipa": "/slaɪd/", "pos": "n", "vi": "trang trình chiếu", "ex": "Let's go to the next slide.", "exVi": "Mình sang trang trình chiếu tiếp theo nhé.", "lv": "B1"},
+  {"w": "audience", "ipa": "/ˈɔːdiəns/", "pos": "n", "vi": "người nghe, khán giả", "ex": "Keep the demo short for this audience.", "exVi": "Với nhóm người nghe này thì demo ngắn thôi.", "lv": "B1"},
+  {"w": "stakeholder", "ipa": "/ˈsteɪkhoʊldər/", "pos": "n", "vi": "người liên quan (khách hàng, quản lý…)", "ex": "We demo new features to the stakeholders every sprint.", "exVi": "Mỗi sprint bọn mình demo tính năng mới cho các bên liên quan.", "lv": "B2"},
+  {"w": "improvement", "ipa": "/ɪmˈpruːvmənt/", "pos": "n", "vi": "cải tiến", "ex": "The biggest improvement is speed.", "exVi": "Cải tiến lớn nhất là tốc độ.", "lv": "B1"},
+  {"w": "compared to", "ipa": "/kəmˈperd tuː/", "pos": "phr", "vi": "so với", "ex": "Compared to the old version, it's faster.", "exVi": "So với bản cũ, nó nhanh hơn.", "lv": "B1"},
+  {"w": "limitation", "ipa": "/ˌlɪmɪˈteɪʃən/", "pos": "n", "vi": "giới hạn, hạn chế", "ex": "One limitation is that it needs internet.", "exVi": "Một hạn chế là nó cần có mạng.", "lv": "B2"},
+  {"w": "recording", "ipa": "/rɪˈkɔːrdɪŋ/", "pos": "n", "vi": "bản ghi hình, video quay sẵn", "ex": "I'll show you a recording instead.", "exVi": "Thay vào đó mình sẽ cho xem video quay sẵn.", "lv": "B1"},
+  {"w": "Q&A", "ipa": "/ˌkjuː ən ˈeɪ/", "pos": "n", "vi": "phần hỏi đáp", "ex": "We'll have a short Q&A at the end.", "exVi": "Cuối buổi sẽ có phần hỏi đáp ngắn.", "lv": "B1"},
+  {"w": "feedback", "ipa": "/ˈfiːdbæk/", "pos": "n", "vi": "góp ý, phản hồi", "ex": "We'd love your feedback on the design.", "exVi": "Bọn mình rất muốn nghe góp ý về thiết kế.", "lv": "B1"},
+  {"w": "find out", "ipa": "/ˌfaɪnd ˈaʊt/", "pos": "phr", "vi": "tìm hiểu, tìm ra", "ex": "I'll find out and let you know.", "exVi": "Mình sẽ tìm hiểu rồi báo bạn.", "lv": "A2"}
+]

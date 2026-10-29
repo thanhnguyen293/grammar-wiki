@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useLocale } from './i18n'
 import { computed, onMounted, ref } from 'vue'
-import { coreTopics, extraTopics, learnedKey, topicLink, vocabTopics } from '../../vocabTopics'
+import { coreTopics, extraTopics, learnedKey, topicLink, vocabTopics, workTopics } from '../../vocabTopics'
+import { workplace } from '../../workplace'
 import SpeakButton from './SpeakButton.vue'
 import { fold, loadTopic, useLearned, useToday, type Word } from './useVocab'
 
@@ -21,6 +22,9 @@ const pct = (slug: string) => (count(slug) ? (done(slug) / count(slug)) * 100 : 
 // The overall bar counts the 3000 core words only; specialist topics show their own count.
 const total = computed(() => coreTopics.reduce((n, t) => n + count(t.slug), 0))
 const totalDone = computed(() => coreTopics.reduce((n, t) => n + done(t.slug), 0))
+// The workplace lessons' words share one card, since each lesson shows its own list.
+const workCount = computed(() => workTopics.reduce((n, t) => n + (count(t.slug) || t.target), 0))
+const workDone = computed(() => workTopics.reduce((n, t) => n + done(t.slug), 0))
 
 const results = computed(() => {
   const q = fold(query.value.trim())
@@ -87,6 +91,15 @@ const { tr, link, pos, topicTitle, isEn } = useLocale()
         <span class="vtopic-prog">
           <span class="vprog-bar"><i :style="{ width: pct(t.slug) + '%' }" /></span>
           <span>{{ done(t.slug) }}/{{ count(t.slug) || t.target }}</span>
+        </span>
+      </a>
+      <a class="vtopic-card" :href="link('/workplace/')">
+        <span class="vtopic-no">{{ tr('Công sở') }}</span>
+        <span class="vtopic-title">{{ isEn ? workplace.en : workplace.title }}</span>
+        <small>{{ isEn ? workplace.title : workplace.en }}</small>
+        <span class="vtopic-prog">
+          <span class="vprog-bar"><i :style="{ width: workCount ? (workDone / workCount) * 100 + '%' : '0' }" /></span>
+          <span>{{ workDone }}/{{ workCount }}</span>
         </span>
       </a>
     </div>

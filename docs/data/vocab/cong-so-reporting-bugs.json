@@ -1,0 +1,17 @@
+[
+  {"w": "bug", "ipa": "/bʌɡ/", "pos": "n", "vi": "lỗi (phần mềm)", "ex": "I found a bug in the checkout screen.", "exVi": "Mình tìm thấy một lỗi ở màn hình thanh toán.", "lv": "A2"},
+  {"w": "crash", "ipa": "/kræʃ/", "pos": "v", "vi": "bị sập, tự thoát", "ex": "The app crashes when I tap Save.", "exVi": "App bị sập khi mình bấm Lưu.", "lv": "B1"},
+  {"w": "reproduce", "ipa": "/ˌriːprəˈduːs/", "pos": "v", "vi": "tái hiện (lỗi)", "ex": "I can't reproduce the bug on my phone.", "exVi": "Mình không tái hiện được lỗi trên điện thoại của mình.", "lv": "B2"},
+  {"w": "steps to reproduce", "ipa": "/ˌsteps tə ˌriːprəˈduːs/", "pos": "phr", "vi": "các bước tái hiện lỗi", "ex": "Please add the steps to reproduce.", "exVi": "Bạn thêm các bước tái hiện lỗi giúp nhé.", "lv": "B2"},
+  {"w": "expected result", "ipa": "/ɪkˌspektɪd rɪˈzʌlt/", "pos": "phr", "vi": "kết quả mong đợi", "ex": "The expected result is a success message.", "exVi": "Kết quả mong đợi là một thông báo thành công.", "lv": "B1"},
+  {"w": "actual result", "ipa": "/ˌæktʃuəl rɪˈzʌlt/", "pos": "phr", "vi": "kết quả thực tế", "ex": "The actual result is a blank screen.", "exVi": "Kết quả thực tế là một màn hình trắng.", "lv": "B1"},
+  {"w": "attach", "ipa": "/əˈtætʃ/", "pos": "v", "vi": "đính kèm", "ex": "I've attached the logs to the ticket.", "exVi": "Mình đã đính kèm log vào ticket.", "lv": "B1"},
+  {"w": "severity", "ipa": "/səˈverəti/", "pos": "n", "vi": "mức độ nghiêm trọng", "ex": "What is the severity of this bug?", "exVi": "Lỗi này nghiêm trọng đến mức nào?", "lv": "B2"},
+  {"w": "workaround", "ipa": "/ˈwɝːkəraʊnd/", "pos": "n", "vi": "cách xử lý tạm", "ex": "Is there a workaround for users?", "exVi": "Có cách xử lý tạm nào cho người dùng không?", "lv": "B2"},
+  {"w": "production", "ipa": "/prəˈdʌkʃən/", "pos": "n", "vi": "môi trường thật (production)", "ex": "The bug only happens on production.", "exVi": "Lỗi chỉ xảy ra trên môi trường thật.", "lv": "B1"},
+  {"w": "outage", "ipa": "/ˈaʊtɪdʒ/", "pos": "n", "vi": "sự cố ngừng dịch vụ", "ex": "The outage lasted twenty minutes.", "exVi": "Sự cố ngừng dịch vụ kéo dài hai mươi phút.", "lv": "B2"},
+  {"w": "look into", "ipa": "/ˌlʊk ˈɪntuː/", "pos": "phr", "vi": "xem xét, kiểm tra", "ex": "We're looking into the problem now.", "exVi": "Bọn mình đang kiểm tra vấn đề.", "lv": "B1"},
+  {"w": "root cause", "ipa": "/ˌruːt ˈkɔːz/", "pos": "n", "vi": "nguyên nhân gốc", "ex": "We finally found the root cause.", "exVi": "Cuối cùng bọn mình đã tìm ra nguyên nhân gốc.", "lv": "B2"},
+  {"w": "roll back", "ipa": "/ˌroʊl ˈbæk/", "pos": "phr", "vi": "quay về bản trước", "ex": "Let's roll back to the last version.", "exVi": "Mình quay về phiên bản trước nhé.", "lv": "B2"},
+  {"w": "hotfix", "ipa": "/ˈhɑːtfɪks/", "pos": "n", "vi": "bản sửa gấp", "ex": "We'll ship a hotfix tonight.", "exVi": "Tối nay bọn mình sẽ phát hành bản sửa gấp.", "lv": "B2"}
+]
